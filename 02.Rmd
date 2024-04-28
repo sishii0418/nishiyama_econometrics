@@ -1,0 +1,56 @@
+# 第2章 データの整理と確率変数の基礎 {-#ch2}
+先に[出版社サイト](https://www.yuhikaku.co.jp/books/detail/9784641053854)よりデータをダウンロードする.
+```{r collapse=T}
+# サポートファイルへのリンク
+curl <- "https://www.yuhikaku.co.jp/static_files/05385_support02.zip"
+# ダウンロード保存用フォルダが存在しない場合, 作成
+if(!dir.exists("downloads")){
+    dir.create("downloads")
+}
+cdestfile <- "downloads/support02.zip"
+download.file(curl, cdestfile)
+# データ保存用フォルダが存在しない場合, 作成
+if(!dir.exists("data")){
+    dir.create("data")
+}
+# WSL上のRで解凍すると文字化けするので、Linuxのコマンドを外部呼び出し
+# Windowsの場合は別途コマンドを用いる.
+if(.Platform$OS.type == "unix") {
+    system(sprintf('unzip -Ocp932 %s -d %s', "downloads/support02.zip", "./data"))
+} else {
+    print("Windowsで解凍するコマンドを別途追加せよ.")
+}
+```
+
+必要なライブラリを読み込む.
+```{r collapse=T}
+library(tidyverse)
+```
+
+## 練習問題 2-1 [確認] {-}
+
+## 練習問題 2-2 [確認] {-}
+
+## 練習問題 2-3 [確認] {-}
+
+## 練習問題 2-4 [確認] {-}
+
+## 練習問題 2-5 [確認] {-}
+
+## 練習問題 2-6 [確認] {-}
+
+## 練習問題 2-7 [発展] {-}
+
+## 練習問題 2-8 [発展] {-}
+
+## 練習問題 2-9 [発展] {-}
+
+## 練習問題 2-10 [発展] {-}
+
+## 練習問題 2-11 [確認] {-}
+
+## 練習問題 2-12 [発展] {-}
+
+## 練習問題 2-13 [確認] {-}
+
+## 練習問題 2-14 [確認] {-}

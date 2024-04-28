@@ -1,0 +1,31 @@
+# 第8章 制限従属変数モデル {-#ch8}
+先に[出版社サイト](https://www.yuhikaku.co.jp/books/detail/9784641053854)よりデータをダウンロードする.
+```{r collapse=T}
+# サポートファイルへのリンク
+curl <- "https://www.yuhikaku.co.jp/static_files/05385_support08.zip"
+# ダウンロード保存用フォルダが存在しない場合, 作成
+if(!dir.exists("downloads")){
+    dir.create("downloads")
+}
+cdestfile <- "downloads/support08.zip"
+download.file(curl, cdestfile)
+# データ保存用フォルダが存在しない場合, 作成
+if(!dir.exists("data")){
+    dir.create("data")
+}
+# WSL上のRで解凍すると文字化けするので、Linuxのコマンドを外部呼び出し
+# Windowsの場合は別途コマンドを用いる.
+if(.Platform$OS.type == "unix") {
+    system(sprintf('unzip -Ocp932 %s -d %s', "downloads/support08.zip", "./data"))
+} else {
+    print("Windowsで解凍するコマンドを別途追加せよ.")
+}
+```
+
+## 練習問題 8-1 [確認] {-}
+
+## 練習問題 8-2 [確認] {-}
+
+## 練習問題 8-3 [発展] {-}
+
+## 練習問題 8-4 [実証] {-}
