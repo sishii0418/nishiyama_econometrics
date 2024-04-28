@@ -3,7 +3,7 @@
 なお[出版社サイト](https://www.yuhikaku.co.jp/books/detail/9784641053854)にある第3章のファイルは, 誤ったデータが格納されている.
 
 必要なライブラリを読み込む.
-```{r collapse=T}
+```{r collapse=T, eval=FALSE}
 library(tidyverse)
 ```
 ## 練習問題 3-1 [確認] {-}

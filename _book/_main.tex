@@ -120,25 +120,8 @@
 
 \title{西山ほか(2019)『計量経済学』有斐閣の練習問題解答とRでの再現}
 \author{石井 俊輔}
-\date{2024-04-27}
+\date{2024-04-28}
 
-\usepackage{amsthm}
-\newtheorem{theorem}{Theorem}[chapter]
-\newtheorem{lemma}{Lemma}[chapter]
-\newtheorem{corollary}{Corollary}[chapter]
-\newtheorem{proposition}{Proposition}[chapter]
-\newtheorem{conjecture}{Conjecture}[chapter]
-\theoremstyle{definition}
-\newtheorem{definition}{Definition}[chapter]
-\theoremstyle{definition}
-\newtheorem{example}{Example}[chapter]
-\theoremstyle{definition}
-\newtheorem{exercise}{Exercise}[chapter]
-\theoremstyle{definition}
-\newtheorem{hypothesis}{Hypothesis}[chapter]
-\theoremstyle{remark}
-\newtheorem*{remark}{Remark}
-\newtheorem*{solution}{Solution}
 \begin{document}
 \maketitle
 
@@ -151,8 +134,15 @@
 \addcontentsline{toc}{chapter}{はじめに}
 
 西山ほか(2019)『計量経済学』有斐閣 (\href{https://www.yuhikaku.co.jp/books/detail/9784641053854}{出版社リンク}) の練習問題解答とRでの再現です.
+必要なRパッケージをインストール:
 
-This is a \emph{sample} book written in \textbf{Markdown}. You can use anything that Pandoc's Markdown supports; for example, a math equation \(a^2 + b^2 = c^2\).
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{install.packages}\NormalTok{(}\StringTok{"tidyverse"}\NormalTok{)}
+\FunctionTok{install.packages}\NormalTok{(}\StringTok{"openxlsx"}\NormalTok{)}
+\FunctionTok{install.packages}\NormalTok{(}\StringTok{"haven"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
 \hypertarget{usage}{%
 \section{Usage}\label{usage}}
@@ -200,6 +190,50 @@ As you work, you may start a local server to live preview this HTML book. This p
 \hypertarget{ch2}{%
 \chapter*{第2章 データの整理と確率変数の基礎}\label{ch2}}
 \addcontentsline{toc}{chapter}{第2章 データの整理と確率変数の基礎}
+
+先に\href{https://www.yuhikaku.co.jp/books/detail/9784641053854}{出版社サイト}よりデータをダウンロードする.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# サポートファイルへのリンク}
+\NormalTok{curl }\OtherTok{\textless{}{-}} \StringTok{"https://www.yuhikaku.co.jp/static\_files/05385\_support02.zip"}
+\CommentTok{\# ダウンロード保存用フォルダが存在しない場合, 作成}
+\ControlFlowTok{if}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{dir.exists}\NormalTok{(}\StringTok{"downloads"}\NormalTok{))\{}
+    \FunctionTok{dir.create}\NormalTok{(}\StringTok{"downloads"}\NormalTok{)}
+\NormalTok{\}}
+\NormalTok{cdestfile }\OtherTok{\textless{}{-}} \StringTok{"downloads/support02.zip"}
+\FunctionTok{download.file}\NormalTok{(curl, cdestfile)}
+\CommentTok{\# データ保存用フォルダが存在しない場合, 作成}
+\ControlFlowTok{if}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{dir.exists}\NormalTok{(}\StringTok{"data"}\NormalTok{))\{}
+    \FunctionTok{dir.create}\NormalTok{(}\StringTok{"data"}\NormalTok{)}
+\NormalTok{\}}
+\CommentTok{\# WSL上のRで解凍すると文字化けするので、Linuxのコマンドを外部呼び出し}
+\CommentTok{\# Windowsの場合は別途コマンドを用いる.}
+\ControlFlowTok{if}\NormalTok{(.Platform}\SpecialCharTok{$}\NormalTok{OS.type }\SpecialCharTok{==} \StringTok{"unix"}\NormalTok{) \{}
+    \FunctionTok{system}\NormalTok{(}\FunctionTok{sprintf}\NormalTok{(}\StringTok{\textquotesingle{}unzip {-}Ocp932 \%s {-}d \%s\textquotesingle{}}\NormalTok{, }\StringTok{"downloads/support02.zip"}\NormalTok{, }\StringTok{"./data"}\NormalTok{))}
+\NormalTok{\} }\ControlFlowTok{else}\NormalTok{ \{}
+    \FunctionTok{print}\NormalTok{(}\StringTok{"Windowsで解凍するコマンドを別途追加せよ."}\NormalTok{)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+必要なライブラリを読み込む.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(tidyverse)}
+\DocumentationTok{\#\# {-}{-} Attaching core tidyverse packages {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-} tidyverse 2.0.0 {-}{-}}
+\DocumentationTok{\#\# v dplyr     1.1.4     v readr     2.1.5}
+\DocumentationTok{\#\# v forcats   1.0.0     v stringr   1.5.1}
+\DocumentationTok{\#\# v ggplot2   3.5.0     v tibble    3.2.1}
+\DocumentationTok{\#\# v lubridate 1.9.3     v tidyr     1.3.1}
+\DocumentationTok{\#\# v purrr     1.0.2     }
+\DocumentationTok{\#\# {-}{-} Conflicts {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-} tidyverse\_conflicts() {-}{-}}
+\DocumentationTok{\#\# x dplyr::filter() masks stats::filter()}
+\DocumentationTok{\#\# x dplyr::lag()    masks stats::lag()}
+\DocumentationTok{\#\# i Use the conflicted package (\textless{}http://conflicted.r{-}lib.org/\textgreater{}) to force all conflicts to become errors}
+\end{Highlighting}
+\end{Shaded}
 
 \hypertarget{ux7df4ux7fd2ux554fux984c-2-1-ux78baux8a8d}{%
 \section*{練習問題 2-1 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-2-1-ux78baux8a8d}}
@@ -257,192 +291,655 @@ As you work, you may start a local server to live preview this HTML book. This p
 \section*{練習問題 2-14 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-2-14-ux78baux8a8d}}
 \addcontentsline{toc}{section}{練習問題 2-14 {[}確認{]}}
 
-\hypertarget{cross}{%
-\chapter{Cross-references}\label{cross}}
+\hypertarget{ch3}{%
+\chapter*{第3章 統計理論の基礎}\label{ch3}}
+\addcontentsline{toc}{chapter}{第3章 統計理論の基礎}
 
-Cross-references make it easier for your readers to find and link to elements in your book.
+第3章では第2章と同じデータを使うため、新たなダウンロードは不要.
+なお\href{https://www.yuhikaku.co.jp/books/detail/9784641053854}{出版社サイト}にある第3章のファイルは, 誤ったデータが格納されている.
 
-\hypertarget{chapters-and-sub-chapters}{%
-\section{Chapters and sub-chapters}\label{chapters-and-sub-chapters}}
-
-There are two steps to cross-reference any heading:
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  Label the heading: \texttt{\#\ Hello\ world\ \{\#nice-label\}}.
-
-  \begin{itemize}
-  \tightlist
-  \item
-    Leave the label off if you like the automated heading generated based on your heading title: for example, \texttt{\#\ Hello\ world} = \texttt{\#\ Hello\ world\ \{\#hello-world\}}.
-  \item
-    To label an un-numbered heading, use: \texttt{\#\ Hello\ world\ \{-\#nice-label\}} or \texttt{\{\#\ Hello\ world\ .unnumbered\}}.
-  \end{itemize}
-\item
-  Next, reference the labeled heading anywhere in the text using \texttt{\textbackslash{}@ref(nice-label)}; for example, please see Chapter \ref{cross}.
-
-  \begin{itemize}
-  \tightlist
-  \item
-    If you prefer text as the link instead of a numbered reference use: \protect\hyperlink{cross}{any text you want can go here}.
-  \end{itemize}
-\end{enumerate}
-
-\hypertarget{captioned-figures-and-tables}{%
-\section{Captioned figures and tables}\label{captioned-figures-and-tables}}
-
-Figures and tables \emph{with captions} can also be cross-referenced from elsewhere in your book using \texttt{\textbackslash{}@ref(fig:chunk-label)} and \texttt{\textbackslash{}@ref(tab:chunk-label)}, respectively.
-
-See Figure \ref{fig:nice-fig}.
+必要なライブラリを読み込む.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{par}\NormalTok{(}\AttributeTok{mar =} \FunctionTok{c}\NormalTok{(}\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{, .}\DecValTok{1}\NormalTok{, .}\DecValTok{1}\NormalTok{))}
-\FunctionTok{plot}\NormalTok{(pressure, }\AttributeTok{type =} \StringTok{\textquotesingle{}b\textquotesingle{}}\NormalTok{, }\AttributeTok{pch =} \DecValTok{19}\NormalTok{)}
+\FunctionTok{library}\NormalTok{(tidyverse)}
 \end{Highlighting}
 \end{Shaded}
 
-\begin{figure}
+\hypertarget{ux7df4ux7fd2ux554fux984c-3-1-ux78baux8a8d}{%
+\section*{練習問題 3-1 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-3-1-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 3-1 {[}確認{]}}
 
-{\centering \includegraphics[width=0.8\linewidth]{_main_files/figure-latex/nice-fig-1} 
+\hypertarget{ux7df4ux7fd2ux554fux984c-3-2-ux78baux8a8d}{%
+\section*{練習問題 3-2 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-3-2-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 3-2 {[}確認{]}}
 
-}
+\hypertarget{ux7df4ux7fd2ux554fux984c-3-3-ux78baux8a8d}{%
+\section*{練習問題 3-3 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-3-3-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 3-3 {[}確認{]}}
 
-\caption{Here is a nice figure!}\label{fig:nice-fig}
-\end{figure}
+\hypertarget{ux7df4ux7fd2ux554fux984c-3-4-ux767aux5c55}{%
+\section*{練習問題 3-4 {[}発展{]}}\label{ux7df4ux7fd2ux554fux984c-3-4-ux767aux5c55}}
+\addcontentsline{toc}{section}{練習問題 3-4 {[}発展{]}}
 
-Don't miss Table \ref{tab:nice-tab}.
+\hypertarget{ch4}{%
+\chapter*{第4章 線形単回帰モデルの推定と検定}\label{ch4}}
+\addcontentsline{toc}{chapter}{第4章 線形単回帰モデルの推定と検定}
+
+先に\href{https://www.yuhikaku.co.jp/books/detail/9784641053854}{出版社サイト}よりデータをダウンロードする.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{knitr}\SpecialCharTok{::}\FunctionTok{kable}\NormalTok{(}
-  \FunctionTok{head}\NormalTok{(pressure, }\DecValTok{10}\NormalTok{), }\AttributeTok{caption =} \StringTok{\textquotesingle{}Here is a nice table!\textquotesingle{}}\NormalTok{,}
-  \AttributeTok{booktabs =} \ConstantTok{TRUE}
-\NormalTok{)}
+\CommentTok{\# サポートファイルへのリンク}
+\NormalTok{curl }\OtherTok{\textless{}{-}} \StringTok{"https://www.yuhikaku.co.jp/static\_files/05385\_support04.zip"}
+\CommentTok{\# ダウンロード保存用フォルダが存在しない場合, 作成}
+\ControlFlowTok{if}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{dir.exists}\NormalTok{(}\StringTok{"downloads"}\NormalTok{))\{}
+    \FunctionTok{dir.create}\NormalTok{(}\StringTok{"downloads"}\NormalTok{)}
+\NormalTok{\}}
+\NormalTok{cdestfile }\OtherTok{\textless{}{-}} \StringTok{"downloads/support04.zip"}
+\FunctionTok{download.file}\NormalTok{(curl, cdestfile)}
+\CommentTok{\# データ保存用フォルダが存在しない場合, 作成}
+\ControlFlowTok{if}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{dir.exists}\NormalTok{(}\StringTok{"data"}\NormalTok{))\{}
+    \FunctionTok{dir.create}\NormalTok{(}\StringTok{"data"}\NormalTok{)}
+\NormalTok{\}}
+\CommentTok{\# WSL上のRで解凍すると文字化けするので、Linuxのコマンドを外部呼び出し}
+\CommentTok{\# Windowsの場合は別途コマンドを用いる.}
+\ControlFlowTok{if}\NormalTok{(.Platform}\SpecialCharTok{$}\NormalTok{OS.type }\SpecialCharTok{==} \StringTok{"unix"}\NormalTok{) \{}
+    \FunctionTok{system}\NormalTok{(}\FunctionTok{sprintf}\NormalTok{(}\StringTok{\textquotesingle{}unzip {-}Ocp932 \%s {-}d \%s\textquotesingle{}}\NormalTok{, }\StringTok{"downloads/support04.zip"}\NormalTok{, }\StringTok{"./data"}\NormalTok{))}
+\NormalTok{\} }\ControlFlowTok{else}\NormalTok{ \{}
+    \FunctionTok{print}\NormalTok{(}\StringTok{"Windowsで解凍するコマンドを別途追加せよ."}\NormalTok{)}
+\NormalTok{\}}
 \end{Highlighting}
 \end{Shaded}
 
-\begin{table}
-
-\caption{\label{tab:nice-tab}Here is a nice table!}
-\centering
-\begin{tabular}[t]{rr}
-\toprule
-temperature & pressure\\
-\midrule
-0 & 0.0002\\
-20 & 0.0012\\
-40 & 0.0060\\
-60 & 0.0300\\
-80 & 0.0900\\
-\addlinespace
-100 & 0.2700\\
-120 & 0.7500\\
-140 & 1.8500\\
-160 & 4.2000\\
-180 & 8.8000\\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\hypertarget{parts}{%
-\chapter{Parts}\label{parts}}
-
-You can add parts to organize one or more book chapters together. Parts can be inserted at the top of an .Rmd file, before the first-level chapter heading in that same file.
-
-Add a numbered part: \texttt{\#\ (PART)\ Act\ one\ \{-\}} (followed by \texttt{\#\ A\ chapter})
-
-Add an unnumbered part: \texttt{\#\ (PART\textbackslash{}*)\ Act\ one\ \{-\}} (followed by \texttt{\#\ A\ chapter})
-
-Add an appendix as a special kind of un-numbered part: \texttt{\#\ (APPENDIX)\ Other\ stuff\ \{-\}} (followed by \texttt{\#\ A\ chapter}). Chapters in an appendix are prepended with letters instead of numbers.
-
-\hypertarget{footnotes-and-citations}{%
-\chapter{Footnotes and citations}\label{footnotes-and-citations}}
-
-\hypertarget{footnotes}{%
-\section{Footnotes}\label{footnotes}}
-
-Footnotes are put inside the square brackets after a caret \texttt{\^{}{[}{]}}. Like this one \footnote{This is a footnote.}.
-
-\hypertarget{citations}{%
-\section{Citations}\label{citations}}
-
-Reference items in your bibliography file(s) using \texttt{@key}.
-
-For example, we are using the \textbf{bookdown} package \citep{R-bookdown} (check out the last code chunk in index.Rmd to see how this citation key was added) in this sample book, which was built on top of R Markdown and \textbf{knitr} \citep{xie2015} (this citation was added manually in an external file book.bib).
-Note that the \texttt{.bib} files need to be listed in the index.Rmd with the YAML \texttt{bibliography} key.
-
-The RStudio Visual Markdown Editor can also make it easier to insert citations: \url{https://rstudio.github.io/visual-markdown-editing/\#/citations}
-
-\hypertarget{blocks}{%
-\chapter{Blocks}\label{blocks}}
-
-\hypertarget{equations}{%
-\section{Equations}\label{equations}}
-
-Here is an equation.
-
-\begin{equation} 
-  f\left(k\right) = \binom{n}{k} p^k\left(1-p\right)^{n-k}
-  \label{eq:binom}
-\end{equation}
-
-You may refer to using \texttt{\textbackslash{}@ref(eq:binom)}, like see Equation \eqref{eq:binom}.
-
-\hypertarget{theorems-and-proofs}{%
-\section{Theorems and proofs}\label{theorems-and-proofs}}
-
-Labeled theorems can be referenced in text using \texttt{\textbackslash{}@ref(thm:tri)}, for example, check out this smart theorem \ref{thm:tri}.
-
-\begin{theorem}
-\protect\hypertarget{thm:tri}{}\label{thm:tri}For a right triangle, if \(c\) denotes the \emph{length} of the hypotenuse
-and \(a\) and \(b\) denote the lengths of the \textbf{other} two sides, we have
-\[a^2 + b^2 = c^2\]
-\end{theorem}
-
-Read more here \url{https://bookdown.org/yihui/bookdown/markdown-extensions-by-bookdown.html}.
-
-\hypertarget{callout-blocks}{%
-\section{Callout blocks}\label{callout-blocks}}
-
-The R Markdown Cookbook provides more help on how to use custom blocks to design your own callouts: \url{https://bookdown.org/yihui/rmarkdown-cookbook/custom-blocks.html}
-
-\hypertarget{sharing-your-book}{%
-\chapter{Sharing your book}\label{sharing-your-book}}
-
-\hypertarget{publishing}{%
-\section{Publishing}\label{publishing}}
-
-HTML books can be published online, see: \url{https://bookdown.org/yihui/bookdown/publishing.html}
-
-\hypertarget{pages}{%
-\section{404 pages}\label{pages}}
-
-By default, users will be directed to a 404 page if they try to access a webpage that cannot be found. If you'd like to customize your 404 page instead of using the default, you may add either a \texttt{\_404.Rmd} or \texttt{\_404.md} file to your project root and use code and/or Markdown syntax.
-
-\hypertarget{metadata-for-sharing}{%
-\section{Metadata for sharing}\label{metadata-for-sharing}}
-
-Bookdown HTML books will provide HTML metadata for social sharing on platforms like Twitter, Facebook, and LinkedIn, using information you provide in the \texttt{index.Rmd} YAML. To setup, set the \texttt{url} for your book and the path to your \texttt{cover-image} file. Your book's \texttt{title} and \texttt{description} are also used.
-
-This \texttt{gitbook} uses the same social sharing data across all chapters in your book- all links shared will look the same.
-
-Specify your book's source repository on GitHub using the \texttt{edit} key under the configuration options in the \texttt{\_output.yml} file, which allows users to suggest an edit by linking to a chapter's source file.
-
-Read more about the features of this output format here:
-
-\url{https://pkgs.rstudio.com/bookdown/reference/gitbook.html}
-
-Or use:
+必要なライブラリを読み込む.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{?bookdown}\SpecialCharTok{::}\NormalTok{gitbook}
+\FunctionTok{library}\NormalTok{(tidyverse)}
+\FunctionTok{library}\NormalTok{(openxlsx) }\CommentTok{\# Excelファイルを読み取るためのパッケージ}
 \end{Highlighting}
 \end{Shaded}
 
+\hypertarget{ux7df4ux7fd2ux554fux984c-4-1-ux78baux8a8d}{%
+\section*{練習問題 4-1 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-4-1-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 4-1 {[}確認{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-4-2-ux5b9fux8a3c}{%
+\section*{練習問題 4-2 {[}実証{]}}\label{ux7df4ux7fd2ux554fux984c-4-2-ux5b9fux8a3c}}
+\addcontentsline{toc}{section}{練習問題 4-2 {[}実証{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-4-3-ux78baux8a8d}{%
+\section*{練習問題 4-3 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-4-3-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 4-3 {[}確認{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-4-4-ux78baux8a8d}{%
+\section*{練習問題 4-4 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-4-4-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 4-4 {[}確認{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-4-5-ux78baux8a8d}{%
+\section*{練習問題 4-5 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-4-5-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 4-5 {[}確認{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-4-6-ux78baux8a8d}{%
+\section*{練習問題 4-6 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-4-6-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 4-6 {[}確認{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-4-7-ux78baux8a8d}{%
+\section*{練習問題 4-7 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-4-7-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 4-7 {[}確認{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-4-8-ux767aux5c55}{%
+\section*{練習問題 4-8 {[}発展{]}}\label{ux7df4ux7fd2ux554fux984c-4-8-ux767aux5c55}}
+\addcontentsline{toc}{section}{練習問題 4-8 {[}発展{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-4-9-ux767aux5c55}{%
+\section*{練習問題 4-9 {[}発展{]}}\label{ux7df4ux7fd2ux554fux984c-4-9-ux767aux5c55}}
+\addcontentsline{toc}{section}{練習問題 4-9 {[}発展{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-4-10-ux5b9fux8a3c}{%
+\section*{練習問題 4-10 {[}実証{]}}\label{ux7df4ux7fd2ux554fux984c-4-10-ux5b9fux8a3c}}
+\addcontentsline{toc}{section}{練習問題 4-10 {[}実証{]}}
+
+\hypertarget{ch5}{%
+\chapter*{第5章 重回帰モデルの推定と検定}\label{ch5}}
+\addcontentsline{toc}{chapter}{第5章 重回帰モデルの推定と検定}
+
+先に\href{https://www.yuhikaku.co.jp/books/detail/9784641053854}{出版社サイト}よりデータをダウンロードする.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# サポートファイルへのリンク}
+\NormalTok{curl }\OtherTok{\textless{}{-}} \StringTok{"https://www.yuhikaku.co.jp/static\_files/05385\_support05.zip"}
+\CommentTok{\# ダウンロード保存用フォルダが存在しない場合, 作成}
+\ControlFlowTok{if}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{dir.exists}\NormalTok{(}\StringTok{"downloads"}\NormalTok{))\{}
+    \FunctionTok{dir.create}\NormalTok{(}\StringTok{"downloads"}\NormalTok{)}
+\NormalTok{\}}
+\NormalTok{cdestfile }\OtherTok{\textless{}{-}} \StringTok{"downloads/support05.zip"}
+\FunctionTok{download.file}\NormalTok{(curl, cdestfile)}
+\CommentTok{\# データ保存用フォルダが存在しない場合, 作成}
+\ControlFlowTok{if}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{dir.exists}\NormalTok{(}\StringTok{"data"}\NormalTok{))\{}
+    \FunctionTok{dir.create}\NormalTok{(}\StringTok{"data"}\NormalTok{)}
+\NormalTok{\}}
+\CommentTok{\# WSL上のRで解凍すると文字化けするので、Linuxのコマンドを外部呼び出し}
+\CommentTok{\# Windowsの場合は別途コマンドを用いる.}
+\ControlFlowTok{if}\NormalTok{(.Platform}\SpecialCharTok{$}\NormalTok{OS.type }\SpecialCharTok{==} \StringTok{"unix"}\NormalTok{) \{}
+    \FunctionTok{system}\NormalTok{(}\FunctionTok{sprintf}\NormalTok{(}\StringTok{\textquotesingle{}unzip {-}Ocp932 \%s {-}d \%s\textquotesingle{}}\NormalTok{, }\StringTok{"downloads/support05.zip"}\NormalTok{, }\StringTok{"./data"}\NormalTok{))}
+\NormalTok{\} }\ControlFlowTok{else}\NormalTok{ \{}
+    \FunctionTok{print}\NormalTok{(}\StringTok{"Windowsで解凍するコマンドを別途追加せよ."}\NormalTok{)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+必要なライブラリを読み込む.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(tidyverse)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-5-1-ux78baux8a8d}{%
+\section*{練習問題 5-1 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-5-1-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 5-1 {[}確認{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-5-2-ux78baux8a8d}{%
+\section*{練習問題 5-2 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-5-2-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 5-2 {[}確認{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-5-3-ux78baux8a8d}{%
+\section*{練習問題 5-3 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-5-3-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 5-3 {[}確認{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-5-4-ux78baux8a8d}{%
+\section*{練習問題 5-4 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-5-4-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 5-4 {[}確認{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-5-5-ux78baux8a8d}{%
+\section*{練習問題 5-5 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-5-5-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 5-5 {[}確認{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-5-6-ux78baux8a8d}{%
+\section*{練習問題 5-6 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-5-6-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 5-6 {[}確認{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-5-7-ux78baux8a8d}{%
+\section*{練習問題 5-7 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-5-7-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 5-7 {[}確認{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-5-8-ux78baux8a8d}{%
+\section*{練習問題 5-8 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-5-8-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 5-8 {[}確認{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-5-9-ux78baux8a8d}{%
+\section*{練習問題 5-9 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-5-9-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 5-9 {[}確認{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-5-10-ux767aux5c55}{%
+\section*{練習問題 5-10 {[}発展{]}}\label{ux7df4ux7fd2ux554fux984c-5-10-ux767aux5c55}}
+\addcontentsline{toc}{section}{練習問題 5-10 {[}発展{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-5-11-ux767aux5c55}{%
+\section*{練習問題 5-11 {[}発展{]}}\label{ux7df4ux7fd2ux554fux984c-5-11-ux767aux5c55}}
+\addcontentsline{toc}{section}{練習問題 5-11 {[}発展{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-5-12-ux767aux5c55}{%
+\section*{練習問題 5-12 {[}発展{]}}\label{ux7df4ux7fd2ux554fux984c-5-12-ux767aux5c55}}
+\addcontentsline{toc}{section}{練習問題 5-12 {[}発展{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-5-13-ux767aux5c55}{%
+\section*{練習問題 5-13 {[}*発展{]}}\label{ux7df4ux7fd2ux554fux984c-5-13-ux767aux5c55}}
+\addcontentsline{toc}{section}{練習問題 5-13 {[}*発展{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-5-14-ux5b9fux8a3c}{%
+\section*{練習問題 5-14 {[}実証{]}}\label{ux7df4ux7fd2ux554fux984c-5-14-ux5b9fux8a3c}}
+\addcontentsline{toc}{section}{練習問題 5-14 {[}実証{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-5-15-ux5b9fux8a3c}{%
+\section*{練習問題 5-15 {[}実証{]}}\label{ux7df4ux7fd2ux554fux984c-5-15-ux5b9fux8a3c}}
+\addcontentsline{toc}{section}{練習問題 5-15 {[}実証{]}}
+
+\hypertarget{ch6}{%
+\chapter*{第6章 パネルデータ分析}\label{ch6}}
+\addcontentsline{toc}{chapter}{第6章 パネルデータ分析}
+
+先に\href{https://www.yuhikaku.co.jp/books/detail/9784641053854}{出版社サイト}よりデータをダウンロードする.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# サポートファイルへのリンク}
+\NormalTok{curl }\OtherTok{\textless{}{-}} \StringTok{"https://www.yuhikaku.co.jp/static\_files/05385\_support06.zip"}
+\CommentTok{\# ダウンロード保存用フォルダが存在しない場合, 作成}
+\ControlFlowTok{if}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{dir.exists}\NormalTok{(}\StringTok{"downloads"}\NormalTok{))\{}
+    \FunctionTok{dir.create}\NormalTok{(}\StringTok{"downloads"}\NormalTok{)}
+\NormalTok{\}}
+\NormalTok{cdestfile }\OtherTok{\textless{}{-}} \StringTok{"downloads/support06.zip"}
+\FunctionTok{download.file}\NormalTok{(curl, cdestfile)}
+\CommentTok{\# データ保存用フォルダが存在しない場合, 作成}
+\ControlFlowTok{if}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{dir.exists}\NormalTok{(}\StringTok{"data"}\NormalTok{))\{}
+    \FunctionTok{dir.create}\NormalTok{(}\StringTok{"data"}\NormalTok{)}
+\NormalTok{\}}
+\CommentTok{\# WSL上のRで解凍すると文字化けするので、Linuxのコマンドを外部呼び出し}
+\CommentTok{\# Windowsの場合は別途コマンドを用いる.}
+\ControlFlowTok{if}\NormalTok{(.Platform}\SpecialCharTok{$}\NormalTok{OS.type }\SpecialCharTok{==} \StringTok{"unix"}\NormalTok{) \{}
+    \FunctionTok{system}\NormalTok{(}\FunctionTok{sprintf}\NormalTok{(}\StringTok{\textquotesingle{}unzip {-}Ocp932 \%s {-}d \%s\textquotesingle{}}\NormalTok{, }\StringTok{"downloads/support06.zip"}\NormalTok{, }\StringTok{"./data"}\NormalTok{))}
+\NormalTok{\} }\ControlFlowTok{else}\NormalTok{ \{}
+    \FunctionTok{print}\NormalTok{(}\StringTok{"Windowsで解凍するコマンドを別途追加せよ."}\NormalTok{)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-6-1-ux78baux8a8d}{%
+\section*{練習問題 6-1 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-6-1-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 6-1 {[}確認{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-6-2-ux78baux8a8d}{%
+\section*{練習問題 6-2 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-6-2-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 6-2 {[}確認{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-6-3-ux78baux8a8d}{%
+\section*{練習問題 6-3 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-6-3-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 6-3 {[}確認{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-6-4-ux78baux8a8d}{%
+\section*{練習問題 6-4 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-6-4-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 6-4 {[}確認{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-6-5-ux78baux8a8d}{%
+\section*{練習問題 6-5 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-6-5-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 6-5 {[}確認{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-6-6-ux78baux8a8d}{%
+\section*{練習問題 6-6 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-6-6-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 6-6 {[}確認{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-6-7-ux78baux8a8d}{%
+\section*{練習問題 6-7 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-6-7-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 6-7 {[}確認{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-6-8-ux767aux5c55}{%
+\section*{練習問題 6-8 {[}発展{]}}\label{ux7df4ux7fd2ux554fux984c-6-8-ux767aux5c55}}
+\addcontentsline{toc}{section}{練習問題 6-8 {[}発展{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-6-9-ux767aux5c55}{%
+\section*{練習問題 6-9 {[}発展{]}}\label{ux7df4ux7fd2ux554fux984c-6-9-ux767aux5c55}}
+\addcontentsline{toc}{section}{練習問題 6-9 {[}発展{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-6-10-ux5b9fux8a3c}{%
+\section*{練習問題 6-10 {[}実証{]}}\label{ux7df4ux7fd2ux554fux984c-6-10-ux5b9fux8a3c}}
+\addcontentsline{toc}{section}{練習問題 6-10 {[}実証{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-6-11-ux5b9fux8a3c}{%
+\section*{練習問題 6-11 {[}実証{]}}\label{ux7df4ux7fd2ux554fux984c-6-11-ux5b9fux8a3c}}
+\addcontentsline{toc}{section}{練習問題 6-11 {[}実証{]}}
+
+\hypertarget{ch7}{%
+\chapter*{第7章 操作変数法}\label{ch7}}
+\addcontentsline{toc}{chapter}{第7章 操作変数法}
+
+先に\href{https://www.yuhikaku.co.jp/books/detail/9784641053854}{出版社サイト}よりデータをダウンロードする.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# サポートファイルへのリンク}
+\NormalTok{curl }\OtherTok{\textless{}{-}} \StringTok{"https://www.yuhikaku.co.jp/static\_files/05385\_support07.zip"}
+\CommentTok{\# ダウンロード保存用フォルダが存在しない場合, 作成}
+\ControlFlowTok{if}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{dir.exists}\NormalTok{(}\StringTok{"downloads"}\NormalTok{))\{}
+    \FunctionTok{dir.create}\NormalTok{(}\StringTok{"downloads"}\NormalTok{)}
+\NormalTok{\}}
+\NormalTok{cdestfile }\OtherTok{\textless{}{-}} \StringTok{"downloads/support07.zip"}
+\FunctionTok{download.file}\NormalTok{(curl, cdestfile)}
+\CommentTok{\# データ保存用フォルダが存在しない場合, 作成}
+\ControlFlowTok{if}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{dir.exists}\NormalTok{(}\StringTok{"data"}\NormalTok{))\{}
+    \FunctionTok{dir.create}\NormalTok{(}\StringTok{"data"}\NormalTok{)}
+\NormalTok{\}}
+\CommentTok{\# WSL上のRで解凍すると文字化けするので、Linuxのコマンドを外部呼び出し}
+\CommentTok{\# Windowsの場合は別途コマンドを用いる.}
+\ControlFlowTok{if}\NormalTok{(.Platform}\SpecialCharTok{$}\NormalTok{OS.type }\SpecialCharTok{==} \StringTok{"unix"}\NormalTok{) \{}
+    \FunctionTok{system}\NormalTok{(}\FunctionTok{sprintf}\NormalTok{(}\StringTok{\textquotesingle{}unzip {-}Ocp932 \%s {-}d \%s\textquotesingle{}}\NormalTok{, }\StringTok{"downloads/support07.zip"}\NormalTok{, }\StringTok{"./data"}\NormalTok{))}
+\NormalTok{\} }\ControlFlowTok{else}\NormalTok{ \{}
+    \FunctionTok{print}\NormalTok{(}\StringTok{"Windowsで解凍するコマンドを別途追加せよ."}\NormalTok{)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-7-1-ux78baux8a8d}{%
+\section*{練習問題 7-1 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-7-1-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 7-1 {[}確認{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-7-2-ux78baux8a8d}{%
+\section*{練習問題 7-2 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-7-2-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 7-2 {[}確認{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-7-3-ux78baux8a8d}{%
+\section*{練習問題 7-3 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-7-3-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 7-3 {[}確認{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-7-4-ux78baux8a8d}{%
+\section*{練習問題 7-4 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-7-4-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 7-4 {[}確認{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-7-5-ux78baux8a8d}{%
+\section*{練習問題 7-5 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-7-5-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 7-5 {[}確認{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-7-6-ux78baux8a8d}{%
+\section*{練習問題 7-6 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-7-6-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 7-6 {[}確認{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-7-7-ux78baux8a8d}{%
+\section*{練習問題 7-7 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-7-7-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 7-7 {[}確認{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-7-8-ux78baux8a8d}{%
+\section*{練習問題 7-8 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-7-8-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 7-8 {[}確認{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-7-9-ux78baux8a8d}{%
+\section*{練習問題 7-9 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-7-9-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 7-9 {[}確認{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-7-10-ux78baux8a8d}{%
+\section*{練習問題 7-10 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-7-10-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 7-10 {[}確認{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-7-11-ux767aux5c55}{%
+\section*{練習問題 7-11 {[}発展{]}}\label{ux7df4ux7fd2ux554fux984c-7-11-ux767aux5c55}}
+\addcontentsline{toc}{section}{練習問題 7-11 {[}発展{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-7-12-ux767aux5c55}{%
+\section*{練習問題 7-12 {[}発展{]}}\label{ux7df4ux7fd2ux554fux984c-7-12-ux767aux5c55}}
+\addcontentsline{toc}{section}{練習問題 7-12 {[}発展{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-7-13-ux5b9fux8a3c}{%
+\section*{練習問題 7-13 {[}実証{]}}\label{ux7df4ux7fd2ux554fux984c-7-13-ux5b9fux8a3c}}
+\addcontentsline{toc}{section}{練習問題 7-13 {[}実証{]}}
+
+\hypertarget{ch8}{%
+\chapter*{第8章 制限従属変数モデル}\label{ch8}}
+\addcontentsline{toc}{chapter}{第8章 制限従属変数モデル}
+
+先に\href{https://www.yuhikaku.co.jp/books/detail/9784641053854}{出版社サイト}よりデータをダウンロードする.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# サポートファイルへのリンク}
+\NormalTok{curl }\OtherTok{\textless{}{-}} \StringTok{"https://www.yuhikaku.co.jp/static\_files/05385\_support08.zip"}
+\CommentTok{\# ダウンロード保存用フォルダが存在しない場合, 作成}
+\ControlFlowTok{if}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{dir.exists}\NormalTok{(}\StringTok{"downloads"}\NormalTok{))\{}
+    \FunctionTok{dir.create}\NormalTok{(}\StringTok{"downloads"}\NormalTok{)}
+\NormalTok{\}}
+\NormalTok{cdestfile }\OtherTok{\textless{}{-}} \StringTok{"downloads/support08.zip"}
+\FunctionTok{download.file}\NormalTok{(curl, cdestfile)}
+\CommentTok{\# データ保存用フォルダが存在しない場合, 作成}
+\ControlFlowTok{if}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{dir.exists}\NormalTok{(}\StringTok{"data"}\NormalTok{))\{}
+    \FunctionTok{dir.create}\NormalTok{(}\StringTok{"data"}\NormalTok{)}
+\NormalTok{\}}
+\CommentTok{\# WSL上のRで解凍すると文字化けするので、Linuxのコマンドを外部呼び出し}
+\CommentTok{\# Windowsの場合は別途コマンドを用いる.}
+\ControlFlowTok{if}\NormalTok{(.Platform}\SpecialCharTok{$}\NormalTok{OS.type }\SpecialCharTok{==} \StringTok{"unix"}\NormalTok{) \{}
+    \FunctionTok{system}\NormalTok{(}\FunctionTok{sprintf}\NormalTok{(}\StringTok{\textquotesingle{}unzip {-}Ocp932 \%s {-}d \%s\textquotesingle{}}\NormalTok{, }\StringTok{"downloads/support08.zip"}\NormalTok{, }\StringTok{"./data"}\NormalTok{))}
+\NormalTok{\} }\ControlFlowTok{else}\NormalTok{ \{}
+    \FunctionTok{print}\NormalTok{(}\StringTok{"Windowsで解凍するコマンドを別途追加せよ."}\NormalTok{)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-8-1-ux78baux8a8d}{%
+\section*{練習問題 8-1 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-8-1-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 8-1 {[}確認{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-8-2-ux78baux8a8d}{%
+\section*{練習問題 8-2 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-8-2-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 8-2 {[}確認{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-8-3-ux767aux5c55}{%
+\section*{練習問題 8-3 {[}発展{]}}\label{ux7df4ux7fd2ux554fux984c-8-3-ux767aux5c55}}
+\addcontentsline{toc}{section}{練習問題 8-3 {[}発展{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-8-4-ux5b9fux8a3c}{%
+\section*{練習問題 8-4 {[}実証{]}}\label{ux7df4ux7fd2ux554fux984c-8-4-ux5b9fux8a3c}}
+\addcontentsline{toc}{section}{練習問題 8-4 {[}実証{]}}
+
+\hypertarget{ch9}{%
+\chapter*{第9章 政策評価モデル}\label{ch9}}
+\addcontentsline{toc}{chapter}{第9章 政策評価モデル}
+
+先に\href{https://www.yuhikaku.co.jp/books/detail/9784641053854}{出版社サイト}よりデータをダウンロードする.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# サポートファイルへのリンク}
+\NormalTok{curl }\OtherTok{\textless{}{-}} \StringTok{"https://www.yuhikaku.co.jp/static\_files/05385\_support09.zip"}
+\CommentTok{\# ダウンロード保存用フォルダが存在しない場合, 作成}
+\ControlFlowTok{if}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{dir.exists}\NormalTok{(}\StringTok{"downloads"}\NormalTok{))\{}
+    \FunctionTok{dir.create}\NormalTok{(}\StringTok{"downloads"}\NormalTok{)}
+\NormalTok{\}}
+\NormalTok{cdestfile }\OtherTok{\textless{}{-}} \StringTok{"downloads/support09.zip"}
+\FunctionTok{download.file}\NormalTok{(curl, cdestfile)}
+\CommentTok{\# データ保存用フォルダが存在しない場合, 作成}
+\ControlFlowTok{if}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{dir.exists}\NormalTok{(}\StringTok{"data"}\NormalTok{))\{}
+    \FunctionTok{dir.create}\NormalTok{(}\StringTok{"data"}\NormalTok{)}
+\NormalTok{\}}
+\CommentTok{\# WSL上のRで解凍すると文字化けするので、Linuxのコマンドを外部呼び出し}
+\CommentTok{\# Windowsの場合は別途コマンドを用いる.}
+\ControlFlowTok{if}\NormalTok{(.Platform}\SpecialCharTok{$}\NormalTok{OS.type }\SpecialCharTok{==} \StringTok{"unix"}\NormalTok{) \{}
+    \FunctionTok{system}\NormalTok{(}\FunctionTok{sprintf}\NormalTok{(}\StringTok{\textquotesingle{}unzip {-}Ocp932 \%s {-}d \%s\textquotesingle{}}\NormalTok{, }\StringTok{"downloads/support09.zip"}\NormalTok{, }\StringTok{"./data"}\NormalTok{))}
+\NormalTok{\} }\ControlFlowTok{else}\NormalTok{ \{}
+    \FunctionTok{print}\NormalTok{(}\StringTok{"Windowsで解凍するコマンドを別途追加せよ."}\NormalTok{)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-9-1-ux78baux8a8d}{%
+\section*{練習問題 9-1 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-9-1-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 9-1 {[}確認{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-9-2-ux78baux8a8d}{%
+\section*{練習問題 9-2 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-9-2-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 9-2 {[}確認{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-9-3-ux767aux5c55}{%
+\section*{練習問題 9-3 {[}発展{]}}\label{ux7df4ux7fd2ux554fux984c-9-3-ux767aux5c55}}
+\addcontentsline{toc}{section}{練習問題 9-3 {[}発展{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-9-4-ux767aux5c55}{%
+\section*{練習問題 9-4 {[}発展{]}}\label{ux7df4ux7fd2ux554fux984c-9-4-ux767aux5c55}}
+\addcontentsline{toc}{section}{練習問題 9-4 {[}発展{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-9-5-ux5b9fux8a3c}{%
+\section*{練習問題 9-5 {[}実証{]}}\label{ux7df4ux7fd2ux554fux984c-9-5-ux5b9fux8a3c}}
+\addcontentsline{toc}{section}{練習問題 9-5 {[}実証{]}}
+
+\hypertarget{ch10}{%
+\chapter*{第10章 系列相関と時系列モデル}\label{ch10}}
+\addcontentsline{toc}{chapter}{第10章 系列相関と時系列モデル}
+
+先に\href{https://www.yuhikaku.co.jp/books/detail/9784641053854}{出版社サイト}よりデータをダウンロードする.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# サポートファイルへのリンク}
+\NormalTok{curl }\OtherTok{\textless{}{-}} \StringTok{"https://www.yuhikaku.co.jp/static\_files/05385\_support10.zip"}
+\CommentTok{\# ダウンロード保存用フォルダが存在しない場合, 作成}
+\ControlFlowTok{if}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{dir.exists}\NormalTok{(}\StringTok{"downloads"}\NormalTok{))\{}
+    \FunctionTok{dir.create}\NormalTok{(}\StringTok{"downloads"}\NormalTok{)}
+\NormalTok{\}}
+\NormalTok{cdestfile }\OtherTok{\textless{}{-}} \StringTok{"downloads/support10.zip"}
+\FunctionTok{download.file}\NormalTok{(curl, cdestfile)}
+\CommentTok{\# データ保存用フォルダが存在しない場合, 作成}
+\ControlFlowTok{if}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{dir.exists}\NormalTok{(}\StringTok{"data"}\NormalTok{))\{}
+    \FunctionTok{dir.create}\NormalTok{(}\StringTok{"data"}\NormalTok{)}
+\NormalTok{\}}
+\CommentTok{\# WSL上のRで解凍すると文字化けするので、Linuxのコマンドを外部呼び出し}
+\CommentTok{\# Windowsの場合は別途コマンドを用いる.}
+\ControlFlowTok{if}\NormalTok{(.Platform}\SpecialCharTok{$}\NormalTok{OS.type }\SpecialCharTok{==} \StringTok{"unix"}\NormalTok{) \{}
+    \FunctionTok{system}\NormalTok{(}\FunctionTok{sprintf}\NormalTok{(}\StringTok{\textquotesingle{}unzip {-}Ocp932 \%s {-}d \%s\textquotesingle{}}\NormalTok{, }\StringTok{"downloads/support10.zip"}\NormalTok{, }\StringTok{"./data"}\NormalTok{))}
+\NormalTok{\} }\ControlFlowTok{else}\NormalTok{ \{}
+    \FunctionTok{print}\NormalTok{(}\StringTok{"Windowsで解凍するコマンドを別途追加せよ."}\NormalTok{)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-10-1-ux78baux8a8d}{%
+\section*{練習問題 10-1 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-10-1-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 10-1 {[}確認{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-10-2-ux78baux8a8d}{%
+\section*{練習問題 10-2 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-10-2-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 10-2 {[}確認{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-10-3-ux78baux8a8d}{%
+\section*{練習問題 10-3 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-10-3-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 10-3 {[}確認{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-10-4-ux78baux8a8d}{%
+\section*{練習問題 10-4 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-10-4-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 10-4 {[}確認{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-10-5-ux78baux8a8d}{%
+\section*{練習問題 10-5 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-10-5-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 10-5 {[}確認{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-10-6-ux78baux8a8d}{%
+\section*{練習問題 10-6 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-10-6-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 10-6 {[}確認{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-10-7-ux767aux5c55}{%
+\section*{練習問題 10-7 {[}発展{]}}\label{ux7df4ux7fd2ux554fux984c-10-7-ux767aux5c55}}
+\addcontentsline{toc}{section}{練習問題 10-7 {[}発展{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-10-8-ux767aux5c55}{%
+\section*{練習問題 10-8 {[}発展{]}}\label{ux7df4ux7fd2ux554fux984c-10-8-ux767aux5c55}}
+\addcontentsline{toc}{section}{練習問題 10-8 {[}発展{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-10-9-ux5b9fux8a3c}{%
+\section*{練習問題 10-9 {[}実証{]}}\label{ux7df4ux7fd2ux554fux984c-10-9-ux5b9fux8a3c}}
+\addcontentsline{toc}{section}{練習問題 10-9 {[}実証{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-10-10-ux5b9fux8a3c}{%
+\section*{練習問題 10-10 {[}実証{]}}\label{ux7df4ux7fd2ux554fux984c-10-10-ux5b9fux8a3c}}
+\addcontentsline{toc}{section}{練習問題 10-10 {[}実証{]}}
+
+\hypertarget{ch11}{%
+\chapter*{第11章 トレンドと構造変化}\label{ch11}}
+\addcontentsline{toc}{chapter}{第11章 トレンドと構造変化}
+
+先に\href{https://www.yuhikaku.co.jp/books/detail/9784641053854}{出版社サイト}よりデータをダウンロードする.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# サポートファイルへのリンク}
+\NormalTok{curl }\OtherTok{\textless{}{-}} \StringTok{"https://www.yuhikaku.co.jp/static\_files/05385\_support11.zip"}
+\CommentTok{\# ダウンロード保存用フォルダが存在しない場合, 作成}
+\ControlFlowTok{if}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{dir.exists}\NormalTok{(}\StringTok{"downloads"}\NormalTok{))\{}
+    \FunctionTok{dir.create}\NormalTok{(}\StringTok{"downloads"}\NormalTok{)}
+\NormalTok{\}}
+\NormalTok{cdestfile }\OtherTok{\textless{}{-}} \StringTok{"downloads/support11.zip"}
+\FunctionTok{download.file}\NormalTok{(curl, cdestfile)}
+\CommentTok{\# データ保存用フォルダが存在しない場合, 作成}
+\ControlFlowTok{if}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{dir.exists}\NormalTok{(}\StringTok{"data"}\NormalTok{))\{}
+    \FunctionTok{dir.create}\NormalTok{(}\StringTok{"data"}\NormalTok{)}
+\NormalTok{\}}
+\CommentTok{\# WSL上のRで解凍すると文字化けするので、Linuxのコマンドを外部呼び出し}
+\CommentTok{\# Windowsの場合は別途コマンドを用いる.}
+\ControlFlowTok{if}\NormalTok{(.Platform}\SpecialCharTok{$}\NormalTok{OS.type }\SpecialCharTok{==} \StringTok{"unix"}\NormalTok{) \{}
+    \FunctionTok{system}\NormalTok{(}\FunctionTok{sprintf}\NormalTok{(}\StringTok{\textquotesingle{}unzip {-}Ocp932 \%s {-}d \%s\textquotesingle{}}\NormalTok{, }\StringTok{"downloads/support11.zip"}\NormalTok{, }\StringTok{"./data"}\NormalTok{))}
+\NormalTok{\} }\ControlFlowTok{else}\NormalTok{ \{}
+    \FunctionTok{print}\NormalTok{(}\StringTok{"Windowsで解凍するコマンドを別途追加せよ."}\NormalTok{)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-11-1-ux78baux8a8d}{%
+\section*{練習問題 11-1 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-11-1-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 11-1 {[}確認{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-11-2-ux78baux8a8d}{%
+\section*{練習問題 11-2 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-11-2-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 11-2 {[}確認{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-11-3-ux78baux8a8d}{%
+\section*{練習問題 11-3 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-11-3-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 11-3 {[}確認{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-11-4-ux78baux8a8d}{%
+\section*{練習問題 11-4 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-11-4-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 11-4 {[}確認{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-11-5-ux78baux8a8d}{%
+\section*{練習問題 11-5 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-11-5-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 11-5 {[}確認{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-11-6-ux767aux5c55}{%
+\section*{練習問題 11-6 {[}発展{]}}\label{ux7df4ux7fd2ux554fux984c-11-6-ux767aux5c55}}
+\addcontentsline{toc}{section}{練習問題 11-6 {[}発展{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-11-7-ux767aux5c55}{%
+\section*{練習問題 11-7 {[}発展{]}}\label{ux7df4ux7fd2ux554fux984c-11-7-ux767aux5c55}}
+\addcontentsline{toc}{section}{練習問題 11-7 {[}発展{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-11-8-ux5b9fux8a3c}{%
+\section*{練習問題 11-8 {[}実証{]}}\label{ux7df4ux7fd2ux554fux984c-11-8-ux5b9fux8a3c}}
+\addcontentsline{toc}{section}{練習問題 11-8 {[}実証{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-11-9-ux5b9fux8a3c}{%
+\section*{練習問題 11-9 {[}実証{]}}\label{ux7df4ux7fd2ux554fux984c-11-9-ux5b9fux8a3c}}
+\addcontentsline{toc}{section}{練習問題 11-9 {[}実証{]}}
+
+\hypertarget{ch12}{%
+\chapter*{第12章 VARモデル}\label{ch12}}
+\addcontentsline{toc}{chapter}{第12章 VARモデル}
+
+先に\href{https://www.yuhikaku.co.jp/books/detail/9784641053854}{出版社サイト}よりデータをダウンロードする.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# サポートファイルへのリンク}
+\NormalTok{curl }\OtherTok{\textless{}{-}} \StringTok{"https://www.yuhikaku.co.jp/static\_files/05385\_support12.zip"}
+\CommentTok{\# ダウンロード保存用フォルダが存在しない場合, 作成}
+\ControlFlowTok{if}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{dir.exists}\NormalTok{(}\StringTok{"downloads"}\NormalTok{))\{}
+    \FunctionTok{dir.create}\NormalTok{(}\StringTok{"downloads"}\NormalTok{)}
+\NormalTok{\}}
+\NormalTok{cdestfile }\OtherTok{\textless{}{-}} \StringTok{"downloads/support12.zip"}
+\FunctionTok{download.file}\NormalTok{(curl, cdestfile)}
+\CommentTok{\# データ保存用フォルダが存在しない場合, 作成}
+\ControlFlowTok{if}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{dir.exists}\NormalTok{(}\StringTok{"data"}\NormalTok{))\{}
+    \FunctionTok{dir.create}\NormalTok{(}\StringTok{"data"}\NormalTok{)}
+\NormalTok{\}}
+\CommentTok{\# WSL上のRで解凍すると文字化けするので、Linuxのコマンドを外部呼び出し}
+\CommentTok{\# Windowsの場合は別途コマンドを用いる.}
+\ControlFlowTok{if}\NormalTok{(.Platform}\SpecialCharTok{$}\NormalTok{OS.type }\SpecialCharTok{==} \StringTok{"unix"}\NormalTok{) \{}
+    \FunctionTok{system}\NormalTok{(}\FunctionTok{sprintf}\NormalTok{(}\StringTok{\textquotesingle{}unzip {-}Ocp932 \%s {-}d \%s\textquotesingle{}}\NormalTok{, }\StringTok{"downloads/support12.zip"}\NormalTok{, }\StringTok{"./data"}\NormalTok{))}
+\NormalTok{\} }\ControlFlowTok{else}\NormalTok{ \{}
+    \FunctionTok{print}\NormalTok{(}\StringTok{"Windowsで解凍するコマンドを別途追加せよ."}\NormalTok{)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-12-1-ux78baux8a8d}{%
+\section*{練習問題 12-1 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-12-1-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 12-1 {[}確認{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-12-2-ux78baux8a8d}{%
+\section*{練習問題 12-2 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-12-2-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 12-2 {[}確認{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-12-3-ux78baux8a8d}{%
+\section*{練習問題 12-3 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-12-3-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 12-3 {[}確認{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-12-4-ux767aux5c55}{%
+\section*{練習問題 12-4 {[}発展{]}}\label{ux7df4ux7fd2ux554fux984c-12-4-ux767aux5c55}}
+\addcontentsline{toc}{section}{練習問題 12-4 {[}発展{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-12-5-ux5b9fux8a3c}{%
+\section*{練習問題 12-5 {[}実証{]}}\label{ux7df4ux7fd2ux554fux984c-12-5-ux5b9fux8a3c}}
+\addcontentsline{toc}{section}{練習問題 12-5 {[}実証{]}}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-12-6-ux5b9fux8a3c}{%
+\section*{練習問題 12-6 {[}実証{]}}\label{ux7df4ux7fd2ux554fux984c-12-6-ux5b9fux8a3c}}
+\addcontentsline{toc}{section}{練習問題 12-6 {[}実証{]}}
 
   \bibliography{book.bib,packages.bib}
 

@@ -1,6 +1,6 @@
 # 第4章 線形単回帰モデルの推定と検定 {-#ch4}
 先に[出版社サイト](https://www.yuhikaku.co.jp/books/detail/9784641053854)よりデータをダウンロードする.
-```{r collapse=T}
+```{r collapse=T, eval=FALSE}
 # サポートファイルへのリンク
 curl <- "https://www.yuhikaku.co.jp/static_files/05385_support04.zip"
 # ダウンロード保存用フォルダが存在しない場合, 作成
