@@ -178,6 +178,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="" data-path="ch4.html"><a href="ch4.html"><i class="fa fa-check"></i>第4章 線形単回帰モデルの推定と検定</a>
 <ul>
+<li class="chapter" data-level="" data-path="ch4.html"><a href="ch4.html#実証例4.1-労働生産性と実質賃金の関係"><i class="fa fa-check"></i>実証例4.1 労働生産性と実質賃金の関係</a></li>
+<li class="chapter" data-level="" data-path="ch4.html"><a href="ch4.html#図4-1-時間当たり実質賃金と労働生産性"><i class="fa fa-check"></i>図4-1: 時間当たり実質賃金と労働生産性</a></li>
 <li class="chapter" data-level="" data-path="ch4.html"><a href="ch4.html#練習問題-4-1-確認"><i class="fa fa-check"></i>練習問題 4-1 [確認]</a></li>
 <li class="chapter" data-level="" data-path="ch4.html"><a href="ch4.html#練習問題-4-2-実証"><i class="fa fa-check"></i>練習問題 4-2 [実証]</a></li>
 <li class="chapter" data-level="" data-path="ch4.html"><a href="ch4.html#練習問題-4-3-確認"><i class="fa fa-check"></i>練習問題 4-3 [確認]</a></li>
@@ -309,33 +311,117 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="ch4" class="section level1 unnumbered hasAnchor">
 <h1>第4章 線形単回帰モデルの推定と検定<a href="ch4.html#ch4" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>先に<a href="https://www.yuhikaku.co.jp/books/detail/9784641053854">出版社サイト</a>よりデータをダウンロードする.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="ch4.html#cb7-1" tabindex="-1"></a><span class="co"># サポートファイルへのリンク</span></span>
-<span id="cb7-2"><a href="ch4.html#cb7-2" tabindex="-1"></a>curl <span class="ot">&lt;-</span> <span class="st">&quot;https://www.yuhikaku.co.jp/static_files/05385_support04.zip&quot;</span></span>
-<span id="cb7-3"><a href="ch4.html#cb7-3" tabindex="-1"></a><span class="co"># ダウンロード保存用フォルダが存在しない場合, 作成</span></span>
-<span id="cb7-4"><a href="ch4.html#cb7-4" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">dir.exists</span>(<span class="st">&quot;downloads&quot;</span>)){</span>
-<span id="cb7-5"><a href="ch4.html#cb7-5" tabindex="-1"></a>    <span class="fu">dir.create</span>(<span class="st">&quot;downloads&quot;</span>)</span>
-<span id="cb7-6"><a href="ch4.html#cb7-6" tabindex="-1"></a>}</span>
-<span id="cb7-7"><a href="ch4.html#cb7-7" tabindex="-1"></a>cdestfile <span class="ot">&lt;-</span> <span class="st">&quot;downloads/support04.zip&quot;</span></span>
-<span id="cb7-8"><a href="ch4.html#cb7-8" tabindex="-1"></a><span class="fu">download.file</span>(curl, cdestfile)</span>
-<span id="cb7-9"><a href="ch4.html#cb7-9" tabindex="-1"></a><span class="co"># データ保存用フォルダが存在しない場合, 作成</span></span>
-<span id="cb7-10"><a href="ch4.html#cb7-10" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">dir.exists</span>(<span class="st">&quot;data&quot;</span>)){</span>
-<span id="cb7-11"><a href="ch4.html#cb7-11" tabindex="-1"></a>    <span class="fu">dir.create</span>(<span class="st">&quot;data&quot;</span>)</span>
-<span id="cb7-12"><a href="ch4.html#cb7-12" tabindex="-1"></a>}</span>
-<span id="cb7-13"><a href="ch4.html#cb7-13" tabindex="-1"></a><span class="co"># WSL上のRで解凍すると文字化けするので、Linuxのコマンドを外部呼び出し</span></span>
-<span id="cb7-14"><a href="ch4.html#cb7-14" tabindex="-1"></a><span class="co"># Windowsの場合は別途コマンドを用いる.</span></span>
-<span id="cb7-15"><a href="ch4.html#cb7-15" tabindex="-1"></a><span class="cf">if</span>(.Platform<span class="sc">$</span>OS.type <span class="sc">==</span> <span class="st">&quot;unix&quot;</span>) {</span>
-<span id="cb7-16"><a href="ch4.html#cb7-16" tabindex="-1"></a>    <span class="fu">system</span>(<span class="fu">sprintf</span>(<span class="st">&#39;unzip -n -Ocp932 %s -d %s&#39;</span>, <span class="st">&quot;downloads/support04.zip&quot;</span>, <span class="st">&quot;./data&quot;</span>))</span>
-<span id="cb7-17"><a href="ch4.html#cb7-17" tabindex="-1"></a>} <span class="cf">else</span> {</span>
-<span id="cb7-18"><a href="ch4.html#cb7-18" tabindex="-1"></a>    <span class="fu">print</span>(<span class="st">&quot;Windowsで解凍するコマンドを別途追加せよ.&quot;</span>)</span>
-<span id="cb7-19"><a href="ch4.html#cb7-19" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="ch4.html#cb11-1" tabindex="-1"></a><span class="co"># サポートファイルへのリンク</span></span>
+<span id="cb11-2"><a href="ch4.html#cb11-2" tabindex="-1"></a>curl <span class="ot">&lt;-</span> <span class="st">&quot;https://www.yuhikaku.co.jp/static_files/05385_support04.zip&quot;</span></span>
+<span id="cb11-3"><a href="ch4.html#cb11-3" tabindex="-1"></a><span class="co"># ダウンロード保存用フォルダが存在しない場合, 作成</span></span>
+<span id="cb11-4"><a href="ch4.html#cb11-4" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">dir.exists</span>(<span class="st">&quot;downloads&quot;</span>)){</span>
+<span id="cb11-5"><a href="ch4.html#cb11-5" tabindex="-1"></a>    <span class="fu">dir.create</span>(<span class="st">&quot;downloads&quot;</span>)</span>
+<span id="cb11-6"><a href="ch4.html#cb11-6" tabindex="-1"></a>}</span>
+<span id="cb11-7"><a href="ch4.html#cb11-7" tabindex="-1"></a>cdestfile <span class="ot">&lt;-</span> <span class="st">&quot;downloads/support04.zip&quot;</span></span>
+<span id="cb11-8"><a href="ch4.html#cb11-8" tabindex="-1"></a><span class="fu">download.file</span>(curl, cdestfile)</span>
+<span id="cb11-9"><a href="ch4.html#cb11-9" tabindex="-1"></a><span class="co"># データ保存用フォルダが存在しない場合, 作成</span></span>
+<span id="cb11-10"><a href="ch4.html#cb11-10" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">dir.exists</span>(<span class="st">&quot;data&quot;</span>)){</span>
+<span id="cb11-11"><a href="ch4.html#cb11-11" tabindex="-1"></a>    <span class="fu">dir.create</span>(<span class="st">&quot;data&quot;</span>)</span>
+<span id="cb11-12"><a href="ch4.html#cb11-12" tabindex="-1"></a>}</span>
+<span id="cb11-13"><a href="ch4.html#cb11-13" tabindex="-1"></a><span class="co"># WSL上のRで解凍すると文字化けするので、Linuxのコマンドを外部呼び出し</span></span>
+<span id="cb11-14"><a href="ch4.html#cb11-14" tabindex="-1"></a><span class="co"># Windowsの場合は別途コマンドを用いる.</span></span>
+<span id="cb11-15"><a href="ch4.html#cb11-15" tabindex="-1"></a><span class="cf">if</span>(.Platform<span class="sc">$</span>OS.type <span class="sc">==</span> <span class="st">&quot;unix&quot;</span>) {</span>
+<span id="cb11-16"><a href="ch4.html#cb11-16" tabindex="-1"></a>    <span class="fu">system</span>(<span class="fu">sprintf</span>(<span class="st">&#39;unzip -n -Ocp932 %s -d %s&#39;</span>, <span class="st">&quot;downloads/support04.zip&quot;</span>, <span class="st">&quot;./data&quot;</span>))</span>
+<span id="cb11-17"><a href="ch4.html#cb11-17" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb11-18"><a href="ch4.html#cb11-18" tabindex="-1"></a>    <span class="fu">print</span>(<span class="st">&quot;Windowsで解凍するコマンドを別途追加せよ.&quot;</span>)</span>
+<span id="cb11-19"><a href="ch4.html#cb11-19" tabindex="-1"></a>}</span></code></pre></div>
 <p>必要なライブラリを読み込む.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="ch4.html#cb8-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb8-2"><a href="ch4.html#cb8-2" tabindex="-1"></a><span class="fu">library</span>(openxlsx) <span class="co"># Excelファイルを読み取るためのパッケージ</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="ch4.html#cb12-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb12-2"><a href="ch4.html#cb12-2" tabindex="-1"></a><span class="fu">library</span>(openxlsx) <span class="co"># Excelファイルを読み取るためのパッケージ</span></span></code></pre></div>
+<div id="実証例4.1-労働生産性と実質賃金の関係" class="section level2 unnumbered hasAnchor">
+<h2>実証例4.1 労働生産性と実質賃金の関係<a href="ch4.html#実証例4.1-労働生産性と実質賃金の関係" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>p.128の実証例ブロック内の<span class="math inline">\(N=22\)</span>は<span class="math inline">\(N=21\)</span>の誤植と思われる.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="ch4.html#cb13-1" tabindex="-1"></a>ch04_wage <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">&quot;data/04_第4章/ch04_wage.csv&quot;</span>, <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">sep =</span> <span class="st">&quot;,&quot;</span>)</span>
+<span id="cb13-2"><a href="ch4.html#cb13-2" tabindex="-1"></a>ch04_wage_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(wage <span class="sc">~</span> productivity, <span class="at">data =</span> ch04_wage) <span class="co"># robustじゃない?</span></span>
+<span id="cb13-3"><a href="ch4.html#cb13-3" tabindex="-1"></a><span class="fu">summary</span>(ch04_wage_model)</span>
+<span id="cb13-4"><a href="ch4.html#cb13-4" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb13-5"><a href="ch4.html#cb13-5" tabindex="-1"></a><span class="do">## Call:</span></span>
+<span id="cb13-6"><a href="ch4.html#cb13-6" tabindex="-1"></a><span class="do">## lm(formula = wage ~ productivity, data = ch04_wage)</span></span>
+<span id="cb13-7"><a href="ch4.html#cb13-7" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb13-8"><a href="ch4.html#cb13-8" tabindex="-1"></a><span class="do">## Residuals:</span></span>
+<span id="cb13-9"><a href="ch4.html#cb13-9" tabindex="-1"></a><span class="do">##     Min      1Q  Median      3Q     Max </span></span>
+<span id="cb13-10"><a href="ch4.html#cb13-10" tabindex="-1"></a><span class="do">## -47.618 -17.612   4.186  21.946  37.052 </span></span>
+<span id="cb13-11"><a href="ch4.html#cb13-11" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb13-12"><a href="ch4.html#cb13-12" tabindex="-1"></a><span class="do">## Coefficients:</span></span>
+<span id="cb13-13"><a href="ch4.html#cb13-13" tabindex="-1"></a><span class="do">##               Estimate Std. Error t value Pr(&gt;|t|)    </span></span>
+<span id="cb13-14"><a href="ch4.html#cb13-14" tabindex="-1"></a><span class="do">## (Intercept)  276.12961   87.61057   3.152  0.00525 ** </span></span>
+<span id="cb13-15"><a href="ch4.html#cb13-15" tabindex="-1"></a><span class="do">## productivity   0.54682    0.02442  22.395 4.04e-15 ***</span></span>
+<span id="cb13-16"><a href="ch4.html#cb13-16" tabindex="-1"></a><span class="do">## ---</span></span>
+<span id="cb13-17"><a href="ch4.html#cb13-17" tabindex="-1"></a><span class="do">## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</span></span>
+<span id="cb13-18"><a href="ch4.html#cb13-18" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb13-19"><a href="ch4.html#cb13-19" tabindex="-1"></a><span class="do">## Residual standard error: 25.77 on 19 degrees of freedom</span></span>
+<span id="cb13-20"><a href="ch4.html#cb13-20" tabindex="-1"></a><span class="do">## Multiple R-squared:  0.9635, Adjusted R-squared:  0.9616 </span></span>
+<span id="cb13-21"><a href="ch4.html#cb13-21" tabindex="-1"></a><span class="do">## F-statistic: 501.5 on 1 and 19 DF,  p-value: 4.037e-15</span></span></code></pre></div>
+</div>
+<div id="図4-1-時間当たり実質賃金と労働生産性" class="section level2 unnumbered hasAnchor">
+<h2>図4-1: 時間当たり実質賃金と労働生産性<a href="ch4.html#図4-1-時間当たり実質賃金と労働生産性" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>メモ: 回帰直線を追加する!</strong></p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="ch4.html#cb14-1" tabindex="-1"></a>ch04_wage <span class="sc">%&gt;%</span></span>
+<span id="cb14-2"><a href="ch4.html#cb14-2" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> productivity, <span class="at">y =</span> wage)) <span class="sc">+</span></span>
+<span id="cb14-3"><a href="ch4.html#cb14-3" tabindex="-1"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb14-4"><a href="ch4.html#cb14-4" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">&quot;労働生産性(円)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb14-5"><a href="ch4.html#cb14-5" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="st">&quot;実質賃金(円)&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+</div>
 <div id="練習問題-4-1-確認" class="section level2 unnumbered hasAnchor">
 <h2>練習問題 4-1 [確認]<a href="ch4.html#練習問題-4-1-確認" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 </div>
 <div id="練習問題-4-2-実証" class="section level2 unnumbered hasAnchor">
 <h2>練習問題 4-2 [実証]<a href="ch4.html#練習問題-4-2-実証" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ol style="list-style-type: decimal">
+<li>データを読み込み, 回帰分析を実行する.
+Excelファイルの読み込みには<code>openxlsx::read.xlsx()</code>を用いる.
+列名が日本語だと扱いづらいため, これを変更しておく.
+<span class="math inline">\(gdp2013\_ln = \beta_0 + \beta_1 pop2013\_ln\)</span>というモデルを立てると, <span class="math inline">\(\hat{\beta_0} = 7.623, \hat{\beta_1} = 1.075\)</span>と求められる.</li>
+</ol>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="ch4.html#cb15-1" tabindex="-1"></a>data42 <span class="ot">&lt;-</span> <span class="fu">read.xlsx</span>(<span class="st">&quot;data/04_第4章/data for chap 4 exercise 2.xlsx&quot;</span>)</span>
+<span id="cb15-2"><a href="ch4.html#cb15-2" tabindex="-1"></a><span class="fu">colnames</span>(data42) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;pref&quot;</span>, <span class="st">&quot;pop2013&quot;</span>, <span class="st">&quot;gdp2013&quot;</span>, <span class="st">&quot;pop2013_ln&quot;</span>, <span class="st">&quot;gdp2013_ln&quot;</span>)</span>
+<span id="cb15-3"><a href="ch4.html#cb15-3" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="ch4.html#cb15-4" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(gdp2013_ln <span class="sc">~</span> pop2013_ln, <span class="at">data =</span> data42)</span>
+<span id="cb15-5"><a href="ch4.html#cb15-5" tabindex="-1"></a>model</span>
+<span id="cb15-6"><a href="ch4.html#cb15-6" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb15-7"><a href="ch4.html#cb15-7" tabindex="-1"></a><span class="do">## Call:</span></span>
+<span id="cb15-8"><a href="ch4.html#cb15-8" tabindex="-1"></a><span class="do">## lm(formula = gdp2013_ln ~ pop2013_ln, data = data42)</span></span>
+<span id="cb15-9"><a href="ch4.html#cb15-9" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb15-10"><a href="ch4.html#cb15-10" tabindex="-1"></a><span class="do">## Coefficients:</span></span>
+<span id="cb15-11"><a href="ch4.html#cb15-11" tabindex="-1"></a><span class="do">## (Intercept)   pop2013_ln  </span></span>
+<span id="cb15-12"><a href="ch4.html#cb15-12" tabindex="-1"></a><span class="do">##       7.623        1.075</span></span></code></pre></div>
+<ol start="2" style="list-style-type: decimal">
+<li>帰無仮説<span class="math inline">\(H_0\)</span>: <span class="math inline">\(\beta_1 = 1\)</span>に関して, 統計量<span class="math inline">\(t = \frac{\hat{\beta_1} - \beta_1}{\text{SE}(\hat{\beta_1})} = 2.62773\)</span>が求められる.
+これは自由度<span class="math inline">\(n-2 = 45\)</span>で, 有意水準5%のt検定の棄却域<span class="math inline">\((\infty, -2.014103]\)</span>, <span class="math inline">\([2.014103, \infty)\)</span>に入っていることから帰無仮説は棄却される.</li>
+</ol>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="ch4.html#cb16-1" tabindex="-1"></a>beta1 <span class="ot">&lt;-</span> model<span class="sc">$</span>coefficients[<span class="dv">2</span>]</span>
+<span id="cb16-2"><a href="ch4.html#cb16-2" tabindex="-1"></a>sebeta1 <span class="ot">&lt;-</span> <span class="fu">summary</span>(model)<span class="sc">$</span>coefficients[<span class="dv">2</span>, <span class="dv">2</span>]</span>
+<span id="cb16-3"><a href="ch4.html#cb16-3" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">dim</span>(data42)[<span class="dv">1</span>]</span>
+<span id="cb16-4"><a href="ch4.html#cb16-4" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="ch4.html#cb16-5" tabindex="-1"></a>t <span class="ot">&lt;-</span> (beta1 <span class="sc">-</span> <span class="dv">1</span>)<span class="sc">/</span>sebeta1</span>
+<span id="cb16-6"><a href="ch4.html#cb16-6" tabindex="-1"></a>t</span>
+<span id="cb16-7"><a href="ch4.html#cb16-7" tabindex="-1"></a><span class="do">## pop2013_ln </span></span>
+<span id="cb16-8"><a href="ch4.html#cb16-8" tabindex="-1"></a><span class="do">##    2.62773</span></span>
+<span id="cb16-9"><a href="ch4.html#cb16-9" tabindex="-1"></a><span class="fu">qt</span>(<span class="fl">0.975</span>, n<span class="dv">-2</span>) <span class="co"># 2.014103</span></span>
+<span id="cb16-10"><a href="ch4.html#cb16-10" tabindex="-1"></a><span class="do">## [1] 2.014103</span></span></code></pre></div>
+<ol start="3" style="list-style-type: decimal">
+<li><code>confint()</code>関数を用いると直接求められる.</li>
+</ol>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="ch4.html#cb17-1" tabindex="-1"></a><span class="fu">confint</span>(model, <span class="st">&#39;(Intercept)&#39;</span>, <span class="at">level=</span><span class="fl">0.90</span>)</span>
+<span id="cb17-2"><a href="ch4.html#cb17-2" tabindex="-1"></a><span class="do">##                  5 %     95 %</span></span>
+<span id="cb17-3"><a href="ch4.html#cb17-3" tabindex="-1"></a><span class="do">## (Intercept) 7.257252 7.988132</span></span></code></pre></div>
+<ol start="4" style="list-style-type: decimal">
+<li><p>人口が1%変化すると, GDPは<span class="math inline">\(\beta_1 = 1.075\)</span>%変化する.</p></li>
+<li><p><span class="math inline">\(\text{Var}(u) = \frac{\sum_{i=1}^n \hat{u}_i^2}{n-2} = 0.02245859\)</span>と求められる.
+ln(人口)の分散は<code>var()</code>関数を用いると, 0.5964525と求められる.</p></li>
+</ol>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="ch4.html#cb18-1" tabindex="-1"></a><span class="fu">sum</span>(model<span class="sc">$</span>residuals<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span>(n<span class="dv">-2</span>)</span>
+<span id="cb18-2"><a href="ch4.html#cb18-2" tabindex="-1"></a><span class="do">## [1] 0.02245859</span></span>
+<span id="cb18-3"><a href="ch4.html#cb18-3" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="ch4.html#cb18-4" tabindex="-1"></a>var_pop2013_ln <span class="ot">&lt;-</span> <span class="fu">var</span>(data42<span class="sc">$</span>pop2013_ln)</span>
+<span id="cb18-5"><a href="ch4.html#cb18-5" tabindex="-1"></a>var_pop2013_ln</span>
+<span id="cb18-6"><a href="ch4.html#cb18-6" tabindex="-1"></a><span class="do">## [1] 0.5964525</span></span></code></pre></div>
 </div>
 <div id="練習問題-4-3-確認" class="section level2 unnumbered hasAnchor">
 <h2>練習問題 4-3 [確認]<a href="ch4.html#練習問題-4-3-確認" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -423,6 +509,20 @@ gitbook.start({
 });
 </script>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
 
 </html>

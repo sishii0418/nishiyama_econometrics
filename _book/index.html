@@ -178,6 +178,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="" data-path="ch4.html"><a href="ch4.html"><i class="fa fa-check"></i>第4章 線形単回帰モデルの推定と検定</a>
 <ul>
+<li class="chapter" data-level="" data-path="ch4.html"><a href="ch4.html#実証例4.1-労働生産性と実質賃金の関係"><i class="fa fa-check"></i>実証例4.1 労働生産性と実質賃金の関係</a></li>
+<li class="chapter" data-level="" data-path="ch4.html"><a href="ch4.html#図4-1-時間当たり実質賃金と労働生産性"><i class="fa fa-check"></i>図4-1: 時間当たり実質賃金と労働生産性</a></li>
 <li class="chapter" data-level="" data-path="ch4.html"><a href="ch4.html#練習問題-4-1-確認"><i class="fa fa-check"></i>練習問題 4-1 [確認]</a></li>
 <li class="chapter" data-level="" data-path="ch4.html"><a href="ch4.html#練習問題-4-2-実証"><i class="fa fa-check"></i>練習問題 4-2 [実証]</a></li>
 <li class="chapter" data-level="" data-path="ch4.html"><a href="ch4.html#練習問題-4-3-確認"><i class="fa fa-check"></i>練習問題 4-3 [確認]</a></li>
@@ -316,21 +318,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>西山ほか(2019)『計量経済学』有斐閣 (<a href="https://www.yuhikaku.co.jp/books/detail/9784641053854">出版社リンク</a>) の練習問題解答とRでの再現です.
 必要なRパッケージをインストール:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="index.html#cb1-1" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;tidyverse&quot;</span>)</span>
-<span id="cb1-2"><a href="index.html#cb1-2" tabindex="-1"></a><span class="do">## Installing package into &#39;/home/shunsuke/R/x86_64-pc-linux-gnu-library/4.3&#39;</span></span>
-<span id="cb1-3"><a href="index.html#cb1-3" tabindex="-1"></a><span class="do">## (as &#39;lib&#39; is unspecified)</span></span>
-<span id="cb1-4"><a href="index.html#cb1-4" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;openxlsx&quot;</span>)</span>
-<span id="cb1-5"><a href="index.html#cb1-5" tabindex="-1"></a><span class="do">## Installing package into &#39;/home/shunsuke/R/x86_64-pc-linux-gnu-library/4.3&#39;</span></span>
-<span id="cb1-6"><a href="index.html#cb1-6" tabindex="-1"></a><span class="do">## (as &#39;lib&#39; is unspecified)</span></span>
-<span id="cb1-7"><a href="index.html#cb1-7" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;haven&quot;</span>)</span>
-<span id="cb1-8"><a href="index.html#cb1-8" tabindex="-1"></a><span class="do">## Installing package into &#39;/home/shunsuke/R/x86_64-pc-linux-gnu-library/4.3&#39;</span></span>
-<span id="cb1-9"><a href="index.html#cb1-9" tabindex="-1"></a><span class="do">## (as &#39;lib&#39; is unspecified)</span></span>
-<span id="cb1-10"><a href="index.html#cb1-10" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;wooldridge&quot;</span>)</span>
-<span id="cb1-11"><a href="index.html#cb1-11" tabindex="-1"></a><span class="do">## Installing package into &#39;/home/shunsuke/R/x86_64-pc-linux-gnu-library/4.3&#39;</span></span>
-<span id="cb1-12"><a href="index.html#cb1-12" tabindex="-1"></a><span class="do">## (as &#39;lib&#39; is unspecified)</span></span>
-<span id="cb1-13"><a href="index.html#cb1-13" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;fixest&quot;</span>)</span>
-<span id="cb1-14"><a href="index.html#cb1-14" tabindex="-1"></a><span class="do">## Installing package into &#39;/home/shunsuke/R/x86_64-pc-linux-gnu-library/4.3&#39;</span></span>
-<span id="cb1-15"><a href="index.html#cb1-15" tabindex="-1"></a><span class="do">## (as &#39;lib&#39; is unspecified)</span></span>
-<span id="cb1-16"><a href="index.html#cb1-16" tabindex="-1"></a><span class="do">## also installing the dependencies &#39;dreamerr&#39;, &#39;stringmagic&#39;</span></span></code></pre></div>
+<span id="cb1-2"><a href="index.html#cb1-2" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;openxlsx&quot;</span>)</span>
+<span id="cb1-3"><a href="index.html#cb1-3" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;haven&quot;</span>)</span>
+<span id="cb1-4"><a href="index.html#cb1-4" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;wooldridge&quot;</span>)</span>
+<span id="cb1-5"><a href="index.html#cb1-5" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;fixest&quot;</span>)</span></code></pre></div>
 <div id="usage" class="section level2 hasAnchor" number="0.1">
 <h2><span class="header-section-number">0.1</span> Usage<a href="index.html#usage" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Each <strong>bookdown</strong> chapter is an .Rmd file, and each .Rmd file can contain one (and only one) chapter. A chapter <em>must</em> start with a first-level heading: <code># A good chapter</code>, and can contain one (and only one) first-level heading.</p>
@@ -415,6 +406,20 @@ gitbook.start({
 });
 </script>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
 
 </html>

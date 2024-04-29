@@ -178,6 +178,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="" data-path="ch4.html"><a href="ch4.html"><i class="fa fa-check"></i>第4章 線形単回帰モデルの推定と検定</a>
 <ul>
+<li class="chapter" data-level="" data-path="ch4.html"><a href="ch4.html#実証例4.1-労働生産性と実質賃金の関係"><i class="fa fa-check"></i>実証例4.1 労働生産性と実質賃金の関係</a></li>
+<li class="chapter" data-level="" data-path="ch4.html"><a href="ch4.html#図4-1-時間当たり実質賃金と労働生産性"><i class="fa fa-check"></i>図4-1: 時間当たり実質賃金と労働生産性</a></li>
 <li class="chapter" data-level="" data-path="ch4.html"><a href="ch4.html#練習問題-4-1-確認"><i class="fa fa-check"></i>練習問題 4-1 [確認]</a></li>
 <li class="chapter" data-level="" data-path="ch4.html"><a href="ch4.html#練習問題-4-2-実証"><i class="fa fa-check"></i>練習問題 4-2 [実証]</a></li>
 <li class="chapter" data-level="" data-path="ch4.html"><a href="ch4.html#練習問題-4-3-確認"><i class="fa fa-check"></i>練習問題 4-3 [確認]</a></li>
@@ -309,25 +311,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="ch9" class="section level1 unnumbered hasAnchor">
 <h1>第9章 政策評価モデル<a href="ch9.html#ch9" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>先に<a href="https://www.yuhikaku.co.jp/books/detail/9784641053854">出版社サイト</a>よりデータをダウンロードする.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="ch9.html#cb14-1" tabindex="-1"></a><span class="co"># サポートファイルへのリンク</span></span>
-<span id="cb14-2"><a href="ch9.html#cb14-2" tabindex="-1"></a>curl <span class="ot">&lt;-</span> <span class="st">&quot;https://www.yuhikaku.co.jp/static_files/05385_support09.zip&quot;</span></span>
-<span id="cb14-3"><a href="ch9.html#cb14-3" tabindex="-1"></a><span class="co"># ダウンロード保存用フォルダが存在しない場合, 作成</span></span>
-<span id="cb14-4"><a href="ch9.html#cb14-4" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">dir.exists</span>(<span class="st">&quot;downloads&quot;</span>)){</span>
-<span id="cb14-5"><a href="ch9.html#cb14-5" tabindex="-1"></a>    <span class="fu">dir.create</span>(<span class="st">&quot;downloads&quot;</span>)</span>
-<span id="cb14-6"><a href="ch9.html#cb14-6" tabindex="-1"></a>}</span>
-<span id="cb14-7"><a href="ch9.html#cb14-7" tabindex="-1"></a>cdestfile <span class="ot">&lt;-</span> <span class="st">&quot;downloads/support09.zip&quot;</span></span>
-<span id="cb14-8"><a href="ch9.html#cb14-8" tabindex="-1"></a><span class="fu">download.file</span>(curl, cdestfile)</span>
-<span id="cb14-9"><a href="ch9.html#cb14-9" tabindex="-1"></a><span class="co"># データ保存用フォルダが存在しない場合, 作成</span></span>
-<span id="cb14-10"><a href="ch9.html#cb14-10" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">dir.exists</span>(<span class="st">&quot;data&quot;</span>)){</span>
-<span id="cb14-11"><a href="ch9.html#cb14-11" tabindex="-1"></a>    <span class="fu">dir.create</span>(<span class="st">&quot;data&quot;</span>)</span>
-<span id="cb14-12"><a href="ch9.html#cb14-12" tabindex="-1"></a>}</span>
-<span id="cb14-13"><a href="ch9.html#cb14-13" tabindex="-1"></a><span class="co"># WSL上のRで解凍すると文字化けするので、Linuxのコマンドを外部呼び出し</span></span>
-<span id="cb14-14"><a href="ch9.html#cb14-14" tabindex="-1"></a><span class="co"># Windowsの場合は別途コマンドを用いる.</span></span>
-<span id="cb14-15"><a href="ch9.html#cb14-15" tabindex="-1"></a><span class="cf">if</span>(.Platform<span class="sc">$</span>OS.type <span class="sc">==</span> <span class="st">&quot;unix&quot;</span>) {</span>
-<span id="cb14-16"><a href="ch9.html#cb14-16" tabindex="-1"></a>    <span class="fu">system</span>(<span class="fu">sprintf</span>(<span class="st">&#39;unzip -n -Ocp932 %s -d %s&#39;</span>, <span class="st">&quot;downloads/support09.zip&quot;</span>, <span class="st">&quot;./data&quot;</span>))</span>
-<span id="cb14-17"><a href="ch9.html#cb14-17" tabindex="-1"></a>} <span class="cf">else</span> {</span>
-<span id="cb14-18"><a href="ch9.html#cb14-18" tabindex="-1"></a>    <span class="fu">print</span>(<span class="st">&quot;Windowsで解凍するコマンドを別途追加せよ.&quot;</span>)</span>
-<span id="cb14-19"><a href="ch9.html#cb14-19" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="ch9.html#cb24-1" tabindex="-1"></a><span class="co"># サポートファイルへのリンク</span></span>
+<span id="cb24-2"><a href="ch9.html#cb24-2" tabindex="-1"></a>curl <span class="ot">&lt;-</span> <span class="st">&quot;https://www.yuhikaku.co.jp/static_files/05385_support09.zip&quot;</span></span>
+<span id="cb24-3"><a href="ch9.html#cb24-3" tabindex="-1"></a><span class="co"># ダウンロード保存用フォルダが存在しない場合, 作成</span></span>
+<span id="cb24-4"><a href="ch9.html#cb24-4" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">dir.exists</span>(<span class="st">&quot;downloads&quot;</span>)){</span>
+<span id="cb24-5"><a href="ch9.html#cb24-5" tabindex="-1"></a>    <span class="fu">dir.create</span>(<span class="st">&quot;downloads&quot;</span>)</span>
+<span id="cb24-6"><a href="ch9.html#cb24-6" tabindex="-1"></a>}</span>
+<span id="cb24-7"><a href="ch9.html#cb24-7" tabindex="-1"></a>cdestfile <span class="ot">&lt;-</span> <span class="st">&quot;downloads/support09.zip&quot;</span></span>
+<span id="cb24-8"><a href="ch9.html#cb24-8" tabindex="-1"></a><span class="fu">download.file</span>(curl, cdestfile)</span>
+<span id="cb24-9"><a href="ch9.html#cb24-9" tabindex="-1"></a><span class="co"># データ保存用フォルダが存在しない場合, 作成</span></span>
+<span id="cb24-10"><a href="ch9.html#cb24-10" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">dir.exists</span>(<span class="st">&quot;data&quot;</span>)){</span>
+<span id="cb24-11"><a href="ch9.html#cb24-11" tabindex="-1"></a>    <span class="fu">dir.create</span>(<span class="st">&quot;data&quot;</span>)</span>
+<span id="cb24-12"><a href="ch9.html#cb24-12" tabindex="-1"></a>}</span>
+<span id="cb24-13"><a href="ch9.html#cb24-13" tabindex="-1"></a><span class="co"># WSL上のRで解凍すると文字化けするので、Linuxのコマンドを外部呼び出し</span></span>
+<span id="cb24-14"><a href="ch9.html#cb24-14" tabindex="-1"></a><span class="co"># Windowsの場合は別途コマンドを用いる.</span></span>
+<span id="cb24-15"><a href="ch9.html#cb24-15" tabindex="-1"></a><span class="cf">if</span>(.Platform<span class="sc">$</span>OS.type <span class="sc">==</span> <span class="st">&quot;unix&quot;</span>) {</span>
+<span id="cb24-16"><a href="ch9.html#cb24-16" tabindex="-1"></a>    <span class="fu">system</span>(<span class="fu">sprintf</span>(<span class="st">&#39;unzip -n -Ocp932 %s -d %s&#39;</span>, <span class="st">&quot;downloads/support09.zip&quot;</span>, <span class="st">&quot;./data&quot;</span>))</span>
+<span id="cb24-17"><a href="ch9.html#cb24-17" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb24-18"><a href="ch9.html#cb24-18" tabindex="-1"></a>    <span class="fu">print</span>(<span class="st">&quot;Windowsで解凍するコマンドを別途追加せよ.&quot;</span>)</span>
+<span id="cb24-19"><a href="ch9.html#cb24-19" tabindex="-1"></a>}</span></code></pre></div>
 <div id="練習問題-9-1-確認" class="section level2 unnumbered hasAnchor">
 <h2>練習問題 9-1 [確認]<a href="ch9.html#練習問題-9-1-確認" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 </div>
@@ -405,6 +407,20 @@ gitbook.start({
 });
 </script>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
 
 </html>

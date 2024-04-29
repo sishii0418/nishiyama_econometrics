@@ -1,6 +1,6 @@
 # 第2章 データの整理と確率変数の基礎 {-#ch2}
 先に[出版社サイト](https://www.yuhikaku.co.jp/books/detail/9784641053854)よりデータをダウンロードする.
-```{r collapse=T, eval=T}
+```{r collapse=T, eval=F}
 # サポートファイルへのリンク
 curl <- "https://www.yuhikaku.co.jp/static_files/05385_support02.zip"
 # ダウンロード保存用フォルダが存在しない場合, 作成
@@ -28,10 +28,39 @@ library(tidyverse)
 ```
 
 ## 練習問題 2-1 [確認] {-}
+R には最頻値を求める関数がないようなので, 別途関数`Mode()`を定義する.
+```{r collapse=T}
+data21 <- read.table("data/02_第2章/02_practice_01.csv")
+
+mean(data21$V1)
+var(data21$V1)
+median(data21$V1)
+
+Mode <- function(x) {
+    ux <- unique(x)
+    tab <- tabulate(match(x, ux))
+    ux[tab == max(tab)]
+}
+
+Mode(data21$V1)
+```
 
 ## 練習問題 2-2 [確認] {-}
 
 ## 練習問題 2-3 [確認] {-}
+```{r collapse=T}
+data23 <- read.table("data/02_第2章/02_practice_03.csv", sep=",")
+
+x <- data23$V1
+y <- data23$V2
+
+data23 %>%
+    ggplot(aes(x = x, y = y)) +
+    geom_point()
+
+cov(x, y)
+cor(x, y)
+```
 
 ## 練習問題 2-4 [確認] {-}
 

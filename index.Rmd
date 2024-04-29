@@ -19,7 +19,7 @@ github-repo: rstudio/bookdown-demo
 
 西山ほか(2019)『計量経済学』有斐閣 ([出版社リンク](https://www.yuhikaku.co.jp/books/detail/9784641053854)) の練習問題解答とRでの再現です.
 必要なRパッケージをインストール:
-```{r collapse=T, eval=TRUE}
+```{r collapse=T, eval=F}
 install.packages("tidyverse")
 install.packages("openxlsx")
 install.packages("haven")

@@ -178,6 +178,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="" data-path="ch4.html"><a href="ch4.html"><i class="fa fa-check"></i>第4章 線形単回帰モデルの推定と検定</a>
 <ul>
+<li class="chapter" data-level="" data-path="ch4.html"><a href="ch4.html#実証例4.1-労働生産性と実質賃金の関係"><i class="fa fa-check"></i>実証例4.1 労働生産性と実質賃金の関係</a></li>
+<li class="chapter" data-level="" data-path="ch4.html"><a href="ch4.html#図4-1-時間当たり実質賃金と労働生産性"><i class="fa fa-check"></i>図4-1: 時間当たり実質賃金と労働生産性</a></li>
 <li class="chapter" data-level="" data-path="ch4.html"><a href="ch4.html#練習問題-4-1-確認"><i class="fa fa-check"></i>練習問題 4-1 [確認]</a></li>
 <li class="chapter" data-level="" data-path="ch4.html"><a href="ch4.html#練習問題-4-2-実証"><i class="fa fa-check"></i>練習問題 4-2 [実証]</a></li>
 <li class="chapter" data-level="" data-path="ch4.html"><a href="ch4.html#練習問題-4-3-確認"><i class="fa fa-check"></i>練習問題 4-3 [確認]</a></li>
@@ -309,14 +311,45 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="ch3" class="section level1 unnumbered hasAnchor">
 <h1>第3章 統計理論の基礎<a href="ch3.html#ch3" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>第3章では第2章と同じデータを使うため、新たなダウンロードは不要.
-なお<a href="https://www.yuhikaku.co.jp/books/detail/9784641053854">出版社サイト</a>にある第3章のファイルは, 誤ったデータが格納されている.</p>
+なお<a href="https://www.yuhikaku.co.jp/books/detail/9784641053854">出版社サイト</a>にある第3章のファイルは, 練習問題2-1のデータを用いるところが, 誤って練習問題2-3と同じデータが格納されている.</p>
 <p>必要なライブラリを読み込む.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="ch3.html#cb6-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="ch3.html#cb9-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
 <div id="練習問題-3-1-確認" class="section level2 unnumbered hasAnchor">
 <h2>練習問題 3-1 [確認]<a href="ch3.html#練習問題-3-1-確認" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 </div>
 <div id="練習問題-3-2-確認" class="section level2 unnumbered hasAnchor">
 <h2>練習問題 3-2 [確認]<a href="ch3.html#練習問題-3-2-確認" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>第2章練習問題2-1で用いたデータを読み込み、両側t検定を実行する.
+<span class="math inline">\(\alpha=0.10\)</span>の場合90%信頼区間は<span class="math inline">\([8.354811, 11.645189]\)</span>となり, これは8を含まないことから帰無仮説は棄却できる.
+一方で<span class="math inline">\(\alpha=0.01\)</span>のとき、99%信頼区間は<span class="math inline">\([7.277955, 12.722045]\)</span>となり8を含むことから, 帰無仮説は棄却されない.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="ch3.html#cb10-1" tabindex="-1"></a>data32 <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">&quot;data/02_第2章/02_practice_01.csv&quot;</span>)</span>
+<span id="cb10-2"><a href="ch3.html#cb10-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> data32<span class="sc">$</span>V1</span>
+<span id="cb10-3"><a href="ch3.html#cb10-3" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="ch3.html#cb10-4" tabindex="-1"></a><span class="fu">t.test</span>(x, <span class="at">alternative =</span> <span class="st">&quot;two.sided&quot;</span>, <span class="at">mu =</span> <span class="dv">8</span>, <span class="at">conf.level =</span> <span class="fl">0.90</span>)</span>
+<span id="cb10-5"><a href="ch3.html#cb10-5" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb10-6"><a href="ch3.html#cb10-6" tabindex="-1"></a><span class="do">##  One Sample t-test</span></span>
+<span id="cb10-7"><a href="ch3.html#cb10-7" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb10-8"><a href="ch3.html#cb10-8" tabindex="-1"></a><span class="do">## data:  x</span></span>
+<span id="cb10-9"><a href="ch3.html#cb10-9" tabindex="-1"></a><span class="do">## t = 2.102, df = 19, p-value = 0.04911</span></span>
+<span id="cb10-10"><a href="ch3.html#cb10-10" tabindex="-1"></a><span class="do">## alternative hypothesis: true mean is not equal to 8</span></span>
+<span id="cb10-11"><a href="ch3.html#cb10-11" tabindex="-1"></a><span class="do">## 90 percent confidence interval:</span></span>
+<span id="cb10-12"><a href="ch3.html#cb10-12" tabindex="-1"></a><span class="do">##   8.354811 11.645189</span></span>
+<span id="cb10-13"><a href="ch3.html#cb10-13" tabindex="-1"></a><span class="do">## sample estimates:</span></span>
+<span id="cb10-14"><a href="ch3.html#cb10-14" tabindex="-1"></a><span class="do">## mean of x </span></span>
+<span id="cb10-15"><a href="ch3.html#cb10-15" tabindex="-1"></a><span class="do">##        10</span></span>
+<span id="cb10-16"><a href="ch3.html#cb10-16" tabindex="-1"></a></span>
+<span id="cb10-17"><a href="ch3.html#cb10-17" tabindex="-1"></a><span class="fu">t.test</span>(x, <span class="at">alternative =</span> <span class="st">&quot;two.sided&quot;</span>, <span class="at">mu =</span> <span class="dv">8</span>, <span class="at">conf.level =</span> <span class="fl">0.99</span>)</span>
+<span id="cb10-18"><a href="ch3.html#cb10-18" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb10-19"><a href="ch3.html#cb10-19" tabindex="-1"></a><span class="do">##  One Sample t-test</span></span>
+<span id="cb10-20"><a href="ch3.html#cb10-20" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb10-21"><a href="ch3.html#cb10-21" tabindex="-1"></a><span class="do">## data:  x</span></span>
+<span id="cb10-22"><a href="ch3.html#cb10-22" tabindex="-1"></a><span class="do">## t = 2.102, df = 19, p-value = 0.04911</span></span>
+<span id="cb10-23"><a href="ch3.html#cb10-23" tabindex="-1"></a><span class="do">## alternative hypothesis: true mean is not equal to 8</span></span>
+<span id="cb10-24"><a href="ch3.html#cb10-24" tabindex="-1"></a><span class="do">## 99 percent confidence interval:</span></span>
+<span id="cb10-25"><a href="ch3.html#cb10-25" tabindex="-1"></a><span class="do">##   7.277955 12.722045</span></span>
+<span id="cb10-26"><a href="ch3.html#cb10-26" tabindex="-1"></a><span class="do">## sample estimates:</span></span>
+<span id="cb10-27"><a href="ch3.html#cb10-27" tabindex="-1"></a><span class="do">## mean of x </span></span>
+<span id="cb10-28"><a href="ch3.html#cb10-28" tabindex="-1"></a><span class="do">##        10</span></span></code></pre></div>
 </div>
 <div id="練習問題-3-3-確認" class="section level2 unnumbered hasAnchor">
 <h2>練習問題 3-3 [確認]<a href="ch3.html#練習問題-3-3-確認" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -386,6 +419,20 @@ gitbook.start({
 });
 </script>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
 
 </html>

@@ -27,10 +27,67 @@ if(.Platform$OS.type == "unix") {
 library(tidyverse)
 library(openxlsx) # Excelファイルを読み取るためのパッケージ
 ```
+## 実証例4.1 労働生産性と実質賃金の関係 {-}
+p.128の実証例ブロック内の$N=22$は$N=21$の誤植と思われる.
+**メモ: Rの実行結果は頑健ではない件. estimatrのlm_robust()でse_type = "stata"にすると結果が一致する.**
+```{r collapse=T}
+ch04_wage <- read.table("data/04_第4章/ch04_wage.csv", header = TRUE, sep = ",")
+ch04_wage_model <- lm(wage ~ productivity, data = ch04_wage) # robustじゃない?
+summary(ch04_wage_model)
+```
+
+## 図4-1 時間当たり実質賃金と労働生産性 {-}
+**メモ: 回帰直線を追加する!**
+```{r collapse=T}
+ch04_wage %>%
+    ggplot(aes(x = productivity, y = wage)) +
+    geom_point() +
+    xlab("労働生産性(円)") +
+    ylab("実質賃金(円)")
+```
+
 ## 練習問題 4-1 [確認] {-}
 
 ## 練習問題 4-2 [実証] {-}
+(1) データを読み込み, 回帰分析を実行する.
+Excelファイルの読み込みには`openxlsx::read.xlsx()`を用いる.
+列名が日本語だと扱いづらいため, これを変更しておく.
+$gdp2013\_ln = \beta_0 + \beta_1 pop2013\_ln$というモデルを立てると, $\hat{\beta_0} = 7.623, \hat{\beta_1} = 1.075$と求められる.
+```{r collapse=T}
+data42 <- read.xlsx("data/04_第4章/data for chap 4 exercise 2.xlsx")
+colnames(data42) <- c("pref", "pop2013", "gdp2013", "pop2013_ln", "gdp2013_ln")
 
+model <- lm(gdp2013_ln ~ pop2013_ln, data = data42)
+model
+```
+
+(2) 帰無仮説$H_0$: $\beta_1 = 1$に関して, 統計量$t = \frac{\hat{\beta_1} - \beta_1}{\text{SE}(\hat{\beta_1})} = 2.62773$が求められる.
+これは自由度$n-2 = 45$で, 有意水準5\%のt検定の棄却域$(\infty, -2.014103]$, $[2.014103, \infty)$に入っていることから帰無仮説は棄却される.
+```{r collapse=T}
+beta1 <- model$coefficients[2]
+sebeta1 <- summary(model)$coefficients[2, 2]
+n <- dim(data42)[1]
+
+t <- (beta1 - 1)/sebeta1
+t
+qt(0.975, n-2) # 2.014103
+```
+
+(3) `confint()`関数を用いると直接求められる.
+```{r collapse=T}
+confint(model, '(Intercept)', level=0.90)
+```
+
+(4) 人口が1\%変化すると, GDPは$\beta_1 = 1.075$\%変化する.
+
+(5) $\text{Var}(u) = \frac{\sum_{i=1}^n \hat{u}_i^2}{n-2} = 0.02245859$と求められる.
+ln(人口)の分散は`var()`関数を用いると, 0.5964525と求められる.
+```{r collapse=T}
+sum(model$residuals^2)/(n-2)
+
+var_pop2013_ln <- var(data42$pop2013_ln)
+var_pop2013_ln
+```
 ## 練習問題 4-3 [確認] {-}
 
 ## 練習問題 4-4 [確認] {-}
