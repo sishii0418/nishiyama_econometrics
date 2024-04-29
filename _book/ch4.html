@@ -324,7 +324,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb7-13"><a href="ch4.html#cb7-13" tabindex="-1"></a><span class="co"># WSL上のRで解凍すると文字化けするので、Linuxのコマンドを外部呼び出し</span></span>
 <span id="cb7-14"><a href="ch4.html#cb7-14" tabindex="-1"></a><span class="co"># Windowsの場合は別途コマンドを用いる.</span></span>
 <span id="cb7-15"><a href="ch4.html#cb7-15" tabindex="-1"></a><span class="cf">if</span>(.Platform<span class="sc">$</span>OS.type <span class="sc">==</span> <span class="st">&quot;unix&quot;</span>) {</span>
-<span id="cb7-16"><a href="ch4.html#cb7-16" tabindex="-1"></a>    <span class="fu">system</span>(<span class="fu">sprintf</span>(<span class="st">&#39;unzip -Ocp932 %s -d %s&#39;</span>, <span class="st">&quot;downloads/support04.zip&quot;</span>, <span class="st">&quot;./data&quot;</span>))</span>
+<span id="cb7-16"><a href="ch4.html#cb7-16" tabindex="-1"></a>    <span class="fu">system</span>(<span class="fu">sprintf</span>(<span class="st">&#39;unzip -n -Ocp932 %s -d %s&#39;</span>, <span class="st">&quot;downloads/support04.zip&quot;</span>, <span class="st">&quot;./data&quot;</span>))</span>
 <span id="cb7-17"><a href="ch4.html#cb7-17" tabindex="-1"></a>} <span class="cf">else</span> {</span>
 <span id="cb7-18"><a href="ch4.html#cb7-18" tabindex="-1"></a>    <span class="fu">print</span>(<span class="st">&quot;Windowsで解凍するコマンドを別途追加せよ.&quot;</span>)</span>
 <span id="cb7-19"><a href="ch4.html#cb7-19" tabindex="-1"></a>}</span></code></pre></div>

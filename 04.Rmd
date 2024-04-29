@@ -16,7 +16,7 @@ if(!dir.exists("data")){
 # WSL上のRで解凍すると文字化けするので、Linuxのコマンドを外部呼び出し
 # Windowsの場合は別途コマンドを用いる.
 if(.Platform$OS.type == "unix") {
-    system(sprintf('unzip -Ocp932 %s -d %s', "downloads/support04.zip", "./data"))
+    system(sprintf('unzip -n -Ocp932 %s -d %s', "downloads/support04.zip", "./data"))
 } else {
     print("Windowsで解凍するコマンドを別途追加せよ.")
 }

@@ -139,8 +139,20 @@
 \begin{Shaded}
 \begin{Highlighting}[]
 \FunctionTok{install.packages}\NormalTok{(}\StringTok{"tidyverse"}\NormalTok{)}
+\DocumentationTok{\#\# Installing package into \textquotesingle{}/home/shunsuke/R/x86\_64{-}pc{-}linux{-}gnu{-}library/4.3\textquotesingle{}}
+\DocumentationTok{\#\# (as \textquotesingle{}lib\textquotesingle{} is unspecified)}
 \FunctionTok{install.packages}\NormalTok{(}\StringTok{"openxlsx"}\NormalTok{)}
+\DocumentationTok{\#\# Installing package into \textquotesingle{}/home/shunsuke/R/x86\_64{-}pc{-}linux{-}gnu{-}library/4.3\textquotesingle{}}
+\DocumentationTok{\#\# (as \textquotesingle{}lib\textquotesingle{} is unspecified)}
 \FunctionTok{install.packages}\NormalTok{(}\StringTok{"haven"}\NormalTok{)}
+\DocumentationTok{\#\# Installing package into \textquotesingle{}/home/shunsuke/R/x86\_64{-}pc{-}linux{-}gnu{-}library/4.3\textquotesingle{}}
+\DocumentationTok{\#\# (as \textquotesingle{}lib\textquotesingle{} is unspecified)}
+\FunctionTok{install.packages}\NormalTok{(}\StringTok{"wooldridge"}\NormalTok{)}
+\DocumentationTok{\#\# Installing package into \textquotesingle{}/home/shunsuke/R/x86\_64{-}pc{-}linux{-}gnu{-}library/4.3\textquotesingle{}}
+\DocumentationTok{\#\# (as \textquotesingle{}lib\textquotesingle{} is unspecified)}
+\FunctionTok{install.packages}\NormalTok{(}\StringTok{"fixest"}\NormalTok{)}
+\DocumentationTok{\#\# Installing package into \textquotesingle{}/home/shunsuke/R/x86\_64{-}pc{-}linux{-}gnu{-}library/4.3\textquotesingle{}}
+\DocumentationTok{\#\# (as \textquotesingle{}lib\textquotesingle{} is unspecified)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -210,7 +222,7 @@ As you work, you may start a local server to live preview this HTML book. This p
 \CommentTok{\# WSL上のRで解凍すると文字化けするので、Linuxのコマンドを外部呼び出し}
 \CommentTok{\# Windowsの場合は別途コマンドを用いる.}
 \ControlFlowTok{if}\NormalTok{(.Platform}\SpecialCharTok{$}\NormalTok{OS.type }\SpecialCharTok{==} \StringTok{"unix"}\NormalTok{) \{}
-    \FunctionTok{system}\NormalTok{(}\FunctionTok{sprintf}\NormalTok{(}\StringTok{\textquotesingle{}unzip {-}Ocp932 \%s {-}d \%s\textquotesingle{}}\NormalTok{, }\StringTok{"downloads/support02.zip"}\NormalTok{, }\StringTok{"./data"}\NormalTok{))}
+    \FunctionTok{system}\NormalTok{(}\FunctionTok{sprintf}\NormalTok{(}\StringTok{\textquotesingle{}unzip {-}n {-}Ocp932 \%s {-}d \%s\textquotesingle{}}\NormalTok{, }\StringTok{"downloads/support02.zip"}\NormalTok{, }\StringTok{"./data"}\NormalTok{))}
 \NormalTok{\} }\ControlFlowTok{else}\NormalTok{ \{}
     \FunctionTok{print}\NormalTok{(}\StringTok{"Windowsで解凍するコマンドを別途追加せよ."}\NormalTok{)}
 \NormalTok{\}}
@@ -345,7 +357,7 @@ As you work, you may start a local server to live preview this HTML book. This p
 \CommentTok{\# WSL上のRで解凍すると文字化けするので、Linuxのコマンドを外部呼び出し}
 \CommentTok{\# Windowsの場合は別途コマンドを用いる.}
 \ControlFlowTok{if}\NormalTok{(.Platform}\SpecialCharTok{$}\NormalTok{OS.type }\SpecialCharTok{==} \StringTok{"unix"}\NormalTok{) \{}
-    \FunctionTok{system}\NormalTok{(}\FunctionTok{sprintf}\NormalTok{(}\StringTok{\textquotesingle{}unzip {-}Ocp932 \%s {-}d \%s\textquotesingle{}}\NormalTok{, }\StringTok{"downloads/support04.zip"}\NormalTok{, }\StringTok{"./data"}\NormalTok{))}
+    \FunctionTok{system}\NormalTok{(}\FunctionTok{sprintf}\NormalTok{(}\StringTok{\textquotesingle{}unzip {-}n {-}Ocp932 \%s {-}d \%s\textquotesingle{}}\NormalTok{, }\StringTok{"downloads/support04.zip"}\NormalTok{, }\StringTok{"./data"}\NormalTok{))}
 \NormalTok{\} }\ControlFlowTok{else}\NormalTok{ \{}
     \FunctionTok{print}\NormalTok{(}\StringTok{"Windowsで解凍するコマンドを別途追加せよ."}\NormalTok{)}
 \NormalTok{\}}
@@ -424,7 +436,7 @@ As you work, you may start a local server to live preview this HTML book. This p
 \CommentTok{\# WSL上のRで解凍すると文字化けするので、Linuxのコマンドを外部呼び出し}
 \CommentTok{\# Windowsの場合は別途コマンドを用いる.}
 \ControlFlowTok{if}\NormalTok{(.Platform}\SpecialCharTok{$}\NormalTok{OS.type }\SpecialCharTok{==} \StringTok{"unix"}\NormalTok{) \{}
-    \FunctionTok{system}\NormalTok{(}\FunctionTok{sprintf}\NormalTok{(}\StringTok{\textquotesingle{}unzip {-}Ocp932 \%s {-}d \%s\textquotesingle{}}\NormalTok{, }\StringTok{"downloads/support05.zip"}\NormalTok{, }\StringTok{"./data"}\NormalTok{))}
+    \FunctionTok{system}\NormalTok{(}\FunctionTok{sprintf}\NormalTok{(}\StringTok{\textquotesingle{}unzip {-}n {-}Ocp932 \%s {-}d \%s\textquotesingle{}}\NormalTok{, }\StringTok{"downloads/support05.zip"}\NormalTok{, }\StringTok{"./data"}\NormalTok{))}
 \NormalTok{\} }\ControlFlowTok{else}\NormalTok{ \{}
     \FunctionTok{print}\NormalTok{(}\StringTok{"Windowsで解凍するコマンドを別途追加せよ."}\NormalTok{)}
 \NormalTok{\}}
@@ -522,7 +534,7 @@ As you work, you may start a local server to live preview this HTML book. This p
 \CommentTok{\# WSL上のRで解凍すると文字化けするので、Linuxのコマンドを外部呼び出し}
 \CommentTok{\# Windowsの場合は別途コマンドを用いる.}
 \ControlFlowTok{if}\NormalTok{(.Platform}\SpecialCharTok{$}\NormalTok{OS.type }\SpecialCharTok{==} \StringTok{"unix"}\NormalTok{) \{}
-    \FunctionTok{system}\NormalTok{(}\FunctionTok{sprintf}\NormalTok{(}\StringTok{\textquotesingle{}unzip {-}Ocp932 \%s {-}d \%s\textquotesingle{}}\NormalTok{, }\StringTok{"downloads/support06.zip"}\NormalTok{, }\StringTok{"./data"}\NormalTok{))}
+    \FunctionTok{system}\NormalTok{(}\FunctionTok{sprintf}\NormalTok{(}\StringTok{\textquotesingle{}unzip {-}n {-}Ocp932 \%s {-}d \%s\textquotesingle{}}\NormalTok{, }\StringTok{"downloads/support06.zip"}\NormalTok{, }\StringTok{"./data"}\NormalTok{))}
 \NormalTok{\} }\ControlFlowTok{else}\NormalTok{ \{}
     \FunctionTok{print}\NormalTok{(}\StringTok{"Windowsで解凍するコマンドを別途追加せよ."}\NormalTok{)}
 \NormalTok{\}}
@@ -596,7 +608,7 @@ As you work, you may start a local server to live preview this HTML book. This p
 \CommentTok{\# WSL上のRで解凍すると文字化けするので、Linuxのコマンドを外部呼び出し}
 \CommentTok{\# Windowsの場合は別途コマンドを用いる.}
 \ControlFlowTok{if}\NormalTok{(.Platform}\SpecialCharTok{$}\NormalTok{OS.type }\SpecialCharTok{==} \StringTok{"unix"}\NormalTok{) \{}
-    \FunctionTok{system}\NormalTok{(}\FunctionTok{sprintf}\NormalTok{(}\StringTok{\textquotesingle{}unzip {-}Ocp932 \%s {-}d \%s\textquotesingle{}}\NormalTok{, }\StringTok{"downloads/support07.zip"}\NormalTok{, }\StringTok{"./data"}\NormalTok{))}
+    \FunctionTok{system}\NormalTok{(}\FunctionTok{sprintf}\NormalTok{(}\StringTok{\textquotesingle{}unzip {-}n {-}Ocp932 \%s {-}d \%s\textquotesingle{}}\NormalTok{, }\StringTok{"downloads/support07.zip"}\NormalTok{, }\StringTok{"./data"}\NormalTok{))}
 \NormalTok{\} }\ControlFlowTok{else}\NormalTok{ \{}
     \FunctionTok{print}\NormalTok{(}\StringTok{"Windowsで解凍するコマンドを別途追加せよ."}\NormalTok{)}
 \NormalTok{\}}
@@ -678,7 +690,7 @@ As you work, you may start a local server to live preview this HTML book. This p
 \CommentTok{\# WSL上のRで解凍すると文字化けするので、Linuxのコマンドを外部呼び出し}
 \CommentTok{\# Windowsの場合は別途コマンドを用いる.}
 \ControlFlowTok{if}\NormalTok{(.Platform}\SpecialCharTok{$}\NormalTok{OS.type }\SpecialCharTok{==} \StringTok{"unix"}\NormalTok{) \{}
-    \FunctionTok{system}\NormalTok{(}\FunctionTok{sprintf}\NormalTok{(}\StringTok{\textquotesingle{}unzip {-}Ocp932 \%s {-}d \%s\textquotesingle{}}\NormalTok{, }\StringTok{"downloads/support08.zip"}\NormalTok{, }\StringTok{"./data"}\NormalTok{))}
+    \FunctionTok{system}\NormalTok{(}\FunctionTok{sprintf}\NormalTok{(}\StringTok{\textquotesingle{}unzip {-}n {-}Ocp932 \%s {-}d \%s\textquotesingle{}}\NormalTok{, }\StringTok{"downloads/support08.zip"}\NormalTok{, }\StringTok{"./data"}\NormalTok{))}
 \NormalTok{\} }\ControlFlowTok{else}\NormalTok{ \{}
     \FunctionTok{print}\NormalTok{(}\StringTok{"Windowsで解凍するコマンドを別途追加せよ."}\NormalTok{)}
 \NormalTok{\}}
@@ -724,7 +736,7 @@ As you work, you may start a local server to live preview this HTML book. This p
 \CommentTok{\# WSL上のRで解凍すると文字化けするので、Linuxのコマンドを外部呼び出し}
 \CommentTok{\# Windowsの場合は別途コマンドを用いる.}
 \ControlFlowTok{if}\NormalTok{(.Platform}\SpecialCharTok{$}\NormalTok{OS.type }\SpecialCharTok{==} \StringTok{"unix"}\NormalTok{) \{}
-    \FunctionTok{system}\NormalTok{(}\FunctionTok{sprintf}\NormalTok{(}\StringTok{\textquotesingle{}unzip {-}Ocp932 \%s {-}d \%s\textquotesingle{}}\NormalTok{, }\StringTok{"downloads/support09.zip"}\NormalTok{, }\StringTok{"./data"}\NormalTok{))}
+    \FunctionTok{system}\NormalTok{(}\FunctionTok{sprintf}\NormalTok{(}\StringTok{\textquotesingle{}unzip {-}n {-}Ocp932 \%s {-}d \%s\textquotesingle{}}\NormalTok{, }\StringTok{"downloads/support09.zip"}\NormalTok{, }\StringTok{"./data"}\NormalTok{))}
 \NormalTok{\} }\ControlFlowTok{else}\NormalTok{ \{}
     \FunctionTok{print}\NormalTok{(}\StringTok{"Windowsで解凍するコマンドを別途追加せよ."}\NormalTok{)}
 \NormalTok{\}}
@@ -774,7 +786,7 @@ As you work, you may start a local server to live preview this HTML book. This p
 \CommentTok{\# WSL上のRで解凍すると文字化けするので、Linuxのコマンドを外部呼び出し}
 \CommentTok{\# Windowsの場合は別途コマンドを用いる.}
 \ControlFlowTok{if}\NormalTok{(.Platform}\SpecialCharTok{$}\NormalTok{OS.type }\SpecialCharTok{==} \StringTok{"unix"}\NormalTok{) \{}
-    \FunctionTok{system}\NormalTok{(}\FunctionTok{sprintf}\NormalTok{(}\StringTok{\textquotesingle{}unzip {-}Ocp932 \%s {-}d \%s\textquotesingle{}}\NormalTok{, }\StringTok{"downloads/support10.zip"}\NormalTok{, }\StringTok{"./data"}\NormalTok{))}
+    \FunctionTok{system}\NormalTok{(}\FunctionTok{sprintf}\NormalTok{(}\StringTok{\textquotesingle{}unzip {-}n {-}Ocp932 \%s {-}d \%s\textquotesingle{}}\NormalTok{, }\StringTok{"downloads/support10.zip"}\NormalTok{, }\StringTok{"./data"}\NormalTok{))}
 \NormalTok{\} }\ControlFlowTok{else}\NormalTok{ \{}
     \FunctionTok{print}\NormalTok{(}\StringTok{"Windowsで解凍するコマンドを別途追加せよ."}\NormalTok{)}
 \NormalTok{\}}
@@ -844,7 +856,7 @@ As you work, you may start a local server to live preview this HTML book. This p
 \CommentTok{\# WSL上のRで解凍すると文字化けするので、Linuxのコマンドを外部呼び出し}
 \CommentTok{\# Windowsの場合は別途コマンドを用いる.}
 \ControlFlowTok{if}\NormalTok{(.Platform}\SpecialCharTok{$}\NormalTok{OS.type }\SpecialCharTok{==} \StringTok{"unix"}\NormalTok{) \{}
-    \FunctionTok{system}\NormalTok{(}\FunctionTok{sprintf}\NormalTok{(}\StringTok{\textquotesingle{}unzip {-}Ocp932 \%s {-}d \%s\textquotesingle{}}\NormalTok{, }\StringTok{"downloads/support11.zip"}\NormalTok{, }\StringTok{"./data"}\NormalTok{))}
+    \FunctionTok{system}\NormalTok{(}\FunctionTok{sprintf}\NormalTok{(}\StringTok{\textquotesingle{}unzip {-}n {-}Ocp932 \%s {-}d \%s\textquotesingle{}}\NormalTok{, }\StringTok{"downloads/support11.zip"}\NormalTok{, }\StringTok{"./data"}\NormalTok{))}
 \NormalTok{\} }\ControlFlowTok{else}\NormalTok{ \{}
     \FunctionTok{print}\NormalTok{(}\StringTok{"Windowsで解凍するコマンドを別途追加せよ."}\NormalTok{)}
 \NormalTok{\}}
@@ -910,7 +922,7 @@ As you work, you may start a local server to live preview this HTML book. This p
 \CommentTok{\# WSL上のRで解凍すると文字化けするので、Linuxのコマンドを外部呼び出し}
 \CommentTok{\# Windowsの場合は別途コマンドを用いる.}
 \ControlFlowTok{if}\NormalTok{(.Platform}\SpecialCharTok{$}\NormalTok{OS.type }\SpecialCharTok{==} \StringTok{"unix"}\NormalTok{) \{}
-    \FunctionTok{system}\NormalTok{(}\FunctionTok{sprintf}\NormalTok{(}\StringTok{\textquotesingle{}unzip {-}Ocp932 \%s {-}d \%s\textquotesingle{}}\NormalTok{, }\StringTok{"downloads/support12.zip"}\NormalTok{, }\StringTok{"./data"}\NormalTok{))}
+    \FunctionTok{system}\NormalTok{(}\FunctionTok{sprintf}\NormalTok{(}\StringTok{\textquotesingle{}unzip {-}n {-}Ocp932 \%s {-}d \%s\textquotesingle{}}\NormalTok{, }\StringTok{"downloads/support12.zip"}\NormalTok{, }\StringTok{"./data"}\NormalTok{))}
 \NormalTok{\} }\ControlFlowTok{else}\NormalTok{ \{}
     \FunctionTok{print}\NormalTok{(}\StringTok{"Windowsで解凍するコマンドを別途追加せよ."}\NormalTok{)}
 \NormalTok{\}}

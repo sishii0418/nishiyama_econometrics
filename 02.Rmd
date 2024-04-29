@@ -1,6 +1,6 @@
 # 第2章 データの整理と確率変数の基礎 {-#ch2}
 先に[出版社サイト](https://www.yuhikaku.co.jp/books/detail/9784641053854)よりデータをダウンロードする.
-```{r collapse=T, eval=FALSE}
+```{r collapse=T, eval=T}
 # サポートファイルへのリンク
 curl <- "https://www.yuhikaku.co.jp/static_files/05385_support02.zip"
 # ダウンロード保存用フォルダが存在しない場合, 作成
@@ -16,7 +16,7 @@ if(!dir.exists("data")){
 # WSL上のRで解凍すると文字化けするので、Linuxのコマンドを外部呼び出し
 # Windowsの場合は別途コマンドを用いる.
 if(.Platform$OS.type == "unix") {
-    system(sprintf('unzip -Ocp932 %s -d %s', "downloads/support02.zip", "./data"))
+    system(sprintf('unzip -n -Ocp932 %s -d %s', "downloads/support02.zip", "./data"))
 } else {
     print("Windowsで解凍するコマンドを別途追加せよ.")
 }
