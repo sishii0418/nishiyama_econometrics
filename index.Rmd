@@ -16,6 +16,7 @@ github-repo: rstudio/bookdown-demo
 # はじめに {.unnumbered}
 
 西山ほか(2019)『計量経済学』有斐閣 ([出版社リンク](https://www.yuhikaku.co.jp/books/detail/9784641053854)) の練習問題解答とRでの再現です.
+サイト: https://sishii0418.github.io/nishiyama_econometrics/
 
 必要なRパッケージをインストール:
 ```{r collapse=T, eval=F}

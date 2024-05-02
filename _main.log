@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2022/dev/Debian) (preloaded format=xelatex 2024.4.27)  2 MAY 2024 17:51
+This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2022/dev/Debian) (preloaded format=xelatex 2024.4.27)  2 MAY 2024 18:25
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -2007,6 +2007,12 @@ Missing character: There is no で (U+3067) in font [lmroman10-regular]:mapping=
 ex-text;!
 Missing character: There is no す (U+3059) in font [lmroman10-regular]:mapping=t
 ex-text;!
+Missing character: There is no サ (U+30B5) in font [lmroman10-regular]:mapping=t
+ex-text;!
+Missing character: There is no イ (U+30A4) in font [lmroman10-regular]:mapping=t
+ex-text;!
+Missing character: There is no ト (U+30C8) in font [lmroman10-regular]:mapping=t
+ex-text;!
 Missing character: There is no 必 (U+5FC5) in font [lmroman10-regular]:mapping=t
 ex-text;!
 Missing character: There is no 要 (U+8981) in font [lmroman10-regular]:mapping=t
@@ -2038,7 +2044,7 @@ ex-text;!
 Missing character: There is no ル (U+30EB) in font [lmroman10-regular]:mapping=t
 ex-text;!
 LaTeX Font Info:    Font shape `TU/lmtt/bx/n' in size <10> not available
-(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 156.
+(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 157.
 Missing character: There is no 方 (U+65B9) in font [lmroman12-bold]:mapping=tex-
 text;!
 Missing character: There is no 針 (U+91DD) in font [lmroman12-bold]:mapping=tex-
@@ -2725,7 +2731,7 @@ Missing character: There is no む (U+3080) in font [lmroman10-regular]:mapping=
 ex-text;!
 
 LaTeX Font Warning: Font shape `TU/lmtt/bx/it' in size <10> not available
-(Font)              Font shape `TU/lmtt/b/sl' tried instead on input line 231.
+(Font)              Font shape `TU/lmtt/b/sl' tried instead on input line 232.
 
 Missing character: There is no 練 (U+7DF4) in font [lmroman12-bold]:mapping=tex-
 text;!
@@ -3237,7 +3243,7 @@ ex-text;!
 Missing character: There is no い (U+3044) in font [lmroman10-regular]:mapping=t
 ex-text;!
 
-Overfull \hbox (12.39485pt too wide) in paragraph at lines 320--323
+Overfull \hbox (12.39485pt too wide) in paragraph at lines 321--324
 \TU/lmr/m/n/10 第2章練習問題2-1で用いたデータを読み込み、両側t検定を実行する. $[] [] [][][][]$の場合90%信頼区間は$[
 ][][][][][][][][][] [][][][][][][][][][]$となり, これは8を含まないことから帰無仮説は棄却できる.
  []
@@ -3535,7 +3541,7 @@ ex-text;!
 Missing character: There is no 第 (U+7B2C) in font [lmmono10-regular]:!
 Missing character: There is no 章 (U+7AE0) in font [lmmono10-regular]:!
 
-Overfull \vbox (1.63837pt too high) detected at line 427
+Overfull \vbox (1.63837pt too high) detected at line 428
  []
 
 [13
@@ -3666,7 +3672,7 @@ ex-text;!
 Missing character: There is no る (U+308B) in font [lmroman10-regular]:mapping=t
 ex-text;!
 
-Underfull \hbox (badness 10000) in paragraph at lines 429--431
+Underfull \hbox (badness 10000) in paragraph at lines 430--432
 []\TU/lmr/m/n/10 Rの\TU/lmtt/m/n/10 lm()\TU/lmr/m/n/10 で計算される標準誤差は不均一分散に対して頑健でない
 . 本文中にある不均一分散に対して頑健な計算結果を求めるには, \TU/lmtt/m/n/10 estimatr::lm_robust()\TU/lmr/m/
 n/10 を用い,
@@ -4104,27 +4110,27 @@ Missing character: There is no 賃 (U+8CC3) in font [lmmonolt10-boldoblique]:!
 Missing character: There is no 金 (U+91D1) in font [lmmonolt10-boldoblique]:!
 Missing character: There is no 円 (U+5186) in font [lmmonolt10-boldoblique]:!
 [14]
-Underfull \vbox (badness 10000) detected at line 640
+Underfull \vbox (badness 10000) detected at line 641
  []
 
 
-Underfull \vbox (badness 10000) detected at line 640
+Underfull \vbox (badness 10000) detected at line 641
  []
 
 [15]
-Underfull \vbox (badness 10000) detected at line 640
+Underfull \vbox (badness 10000) detected at line 641
  []
 
 
-Underfull \vbox (badness 10000) detected at line 640
+Underfull \vbox (badness 10000) detected at line 641
  []
 
 [16]
-Underfull \vbox (badness 10000) detected at line 640
+Underfull \vbox (badness 10000) detected at line 641
  []
 
 
-Underfull \vbox (badness 10000) detected at line 640
+Underfull \vbox (badness 10000) detected at line 641
  []
 
 [17]
@@ -5599,7 +5605,7 @@ ex-text;!
 Missing character: There is no た (U+305F) in font [lmroman10-regular]:mapping=t
 ex-text;!
 
-Overfull \hbox (10.81403pt too wide) in paragraph at lines 1003--1004
+Overfull \hbox (10.81403pt too wide) in paragraph at lines 1004--1005
 \TU/lmr/m/n/10 定数項なしの回帰を実行するには, \TU/lmtt/m/n/10 formula\TU/lmr/m/n/10 に\TU/lmtt
 /m/n/10 +0\TU/lmr/m/n/10 か\TU/lmtt/m/n/10 -1\TU/lmr/m/n/10 を追加する([]参考[]). なお, \
 TU/lmtt/m/n/10 estimatr::lm_robust()\TU/lmr/m/n/10 には\TU/lmtt/m/n/10 lm\TU/lmr/
@@ -5607,7 +5613,7 @@ m/n/10 のように\TU/lmtt/m/n/10 residuals\TU/lmr/m/n/10 がないため,
  []
 
 
-Overfull \vbox (0.55838pt too high) detected at line 1066
+Overfull \vbox (0.55838pt too high) detected at line 1067
  []
 
 [26]
@@ -6048,19 +6054,19 @@ Missing character: There is no 成 (U+6210) in font [lmmonolt10-boldoblique]:!
 Missing character: There is no 長 (U+9577) in font [lmmonolt10-boldoblique]:!
 Missing character: There is no 率 (U+7387) in font [lmmonolt10-boldoblique]:!
 [28]
-Underfull \vbox (badness 10000) detected at line 1246
+Underfull \vbox (badness 10000) detected at line 1247
  []
 
 
-Underfull \vbox (badness 10000) detected at line 1246
+Underfull \vbox (badness 10000) detected at line 1247
  []
 
 [29]
-Underfull \vbox (badness 10000) detected at line 1246
+Underfull \vbox (badness 10000) detected at line 1247
  []
 
 
-Underfull \vbox (badness 10000) detected at line 1246
+Underfull \vbox (badness 10000) detected at line 1247
  []
 
 [30]
@@ -6238,7 +6244,7 @@ ex-text;!
 Missing character: There is no い (U+3044) in font [lmroman10-regular]:mapping=t
 ex-text;!
 
-Overfull \hbox (51.58202pt too wide) in paragraph at lines 1280--1281
+Overfull \hbox (51.58202pt too wide) in paragraph at lines 1281--1282
 \TU/lmr/m/n/10 先にダミー変数\TU/lmtt/m/n/10 urban\TU/lmr/m/n/10 を作成してから回帰分析を実行する(下では\
 TU/lmtt/m/n/10 urban\TU/lmr/m/n/10 の型は\TU/lmtt/m/n/10 int\TU/lmr/m/n/10 ではなく\TU
 /lmtt/m/n/10 bool\TU/lmr/m/n/10 になるが構わない). \TU/lmtt/m/n/10 urban\TU/lmr/m/n/10 
@@ -6247,7 +6253,7 @@ TU/lmtt/m/n/10 urban\TU/lmr/m/n/10 の型は\TU/lmtt/m/n/10 int\TU/lmr/m/n/10 �
  []
 
 
-Overfull \vbox (0.53838pt too high) detected at line 1346
+Overfull \vbox (0.53838pt too high) detected at line 1347
  []
 
 [32]
@@ -7135,7 +7141,7 @@ ex-text;!
 Missing character: There is no た (U+305F) in font [lmroman10-regular]:mapping=t
 ex-text;!
 
-Overfull \hbox (177.56201pt too wide) in paragraph at lines 1454--1455
+Overfull \hbox (177.56201pt too wide) in paragraph at lines 1455--1456
 \TU/lmr/m/n/10 回帰結果の表は\TU/lmtt/m/n/10 modelsummary\TU/lmr/m/n/10 を使う (\TU/lmtt/
 m/n/10 stargazer\TU/lmr/m/n/10 でも可能だが更新が止まっており, \TU/lmtt/m/n/10 estimatr\TU/lmr
 /m/n/10 の結果を表示できないなどデメリットがある). \TU/lmtt/m/n/10 modelsummary::msummary()\TU/lmr/
@@ -7701,7 +7707,7 @@ ex-text;!
 Missing character: There is no ズ (U+30BA) in font [lmroman10-regular]:mapping=t
 ex-text;!
 
-Overfull \hbox (176.91pt too wide) in paragraph at lines 1533--1534
+Overfull \hbox (176.91pt too wide) in paragraph at lines 1534--1535
  [][] 
  []
 
@@ -7952,11 +7958,11 @@ Missing character: There is no か (U+304B) in font [lmmono10-italic]:!
 Missing character: There is no し (U+3057) in font [lmmono10-italic]:!
 Missing character: There is no い (U+3044) in font [lmmono10-italic]:!
 [36]
-Underfull \vbox (badness 10000) detected at line 1586
+Underfull \vbox (badness 10000) detected at line 1587
  []
 
 
-Underfull \vbox (badness 10000) detected at line 1586
+Underfull \vbox (badness 10000) detected at line 1587
  []
 
 [37]
@@ -8572,7 +8578,7 @@ ex-text;!
 Missing character: There is no ズ (U+30BA) in font [lmroman10-regular]:mapping=t
 ex-text;!
 
-Overfull \hbox (33.74pt too wide) in paragraph at lines 1629--1630
+Overfull \hbox (33.74pt too wide) in paragraph at lines 1630--1631
  [][] 
  []
 
@@ -8920,7 +8926,7 @@ ex-text;!
 Missing character: There is no い (U+3044) in font [lmroman10-regular]:mapping=t
 ex-text;!
 
-Underfull \hbox (badness 1286) in paragraph at lines 1734--1735
+Underfull \hbox (badness 1286) in paragraph at lines 1735--1736
 []\TU/lmr/m/n/10 これを決定係数$[][]$の定義と比べると, 自由度修正済み決定係数は変数の数$[]$が増えるたびに値が小さくなることがわか
 る. 決定係数$[][]$ではこのようなことは起きず, 変数の数を増やすと$[][]$の値は必ず変わらないか大きくなり,
  []
@@ -9297,7 +9303,7 @@ ex-text;!
 Missing character: There is no ズ (U+30BA) in font [lmroman10-regular]:mapping=t
 ex-text;!
 
-Overfull \hbox (98.11pt too wide) in paragraph at lines 1852--1853
+Overfull \hbox (98.11pt too wide) in paragraph at lines 1853--1854
  [][] 
  []
 
@@ -11332,7 +11338,7 @@ No file _main.bbl.
 Here is how much of TeX's memory you used:
  26460 strings out of 477728
  550037 string characters out of 5842238
- 1064083 words of memory out of 5000000
+ 1064137 words of memory out of 5000000
  46767 multiletter control sequences out of 15000+600000
  484803 words of font info for 96 fonts, out of 8000000 for 9000
  264 hyphenation exceptions out of 8191
