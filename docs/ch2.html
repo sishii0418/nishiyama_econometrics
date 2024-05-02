@@ -60,6 +60,20 @@
 
   gtag('config', 'G-8R0S76ZD8E');
 </script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: {
+    Macros: {
+      P: "{\\mathbb{P}}",
+      E: "{\\text{E}}",
+      Var: "{\\text{Var}}",
+      Cov: "{\\text{Cov}}",
+      sumN: ["{\\sum_{#1=0}^N}", 1]
+    }
+  }
+});
+</script>
+
 
 
 <style type="text/css">
@@ -156,7 +170,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="ch2.html"><a href="ch2.html"><i class="fa fa-check"></i>第2章 データの整理と確率変数の基礎</a>
 <ul>
 <li class="chapter" data-level="" data-path="ch2.html"><a href="ch2.html#練習問題-2-1-確認"><i class="fa fa-check"></i>練習問題 2-1 [確認]</a></li>
+<li class="chapter" data-level="" data-path="ch2.html"><a href="ch2.html#練習問題-2-2-確認"><i class="fa fa-check"></i>練習問題 2-2 [確認]</a></li>
 <li class="chapter" data-level="" data-path="ch2.html"><a href="ch2.html#練習問題-2-3-確認"><i class="fa fa-check"></i>練習問題 2-3 [確認]</a></li>
+<li class="chapter" data-level="" data-path="ch2.html"><a href="ch2.html#練習問題-2-4-確認"><i class="fa fa-check"></i>練習問題 2-4 [確認]</a></li>
+<li class="chapter" data-level="" data-path="ch2.html"><a href="ch2.html#練習問題-2-5-確認"><i class="fa fa-check"></i>練習問題 2-5 [確認]</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="ch3.html"><a href="ch3.html"><i class="fa fa-check"></i>第3章 統計理論の基礎</a>
 <ul>
@@ -240,13 +257,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb2-19"><a href="ch2.html#cb2-19" tabindex="-1"></a>}</span></code></pre></div>
 <p>必要なライブラリを読み込む.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="ch2.html#cb3-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb3-2"><a href="ch2.html#cb3-2" tabindex="-1"></a><span class="do">## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──</span></span>
+<span id="cb3-2"><a href="ch2.html#cb3-2" tabindex="-1"></a><span class="do">## ── Attaching core tidyverse packages ──────────────────── tidyverse 2.0.0 ──</span></span>
 <span id="cb3-3"><a href="ch2.html#cb3-3" tabindex="-1"></a><span class="do">## ✔ dplyr     1.1.4     ✔ readr     2.1.5</span></span>
 <span id="cb3-4"><a href="ch2.html#cb3-4" tabindex="-1"></a><span class="do">## ✔ forcats   1.0.0     ✔ stringr   1.5.1</span></span>
 <span id="cb3-5"><a href="ch2.html#cb3-5" tabindex="-1"></a><span class="do">## ✔ ggplot2   3.5.0     ✔ tibble    3.2.1</span></span>
 <span id="cb3-6"><a href="ch2.html#cb3-6" tabindex="-1"></a><span class="do">## ✔ lubridate 1.9.3     ✔ tidyr     1.3.1</span></span>
 <span id="cb3-7"><a href="ch2.html#cb3-7" tabindex="-1"></a><span class="do">## ✔ purrr     1.0.2     </span></span>
-<span id="cb3-8"><a href="ch2.html#cb3-8" tabindex="-1"></a><span class="do">## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──</span></span>
+<span id="cb3-8"><a href="ch2.html#cb3-8" tabindex="-1"></a><span class="do">## ── Conflicts ────────────────────────────────────── tidyverse_conflicts() ──</span></span>
 <span id="cb3-9"><a href="ch2.html#cb3-9" tabindex="-1"></a><span class="do">## ✖ dplyr::filter() masks stats::filter()</span></span>
 <span id="cb3-10"><a href="ch2.html#cb3-10" tabindex="-1"></a><span class="do">## ✖ dplyr::lag()    masks stats::lag()</span></span>
 <span id="cb3-11"><a href="ch2.html#cb3-11" tabindex="-1"></a><span class="do">## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</span></span></code></pre></div>
@@ -270,7 +287,34 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb4-15"><a href="ch2.html#cb4-15" tabindex="-1"></a></span>
 <span id="cb4-16"><a href="ch2.html#cb4-16" tabindex="-1"></a><span class="fu">Mode</span>(data21<span class="sc">$</span>V1)</span>
 <span id="cb4-17"><a href="ch2.html#cb4-17" tabindex="-1"></a><span class="do">## [1] 10</span></span></code></pre></div>
-<!-- ## 練習問題 2-2 [確認] {-} -->
+</div>
+<div id="練習問題-2-2-確認" class="section level2 unnumbered hasAnchor">
+<h2>練習問題 2-2 [確認]<a href="ch2.html#練習問題-2-2-確認" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>与式1行目については
+<span class="math display">\[
+\begin{aligned}
+    LHS_1 &amp;= \frac{1}{N}\sum_{i=1}^N (x_i-\bar{x})^2 = \frac{1}{N}\sum_{i=1}^N (x_i^2 - 2x_i\bar{x}+\bar{x}^2) \\
+          &amp;= \frac{1}{N}\left[\sum_{i=1}^N (x_i^2-x_i\bar{x})-\left(\bar{x}\sum_{i=1}^N x_i-N\bar{x}^2\right)\right] \\
+          &amp;= \frac{1}{N}\left[\sum_{i=1}^N (x_i^2-x_i\bar{x})-\left(\bar{x}\cdot N\bar{x}-N\bar{x}^2\right)\right] \\
+          &amp;= \frac{1}{N}\sum_{i=1}^N (x_i^2-x_i\bar{x}) = \frac{1}{N}\sum_{i=1}^N (x_i-\bar{x})x_i = MHS \\
+          &amp;= \frac{1}{N}\sum_{i=1}^N x_i^2 - \frac{1}{N}\bar{x}\sum_{i=1}^N x_i \\
+          &amp;= \frac{1}{N}\sum_{i=1}^N x_i^2 - \frac{1}{N}\bar{x}\cdot N\bar{x} \\
+          &amp;= \frac{1}{N}\sum_{i=1}^N x_i^2 - \bar{x}^2 = RHS_1.
+\end{aligned}
+\]</span>
+与式2, 3行目については
+<span class="math display">\[
+\begin{aligned}
+    LHS_2 &amp;= \frac{1}{N}\sum_{i=1}^N (x_i-\bar{x})(y_i - \bar{y}) = \frac{1}{N}\sum_{i=1}^N (x_iy_i - x_i\bar{y} - \bar{x}y_i + \bar{x}\bar{y}) \\
+          &amp;= \frac{1}{N}\left[\sum_{i=1}^N (x_iy_i - \bar{x}y_i) - \sum_{i=1}^N (x_i\bar{y} - \bar{x}\bar{y})\right] \\
+          &amp;= \frac{1}{N}\left[\sum_{i=1}^N (x_iy_i - \bar{x}y_i) - (N\bar{x}\bar{y} - N\bar{x}{y})\right] \\
+          &amp;= \frac{1}{N}\sum_{i=1}^N (x_i-\bar{x})y_i = MHS_2 \\
+          &amp;= \frac{1}{N}\sum_{i=1}^N (x_iy_i) - \frac{1}{N}\bar{x}\sum_{i=1}^N y_i \\
+          &amp;= \frac{1}{N}\sum_{i=1}^N x_iy_i - \frac{1}{N}\bar{x}\cdot N\bar{y} \\
+          &amp;= \frac{1}{N}\sum_{i=1}^N x_iy_i - \bar{x}\bar{y} = RHS_3.
+\end{aligned}
+\]</span>
+<span class="math inline">\(MHS_2 = RHS_2\)</span>は<span class="math inline">\(LHS_2 = MHS_2\)</span>と<span class="math inline">\(x\)</span>と<span class="math inline">\(y\)</span>との対称性から求められるので, 省略. QED</p>
 </div>
 <div id="練習問題-2-3-確認" class="section level2 unnumbered hasAnchor">
 <h2>練習問題 2-3 [確認]<a href="ch2.html#練習問題-2-3-確認" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -288,11 +332,61 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb6-3"><a href="ch2.html#cb6-3" tabindex="-1"></a><span class="do">## [1] 2.111111</span></span>
 <span id="cb6-4"><a href="ch2.html#cb6-4" tabindex="-1"></a><span class="fu">cor</span>(x, y)</span>
 <span id="cb6-5"><a href="ch2.html#cb6-5" tabindex="-1"></a><span class="do">## [1] 0.7680295</span></span></code></pre></div>
-<!-- ## 練習問題 2-4 [確認] {-}
-
-## 練習問題 2-5 [確認] {-}
-
-## 練習問題 2-6 [確認] {-}
+</div>
+<div id="練習問題-2-4-確認" class="section level2 unnumbered hasAnchor">
+<h2>練習問題 2-4 [確認]<a href="ch2.html#練習問題-2-4-確認" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>任意の<span class="math inline">\(t\)</span>に対して
+<span class="math display">\[
+\begin{aligned}
+    \Var(tX+Y) &amp;= t^2\Var(X) + 2t\Cov(X, Y) + \Var(Y) \\
+               &amp;= s_x^2t^2 + 2s_{xy}t + s_y^2 \geq 0
+\end{aligned}
+\]</span>
+だから, これを<span class="math inline">\(t\)</span>に関する2次関数と見ると, 判別式は
+<span class="math display">\[
+D = s_{xy}^2 - s_x^2s_y^2 \leq 0
+\]</span>
+を満たす.
+これより, <span class="math inline">\(0 \leq s_{xy}^2 \leq s_x^2s_y^2\)</span>であるから,
+<span class="math display">\[
+|s_{xy}| \leq s_xs_y.
+\]</span>
+よって,
+<span class="math display">\[
+\frac{|s_{xy}|}{s_xs_y} = \left|\frac{s_{xy}}{s_xs_y}\right| = |r_{xy}| \leq 1
+\]</span>
+i.e., <span class="math inline">\(-1 \leq r_{xy} \leq 1\)</span>. QED</p>
+<p><strong>別解</strong> 2つのベクトル<span class="math inline">\(\mathbb{x} = (x_1, \cdots, x_n), \mathbb{y} = (y_1, \cdots, y_n)\)</span>を考える.
+それぞれの値を平均値で引いたものを <span class="math inline">\(\mathbb{x}_c = (x_1 - \bar{x}, \cdots, x_n - \bar{x}), \mathbb{y}_c = (y_1 - \bar{y}, \cdots, y_n - \bar{y})\)</span>とすると,
+相関係数<span class="math inline">\(r_{xy}\)</span>は
+<span class="math display">\[
+\begin{aligned}
+r_{xy} &amp;= \frac{s_{xy}}{s_xs_y} \\
+       &amp;= \frac{\sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum_{i=1}^n (x_i - \bar{x})^2}\sqrt{\sum_{i=1}^n (y_i - \bar{y})^2}} \\
+       &amp;= \frac{\mathbb{x}_c\cdot\mathbb{y}_c}{|\mathbb{x}_c||\mathbb{y}_c|} \\
+       &amp;= \cos\theta &amp; \text{ただし, $\theta$は$\mathbb{x}_c$と$\mathbb{y}_c$のなす角}
+\end{aligned}
+\]</span>
+と表せるから, <span class="math inline">\(-1 \leq \cos\theta = r_{xy} \leq 1\)</span>である.</p>
+</div>
+<div id="練習問題-2-5-確認" class="section level2 unnumbered hasAnchor">
+<h2>練習問題 2-5 [確認]<a href="ch2.html#練習問題-2-5-確認" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>それぞれ
+<span class="math display">\[
+\begin{aligned}
+  \E(X)   &amp;= \sum_x x\P(X=x) = 1\cdot\frac{1}{5} + 5\cdot\frac{1}{4} + 6\cdot\frac{3}{10} + 7\cdot\frac{1}{4} = 5. \\
+  \E(X^2) &amp;= \sum_x x^2\P(X=x) = 1^2\cdot\frac{1}{5} + 5^2\cdot\frac{1}{4} + 6^2\cdot\frac{3}{10} + 7^2\cdot\frac{1}{4} = 29.5. \\
+  \Var(X) &amp;= \E(X^2) - [\E(X)]^2 = 4.5.
+\end{aligned}
+\]</span></p>
+<p>累積分布関数は<code>ggplot2::stat_ecdf()</code>を用いて描画できる.
+データは先に指定された確率通りに生成しておく.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="ch2.html#cb7-1" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="fu">rep</span> (<span class="dv">1</span>, <span class="dv">8</span>), <span class="fu">rep</span>(<span class="dv">5</span>, <span class="dv">10</span>), <span class="fu">rep</span>(<span class="dv">6</span>, <span class="dv">12</span>), <span class="fu">rep</span>(<span class="dv">7</span>, <span class="dv">10</span>)))</span>
+<span id="cb7-2"><a href="ch2.html#cb7-2" tabindex="-1"></a>data <span class="sc">%&gt;%</span></span>
+<span id="cb7-3"><a href="ch2.html#cb7-3" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x)) <span class="sc">+</span></span>
+<span id="cb7-4"><a href="ch2.html#cb7-4" tabindex="-1"></a>    <span class="fu">stat_ecdf</span>()</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<!-- ## 練習問題 2-6 [確認] {-}
 
 ## 練習問題 2-7 [発展] {-}
 
@@ -360,7 +454,7 @@ gitbook.start({
 "link": null,
 "text": null
 },
-"download": ["_main.pdf", "_main.epub"],
+"download": null,
 "search": {
 "engine": "fuse",
 "options": null

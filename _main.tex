@@ -143,12 +143,17 @@
 \setcounter{tocdepth}{1}
 \tableofcontents
 }
+\[
+\newcommand{\Var}{\text{Var}}
+\]
+
 \hypertarget{ux306fux3058ux3081ux306b}{%
 \chapter*{はじめに}\label{ux306fux3058ux3081ux306b}}
 \addcontentsline{toc}{chapter}{はじめに}
 
 西山ほか(2019)『計量経済学』有斐閣 (\href{https://www.yuhikaku.co.jp/books/detail/9784641053854}{出版社リンク}) の練習問題解答とRでの再現です.
-サイト: \url{https://sishii0418.github.io/nishiyama_econometrics/}
+
+test \(\Var(X)\)
 
 必要なRパッケージをインストール:
 
@@ -270,6 +275,36 @@ R には最頻値を求める関数がないようなので, 別途関数\texttt
 \end{Highlighting}
 \end{Shaded}
 
+\hypertarget{ux7df4ux7fd2ux554fux984c-2-2-ux78baux8a8d}{%
+\section*{練習問題 2-2 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-2-2-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 2-2 {[}確認{]}}
+
+与式1行目については
+\[
+\begin{aligned}
+    LHS_1 &= \frac{1}{N}\sum_{i=1}^N (x_i-\bar{x})^2 = \frac{1}{N}\sum_{i=1}^N (x_i^2 - 2x_i\bar{x}+\bar{x}^2) \\
+          &= \frac{1}{N}\left[\sum_{i=1}^N (x_i^2-x_i\bar{x})-\left(\bar{x}\sum_{i=1}^N x_i-N\bar{x}^2\right)\right] \\
+          &= \frac{1}{N}\left[\sum_{i=1}^N (x_i^2-x_i\bar{x})-\left(\bar{x}\cdot N\bar{x}-N\bar{x}^2\right)\right] \\
+          &= \frac{1}{N}\sum_{i=1}^N (x_i^2-x_i\bar{x}) = \frac{1}{N}\sum_{i=1}^N (x_i-\bar{x})x_i = MHS \\
+          &= \frac{1}{N}\sum_{i=1}^N x_i^2 - \frac{1}{N}\bar{x}\sum_{i=1}^N x_i \\
+          &= \frac{1}{N}\sum_{i=1}^N x_i^2 - \frac{1}{N}\bar{x}\cdot N\bar{x} \\
+          &= \frac{1}{N}\sum_{i=1}^N x_i^2 - \bar{x}^2 = RHS_1.
+\end{aligned}
+\]
+与式2, 3行目については
+\[
+\begin{aligned}
+    LHS_2 &= \frac{1}{N}\sum_{i=1}^N (x_i-\bar{x})(y_i - \bar{y}) = \frac{1}{N}\sum_{i=1}^N (x_iy_i - x_i\bar{y} - \bar{x}y_i + \bar{x}\bar{y}) \\
+          &= \frac{1}{N}\left[\sum_{i=1}^N (x_iy_i - \bar{x}y_i) - \sum_{i=1}^N (x_i\bar{y} - \bar{x}\bar{y})\right] \\
+          &= \frac{1}{N}\left[\sum_{i=1}^N (x_iy_i - \bar{x}y_i) - (N\bar{x}\bar{y} - N\bar{x}{y})\right] \\
+          &= \frac{1}{N}\sum_{i=1}^N (x_i-\bar{x})y_i = MHS_2 \\
+          &= \frac{1}{N}\sum_{i=1}^N (x_iy_i) - \frac{1}{N}\bar{x}\sum_{i=1}^N y_i \\
+          &= \frac{1}{N}\sum_{i=1}^N x_iy_i - \frac{1}{N}\bar{x}\cdot N\bar{y} \\
+          &= \frac{1}{N}\sum_{i=1}^N x_iy_i - \bar{x}\bar{y} = RHS_3.
+\end{aligned}
+\]
+\(MHS_2 = RHS_2\)は\(LHS_2 = MHS_2\)と\(x\)と\(y\)との対称性から求められるので, 省略. QED
+
 \hypertarget{ux7df4ux7fd2ux554fux984c-2-3-ux78baux8a8d}{%
 \section*{練習問題 2-3 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-2-3-ux78baux8a8d}}
 \addcontentsline{toc}{section}{練習問題 2-3 {[}確認{]}}
@@ -298,6 +333,72 @@ R には最頻値を求める関数がないようなので, 別途関数\texttt
 \DocumentationTok{\#\# [1] 0.7680295}
 \end{Highlighting}
 \end{Shaded}
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-2-4-ux78baux8a8d}{%
+\section*{練習問題 2-4 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-2-4-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 2-4 {[}確認{]}}
+
+任意の\(t\)に対して
+\[
+\begin{aligned}
+    \text{Var}(tX+Y) &= t^2\text{Var}(X) + 2t\text{Cov}(X, Y) + \text{Var}(Y) \\
+                     &= s_x^2t^2 + 2s_{xy}t + s_y^2 \geq 0
+\end{aligned}
+\]
+だから, これを\(t\)に関する2次関数と見ると, 判別式は
+\[
+D = s_{xy}^2 - s_x^2s_y^2 \leq 0
+\]
+を満たす.
+これより, \(0 \leq s_{xy}^2 \leq s_x^2s_y^2\)であるから,
+\[
+|s_{xy}| \leq s_xs_y.
+\]
+よって,
+\[
+\frac{|s_{xy}|}{s_xs_y} = \left|\frac{s_{xy}}{s_xs_y}\right| = |r_{xy}| \leq 1
+\]
+i.e., \(-1 \leq r_{xy} \leq 1\). QED
+
+\textbf{別解} 2つのベクトル\(\mathbb{x} = (x_1, \cdots, x_n), \mathbb{y} = (y_1, \cdots, y_n)\)を考える.
+それぞれの値を平均値で引いたものを \(\mathbb{x}_c = (x_1 - \bar{x}, \cdots, x_n - \bar{x}), \mathbb{y}_c = (y_1 - \bar{y}, \cdots, y_n - \bar{y})\)とすると,
+相関係数\(r_{xy}\)は
+\[
+\begin{aligned}
+r_{xy} &= \frac{s_{xy}}{s_xs_y} \\
+       &= \frac{\sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum_{i=1}^n (x_i - \bar{x})^2}\sqrt{\sum_{i=1}^n (y_i - \bar{y})^2}} \\
+       &= \frac{\mathbb{x}_c\cdot\mathbb{y}_c}{|\mathbb{x}_c||\mathbb{y}_c|} \\
+       &= \cos\theta & \text{ただし, $\theta$は$\mathbb{x}_c$と$\mathbb{y}_c$のなす角}
+\end{aligned}
+\]
+と表せるから, \(-1 \leq \cos\theta = r_{xy} \leq 1\)である.
+
+\hypertarget{ux7df4ux7fd2ux554fux984c-2-5-ux78baux8a8d}{%
+\section*{練習問題 2-5 {[}確認{]}}\label{ux7df4ux7fd2ux554fux984c-2-5-ux78baux8a8d}}
+\addcontentsline{toc}{section}{練習問題 2-5 {[}確認{]}}
+
+それぞれ
+\[
+\begin{aligned}
+  \text{E}(X)   &= \sum_x x\text{P}(X=x) = 1\cdot\frac{1}{5} + 5\cdot\frac{1}{4} + 6\cdot\frac{3}{10} + 7\cdot\frac{1}{4} = 5. \\
+  \text{E}(X^2) &= \sum_x x^2\text{P}(X=x) = 1^2\cdot\frac{1}{5} + 5^2\cdot\frac{1}{4} + 6^2\cdot\frac{3}{10} + 7^2\cdot\frac{1}{4} = 29.5. \\
+  \text{Var}(X)   &= \text{E}(X^2) - [\text{E}(X)]^2 = 4.5.
+\end{aligned}
+\]
+
+累積分布関数は\texttt{ggplot2::stat\_ecdf()}を用いて描画できる.
+データは先に指定された確率通りに生成しておく.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{data }\OtherTok{\textless{}{-}} \FunctionTok{tibble}\NormalTok{(}\AttributeTok{x =} \FunctionTok{c}\NormalTok{(}\FunctionTok{rep}\NormalTok{ (}\DecValTok{1}\NormalTok{, }\DecValTok{8}\NormalTok{), }\FunctionTok{rep}\NormalTok{(}\DecValTok{5}\NormalTok{, }\DecValTok{10}\NormalTok{), }\FunctionTok{rep}\NormalTok{(}\DecValTok{6}\NormalTok{, }\DecValTok{12}\NormalTok{), }\FunctionTok{rep}\NormalTok{(}\DecValTok{7}\NormalTok{, }\DecValTok{10}\NormalTok{)))}
+\NormalTok{data }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{ggplot}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ x)) }\SpecialCharTok{+}
+    \FunctionTok{stat\_ecdf}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{_main_files/figure-latex/unnamed-chunk-7-1.pdf}
 
 \hypertarget{ch3}{%
 \chapter*{第3章 統計理論の基礎}\label{ch3}}
@@ -640,7 +741,7 @@ Rの\texttt{lm()}で計算される標準誤差は不均一分散に対して頑
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-13-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-14-1.pdf}
 
 \hypertarget{ux7df4ux7fd2ux554fux984c-4-2-ux5b9fux8a3c}{%
 \section*{練習問題 4-2 {[}実証{]}}\label{ux7df4ux7fd2ux554fux984c-4-2-ux5b9fux8a3c}}
@@ -776,7 +877,7 @@ Rの\texttt{lm()}で計算される標準誤差は不均一分散に対して頑
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-19-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-20-1.pdf}
 
 \begin{enumerate}
 \def\labelenumi{(\arabic{enumi})}
@@ -1246,7 +1347,7 @@ Rの\texttt{lm()}で計算される標準誤差は不均一分散に対して頑
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-29-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-30-1.pdf}
 
 \hypertarget{ux4f8bux984c5.5}{%
 \section*{例題5.5}\label{ux4f8bux984c5.5}}

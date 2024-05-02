@@ -60,6 +60,20 @@
 
   gtag('config', 'G-8R0S76ZD8E');
 </script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: {
+    Macros: {
+      P: "{\\mathbb{P}}",
+      E: "{\\text{E}}",
+      Var: "{\\text{Var}}",
+      Cov: "{\\text{Cov}}",
+      sumN: ["{\\sum_{#1=0}^N}", 1]
+    }
+  }
+});
+</script>
+
 
 
 <style type="text/css">
@@ -156,7 +170,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="ch2.html"><a href="ch2.html"><i class="fa fa-check"></i>第2章 データの整理と確率変数の基礎</a>
 <ul>
 <li class="chapter" data-level="" data-path="ch2.html"><a href="ch2.html#練習問題-2-1-確認"><i class="fa fa-check"></i>練習問題 2-1 [確認]</a></li>
+<li class="chapter" data-level="" data-path="ch2.html"><a href="ch2.html#練習問題-2-2-確認"><i class="fa fa-check"></i>練習問題 2-2 [確認]</a></li>
 <li class="chapter" data-level="" data-path="ch2.html"><a href="ch2.html#練習問題-2-3-確認"><i class="fa fa-check"></i>練習問題 2-3 [確認]</a></li>
+<li class="chapter" data-level="" data-path="ch2.html"><a href="ch2.html#練習問題-2-4-確認"><i class="fa fa-check"></i>練習問題 2-4 [確認]</a></li>
+<li class="chapter" data-level="" data-path="ch2.html"><a href="ch2.html#練習問題-2-5-確認"><i class="fa fa-check"></i>練習問題 2-5 [確認]</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="ch3.html"><a href="ch3.html"><i class="fa fa-check"></i>第3章 統計理論の基礎</a>
 <ul>
@@ -219,25 +236,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="ch12" class="section level1 unnumbered hasAnchor">
 <h1>第12章 VARモデル<a href="ch12.html#ch12" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>先に<a href="https://www.yuhikaku.co.jp/books/detail/9784641053854">出版社サイト</a>よりデータをダウンロードする.</p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="ch12.html#cb47-1" tabindex="-1"></a><span class="co"># サポートファイルへのリンク</span></span>
-<span id="cb47-2"><a href="ch12.html#cb47-2" tabindex="-1"></a>curl <span class="ot">&lt;-</span> <span class="st">&quot;https://www.yuhikaku.co.jp/static_files/05385_support12.zip&quot;</span></span>
-<span id="cb47-3"><a href="ch12.html#cb47-3" tabindex="-1"></a><span class="co"># ダウンロード保存用フォルダが存在しない場合, 作成</span></span>
-<span id="cb47-4"><a href="ch12.html#cb47-4" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">dir.exists</span>(<span class="st">&quot;downloads&quot;</span>)){</span>
-<span id="cb47-5"><a href="ch12.html#cb47-5" tabindex="-1"></a>    <span class="fu">dir.create</span>(<span class="st">&quot;downloads&quot;</span>)</span>
-<span id="cb47-6"><a href="ch12.html#cb47-6" tabindex="-1"></a>}</span>
-<span id="cb47-7"><a href="ch12.html#cb47-7" tabindex="-1"></a>cdestfile <span class="ot">&lt;-</span> <span class="st">&quot;downloads/support12.zip&quot;</span></span>
-<span id="cb47-8"><a href="ch12.html#cb47-8" tabindex="-1"></a><span class="fu">download.file</span>(curl, cdestfile)</span>
-<span id="cb47-9"><a href="ch12.html#cb47-9" tabindex="-1"></a><span class="co"># データ保存用フォルダが存在しない場合, 作成</span></span>
-<span id="cb47-10"><a href="ch12.html#cb47-10" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">dir.exists</span>(<span class="st">&quot;data&quot;</span>)){</span>
-<span id="cb47-11"><a href="ch12.html#cb47-11" tabindex="-1"></a>    <span class="fu">dir.create</span>(<span class="st">&quot;data&quot;</span>)</span>
-<span id="cb47-12"><a href="ch12.html#cb47-12" tabindex="-1"></a>}</span>
-<span id="cb47-13"><a href="ch12.html#cb47-13" tabindex="-1"></a><span class="co"># WSL上のRで解凍すると文字化けするので、Linuxのコマンドを外部呼び出し</span></span>
-<span id="cb47-14"><a href="ch12.html#cb47-14" tabindex="-1"></a><span class="co"># Windowsの場合は別途コマンドを用いる.</span></span>
-<span id="cb47-15"><a href="ch12.html#cb47-15" tabindex="-1"></a><span class="cf">if</span>(.Platform<span class="sc">$</span>OS.type <span class="sc">==</span> <span class="st">&quot;unix&quot;</span>) {</span>
-<span id="cb47-16"><a href="ch12.html#cb47-16" tabindex="-1"></a>    <span class="fu">system</span>(<span class="fu">sprintf</span>(<span class="st">&#39;unzip -n -Ocp932 %s -d %s&#39;</span>, <span class="st">&quot;downloads/support12.zip&quot;</span>, <span class="st">&quot;./data&quot;</span>))</span>
-<span id="cb47-17"><a href="ch12.html#cb47-17" tabindex="-1"></a>} <span class="cf">else</span> {</span>
-<span id="cb47-18"><a href="ch12.html#cb47-18" tabindex="-1"></a>    <span class="fu">print</span>(<span class="st">&quot;Windowsで解凍するコマンドを別途追加せよ.&quot;</span>)</span>
-<span id="cb47-19"><a href="ch12.html#cb47-19" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="ch12.html#cb48-1" tabindex="-1"></a><span class="co"># サポートファイルへのリンク</span></span>
+<span id="cb48-2"><a href="ch12.html#cb48-2" tabindex="-1"></a>curl <span class="ot">&lt;-</span> <span class="st">&quot;https://www.yuhikaku.co.jp/static_files/05385_support12.zip&quot;</span></span>
+<span id="cb48-3"><a href="ch12.html#cb48-3" tabindex="-1"></a><span class="co"># ダウンロード保存用フォルダが存在しない場合, 作成</span></span>
+<span id="cb48-4"><a href="ch12.html#cb48-4" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">dir.exists</span>(<span class="st">&quot;downloads&quot;</span>)){</span>
+<span id="cb48-5"><a href="ch12.html#cb48-5" tabindex="-1"></a>    <span class="fu">dir.create</span>(<span class="st">&quot;downloads&quot;</span>)</span>
+<span id="cb48-6"><a href="ch12.html#cb48-6" tabindex="-1"></a>}</span>
+<span id="cb48-7"><a href="ch12.html#cb48-7" tabindex="-1"></a>cdestfile <span class="ot">&lt;-</span> <span class="st">&quot;downloads/support12.zip&quot;</span></span>
+<span id="cb48-8"><a href="ch12.html#cb48-8" tabindex="-1"></a><span class="fu">download.file</span>(curl, cdestfile)</span>
+<span id="cb48-9"><a href="ch12.html#cb48-9" tabindex="-1"></a><span class="co"># データ保存用フォルダが存在しない場合, 作成</span></span>
+<span id="cb48-10"><a href="ch12.html#cb48-10" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">dir.exists</span>(<span class="st">&quot;data&quot;</span>)){</span>
+<span id="cb48-11"><a href="ch12.html#cb48-11" tabindex="-1"></a>    <span class="fu">dir.create</span>(<span class="st">&quot;data&quot;</span>)</span>
+<span id="cb48-12"><a href="ch12.html#cb48-12" tabindex="-1"></a>}</span>
+<span id="cb48-13"><a href="ch12.html#cb48-13" tabindex="-1"></a><span class="co"># WSL上のRで解凍すると文字化けするので、Linuxのコマンドを外部呼び出し</span></span>
+<span id="cb48-14"><a href="ch12.html#cb48-14" tabindex="-1"></a><span class="co"># Windowsの場合は別途コマンドを用いる.</span></span>
+<span id="cb48-15"><a href="ch12.html#cb48-15" tabindex="-1"></a><span class="cf">if</span>(.Platform<span class="sc">$</span>OS.type <span class="sc">==</span> <span class="st">&quot;unix&quot;</span>) {</span>
+<span id="cb48-16"><a href="ch12.html#cb48-16" tabindex="-1"></a>    <span class="fu">system</span>(<span class="fu">sprintf</span>(<span class="st">&#39;unzip -n -Ocp932 %s -d %s&#39;</span>, <span class="st">&quot;downloads/support12.zip&quot;</span>, <span class="st">&quot;./data&quot;</span>))</span>
+<span id="cb48-17"><a href="ch12.html#cb48-17" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb48-18"><a href="ch12.html#cb48-18" tabindex="-1"></a>    <span class="fu">print</span>(<span class="st">&quot;Windowsで解凍するコマンドを別途追加せよ.&quot;</span>)</span>
+<span id="cb48-19"><a href="ch12.html#cb48-19" tabindex="-1"></a>}</span></code></pre></div>
 <!-- ## 練習問題 12-1 [確認] {.unnumbered}
 
 ## 練習問題 12-2 [確認] {.unnumbered}
@@ -305,7 +322,7 @@ gitbook.start({
 "link": null,
 "text": null
 },
-"download": ["_main.pdf", "_main.epub"],
+"download": null,
 "search": {
 "engine": "fuse",
 "options": null

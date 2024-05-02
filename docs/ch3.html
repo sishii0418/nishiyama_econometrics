@@ -60,6 +60,20 @@
 
   gtag('config', 'G-8R0S76ZD8E');
 </script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: {
+    Macros: {
+      P: "{\\mathbb{P}}",
+      E: "{\\text{E}}",
+      Var: "{\\text{Var}}",
+      Cov: "{\\text{Cov}}",
+      sumN: ["{\\sum_{#1=0}^N}", 1]
+    }
+  }
+});
+</script>
+
 
 
 <style type="text/css">
@@ -156,7 +170,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="ch2.html"><a href="ch2.html"><i class="fa fa-check"></i>第2章 データの整理と確率変数の基礎</a>
 <ul>
 <li class="chapter" data-level="" data-path="ch2.html"><a href="ch2.html#練習問題-2-1-確認"><i class="fa fa-check"></i>練習問題 2-1 [確認]</a></li>
+<li class="chapter" data-level="" data-path="ch2.html"><a href="ch2.html#練習問題-2-2-確認"><i class="fa fa-check"></i>練習問題 2-2 [確認]</a></li>
 <li class="chapter" data-level="" data-path="ch2.html"><a href="ch2.html#練習問題-2-3-確認"><i class="fa fa-check"></i>練習問題 2-3 [確認]</a></li>
+<li class="chapter" data-level="" data-path="ch2.html"><a href="ch2.html#練習問題-2-4-確認"><i class="fa fa-check"></i>練習問題 2-4 [確認]</a></li>
+<li class="chapter" data-level="" data-path="ch2.html"><a href="ch2.html#練習問題-2-5-確認"><i class="fa fa-check"></i>練習問題 2-5 [確認]</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="ch3.html"><a href="ch3.html"><i class="fa fa-check"></i>第3章 統計理論の基礎</a>
 <ul>
@@ -221,41 +238,41 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>第3章では第2章と同じデータを使うため、新たなダウンロードは不要.
 なお<a href="https://www.yuhikaku.co.jp/books/detail/9784641053854">出版社サイト</a>にある第3章のファイルは, 練習問題2-1のデータを用いるところが, 誤って練習問題2-3と同じデータが格納されている.</p>
 <p>必要なライブラリを読み込む.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="ch3.html#cb7-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="ch3.html#cb8-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
 <!-- ## 練習問題 3-1 [確認] {-} -->
 <div id="練習問題-3-2-確認" class="section level2 unnumbered hasAnchor">
 <h2>練習問題 3-2 [確認]<a href="ch3.html#練習問題-3-2-確認" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>第2章練習問題2-1で用いたデータを読み込み、両側t検定を実行する.
 <span class="math inline">\(\alpha=0.10\)</span>の場合90%信頼区間は<span class="math inline">\([8.354811, 11.645189]\)</span>となり, これは8を含まないことから帰無仮説は棄却できる.
 一方で<span class="math inline">\(\alpha=0.01\)</span>のとき、99%信頼区間は<span class="math inline">\([7.277955, 12.722045]\)</span>となり8を含むことから, 帰無仮説は棄却されない.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="ch3.html#cb8-1" tabindex="-1"></a>data32 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/02_第2章/02_practice_01.csv&quot;</span>, <span class="at">header =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb8-2"><a href="ch3.html#cb8-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> data32<span class="sc">$</span>V1</span>
-<span id="cb8-3"><a href="ch3.html#cb8-3" tabindex="-1"></a></span>
-<span id="cb8-4"><a href="ch3.html#cb8-4" tabindex="-1"></a><span class="fu">t.test</span>(x, <span class="at">alternative =</span> <span class="st">&quot;two.sided&quot;</span>, <span class="at">mu =</span> <span class="dv">8</span>, <span class="at">conf.level =</span> <span class="fl">0.90</span>)</span>
-<span id="cb8-5"><a href="ch3.html#cb8-5" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb8-6"><a href="ch3.html#cb8-6" tabindex="-1"></a><span class="do">##  One Sample t-test</span></span>
-<span id="cb8-7"><a href="ch3.html#cb8-7" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb8-8"><a href="ch3.html#cb8-8" tabindex="-1"></a><span class="do">## data:  x</span></span>
-<span id="cb8-9"><a href="ch3.html#cb8-9" tabindex="-1"></a><span class="do">## t = 2.102, df = 19, p-value = 0.04911</span></span>
-<span id="cb8-10"><a href="ch3.html#cb8-10" tabindex="-1"></a><span class="do">## alternative hypothesis: true mean is not equal to 8</span></span>
-<span id="cb8-11"><a href="ch3.html#cb8-11" tabindex="-1"></a><span class="do">## 90 percent confidence interval:</span></span>
-<span id="cb8-12"><a href="ch3.html#cb8-12" tabindex="-1"></a><span class="do">##   8.354811 11.645189</span></span>
-<span id="cb8-13"><a href="ch3.html#cb8-13" tabindex="-1"></a><span class="do">## sample estimates:</span></span>
-<span id="cb8-14"><a href="ch3.html#cb8-14" tabindex="-1"></a><span class="do">## mean of x </span></span>
-<span id="cb8-15"><a href="ch3.html#cb8-15" tabindex="-1"></a><span class="do">##        10</span></span>
-<span id="cb8-16"><a href="ch3.html#cb8-16" tabindex="-1"></a></span>
-<span id="cb8-17"><a href="ch3.html#cb8-17" tabindex="-1"></a><span class="fu">t.test</span>(x, <span class="at">alternative =</span> <span class="st">&quot;two.sided&quot;</span>, <span class="at">mu =</span> <span class="dv">8</span>, <span class="at">conf.level =</span> <span class="fl">0.99</span>)</span>
-<span id="cb8-18"><a href="ch3.html#cb8-18" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb8-19"><a href="ch3.html#cb8-19" tabindex="-1"></a><span class="do">##  One Sample t-test</span></span>
-<span id="cb8-20"><a href="ch3.html#cb8-20" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb8-21"><a href="ch3.html#cb8-21" tabindex="-1"></a><span class="do">## data:  x</span></span>
-<span id="cb8-22"><a href="ch3.html#cb8-22" tabindex="-1"></a><span class="do">## t = 2.102, df = 19, p-value = 0.04911</span></span>
-<span id="cb8-23"><a href="ch3.html#cb8-23" tabindex="-1"></a><span class="do">## alternative hypothesis: true mean is not equal to 8</span></span>
-<span id="cb8-24"><a href="ch3.html#cb8-24" tabindex="-1"></a><span class="do">## 99 percent confidence interval:</span></span>
-<span id="cb8-25"><a href="ch3.html#cb8-25" tabindex="-1"></a><span class="do">##   7.277955 12.722045</span></span>
-<span id="cb8-26"><a href="ch3.html#cb8-26" tabindex="-1"></a><span class="do">## sample estimates:</span></span>
-<span id="cb8-27"><a href="ch3.html#cb8-27" tabindex="-1"></a><span class="do">## mean of x </span></span>
-<span id="cb8-28"><a href="ch3.html#cb8-28" tabindex="-1"></a><span class="do">##        10</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="ch3.html#cb9-1" tabindex="-1"></a>data32 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/02_第2章/02_practice_01.csv&quot;</span>, <span class="at">header =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb9-2"><a href="ch3.html#cb9-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> data32<span class="sc">$</span>V1</span>
+<span id="cb9-3"><a href="ch3.html#cb9-3" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="ch3.html#cb9-4" tabindex="-1"></a><span class="fu">t.test</span>(x, <span class="at">alternative =</span> <span class="st">&quot;two.sided&quot;</span>, <span class="at">mu =</span> <span class="dv">8</span>, <span class="at">conf.level =</span> <span class="fl">0.90</span>)</span>
+<span id="cb9-5"><a href="ch3.html#cb9-5" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb9-6"><a href="ch3.html#cb9-6" tabindex="-1"></a><span class="do">##  One Sample t-test</span></span>
+<span id="cb9-7"><a href="ch3.html#cb9-7" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb9-8"><a href="ch3.html#cb9-8" tabindex="-1"></a><span class="do">## data:  x</span></span>
+<span id="cb9-9"><a href="ch3.html#cb9-9" tabindex="-1"></a><span class="do">## t = 2.102, df = 19, p-value = 0.04911</span></span>
+<span id="cb9-10"><a href="ch3.html#cb9-10" tabindex="-1"></a><span class="do">## alternative hypothesis: true mean is not equal to 8</span></span>
+<span id="cb9-11"><a href="ch3.html#cb9-11" tabindex="-1"></a><span class="do">## 90 percent confidence interval:</span></span>
+<span id="cb9-12"><a href="ch3.html#cb9-12" tabindex="-1"></a><span class="do">##   8.354811 11.645189</span></span>
+<span id="cb9-13"><a href="ch3.html#cb9-13" tabindex="-1"></a><span class="do">## sample estimates:</span></span>
+<span id="cb9-14"><a href="ch3.html#cb9-14" tabindex="-1"></a><span class="do">## mean of x </span></span>
+<span id="cb9-15"><a href="ch3.html#cb9-15" tabindex="-1"></a><span class="do">##        10</span></span>
+<span id="cb9-16"><a href="ch3.html#cb9-16" tabindex="-1"></a></span>
+<span id="cb9-17"><a href="ch3.html#cb9-17" tabindex="-1"></a><span class="fu">t.test</span>(x, <span class="at">alternative =</span> <span class="st">&quot;two.sided&quot;</span>, <span class="at">mu =</span> <span class="dv">8</span>, <span class="at">conf.level =</span> <span class="fl">0.99</span>)</span>
+<span id="cb9-18"><a href="ch3.html#cb9-18" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb9-19"><a href="ch3.html#cb9-19" tabindex="-1"></a><span class="do">##  One Sample t-test</span></span>
+<span id="cb9-20"><a href="ch3.html#cb9-20" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb9-21"><a href="ch3.html#cb9-21" tabindex="-1"></a><span class="do">## data:  x</span></span>
+<span id="cb9-22"><a href="ch3.html#cb9-22" tabindex="-1"></a><span class="do">## t = 2.102, df = 19, p-value = 0.04911</span></span>
+<span id="cb9-23"><a href="ch3.html#cb9-23" tabindex="-1"></a><span class="do">## alternative hypothesis: true mean is not equal to 8</span></span>
+<span id="cb9-24"><a href="ch3.html#cb9-24" tabindex="-1"></a><span class="do">## 99 percent confidence interval:</span></span>
+<span id="cb9-25"><a href="ch3.html#cb9-25" tabindex="-1"></a><span class="do">##   7.277955 12.722045</span></span>
+<span id="cb9-26"><a href="ch3.html#cb9-26" tabindex="-1"></a><span class="do">## sample estimates:</span></span>
+<span id="cb9-27"><a href="ch3.html#cb9-27" tabindex="-1"></a><span class="do">## mean of x </span></span>
+<span id="cb9-28"><a href="ch3.html#cb9-28" tabindex="-1"></a><span class="do">##        10</span></span></code></pre></div>
 <!-- ## 練習問題 3-3 [確認] {-}
 
 ## 練習問題 3-4 [発展] {-} -->
@@ -310,7 +327,7 @@ gitbook.start({
 "link": null,
 "text": null
 },
-"download": ["_main.pdf", "_main.epub"],
+"download": null,
 "search": {
 "engine": "fuse",
 "options": null
