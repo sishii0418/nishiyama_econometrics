@@ -25,28 +25,35 @@ if(.Platform$OS.type == "unix") {
 必要なライブラリを読み込む.
 ```{r collapse=T}
 library(tidyverse)
-library(openxlsx) # Excelファイルを読み取るためのパッケージ
+library(openxlsx)
+library(estimatr)
 ```
 ## 実証例4.1 労働生産性と実質賃金の関係 {-}
 p.128の実証例ブロック内の$N=22$は$N=21$の誤植と思われる.
-**メモ: Rの実行結果は頑健ではない件. estimatrのlm_robust()でse_type = "stata"にすると結果が一致する.**
 ```{r collapse=T}
-ch04_wage <- read.table("data/04_第4章/ch04_wage.csv", header = TRUE, sep = ",")
-ch04_wage_model <- lm(wage ~ productivity, data = ch04_wage) # robustじゃない?
+ch04_wage <- read.csv("data/04_第4章/ch04_wage.csv")
+ch04_wage_model <- lm(wage ~ productivity, data = ch04_wage)
 summary(ch04_wage_model)
+```
+Rの`lm()`で計算される標準誤差は不均一分散に対して頑健でない.
+本文中にある不均一分散に対して頑健な計算結果を求めるには, `estimatr::lm_robust()`を用い, `se_type = "stata"`と指定する.
+```{r collapse=T}
+ch04_wage_model_robust <- lm_robust(wage ~ productivity, data = ch04_wage, se_type = "stata")
+summary(ch04_wage_model_robust)
 ```
 
 ## 図4-1 時間当たり実質賃金と労働生産性 {-}
-**メモ: 回帰直線を追加する!**
+回帰曲線は`geom_smooth()`で描画できる.
 ```{r collapse=T}
 ch04_wage %>%
     ggplot(aes(x = productivity, y = wage)) +
     geom_point() +
-    xlab("労働生産性(円)") +
-    ylab("実質賃金(円)")
+    xlab("労働生産性 (円)") +
+    ylab("実質賃金 (円)") +
+    geom_smooth(method = "lm", se = FALSE, color = "black")
 ```
 
-## 練習問題 4-1 [確認] {-}
+<!-- ## 練習問題 4-1 [確認] {-} -->
 
 ## 練習問題 4-2 [実証] {-}
 (1) データを読み込み, 回帰分析を実行する.
@@ -57,15 +64,15 @@ $gdp2013\_ln = \beta_0 + \beta_1 pop2013\_ln$というモデルを立てると, 
 data42 <- read.xlsx("data/04_第4章/data for chap 4 exercise 2.xlsx")
 colnames(data42) <- c("pref", "pop2013", "gdp2013", "pop2013_ln", "gdp2013_ln")
 
-model <- lm(gdp2013_ln ~ pop2013_ln, data = data42)
-model
+model42 <- lm(gdp2013_ln ~ pop2013_ln, data = data42)
+model42
 ```
 
 (2) 帰無仮説$H_0$: $\beta_1 = 1$に関して, 統計量$t = \frac{\hat{\beta_1} - \beta_1}{\text{SE}(\hat{\beta_1})} = 2.62773$が求められる.
 これは自由度$n-2 = 45$で, 有意水準5\%のt検定の棄却域$(\infty, -2.014103]$, $[2.014103, \infty)$に入っていることから帰無仮説は棄却される.
 ```{r collapse=T}
-beta1 <- model$coefficients[2]
-sebeta1 <- summary(model)$coefficients[2, 2]
+beta1 <- model42$coefficients[2]
+sebeta1 <- summary(model42)$coefficients[2, 2]
 n <- dim(data42)[1]
 
 t <- (beta1 - 1)/sebeta1
@@ -75,7 +82,7 @@ qt(0.975, n-2) # 2.014103
 
 (3) `confint()`関数を用いると直接求められる.
 ```{r collapse=T}
-confint(model, '(Intercept)', level=0.90)
+confint(model42, '(Intercept)', level=0.90)
 ```
 
 (4) 人口が1\%変化すると, GDPは$\beta_1 = 1.075$\%変化する.
@@ -83,12 +90,12 @@ confint(model, '(Intercept)', level=0.90)
 (5) $\text{Var}(u) = \frac{\sum_{i=1}^n \hat{u}_i^2}{n-2} = 0.02245859$と求められる.
 ln(人口)の分散は`var()`関数を用いると, 0.5964525と求められる.
 ```{r collapse=T}
-sum(model$residuals^2)/(n-2)
+sum(model42$residuals^2)/(n-2)
 
 var_pop2013_ln <- var(data42$pop2013_ln)
 var_pop2013_ln
 ```
-## 練習問題 4-3 [確認] {-}
+<!-- ## 練習問題 4-3 [確認] {-}
 
 ## 練習問題 4-4 [確認] {-}
 
@@ -100,6 +107,39 @@ var_pop2013_ln
 
 ## 練習問題 4-8 [発展] {-}
 
-## 練習問題 4-9 [発展] {-}
+## 練習問題 4-9 [発展] {-} -->
 
 ## 練習問題 4-10 [実証] {-}
+(1) データを読み込み, 回帰分析を実行することで$\beta_1$を一致推定できるか調べる.
+実際に計算すると, Cov$(u_i, X_i) = 0$が成り立っていることが確認できる.
+```{r collapse=T}
+data410 <- read.xlsx("data/04_第4章/data for chap 4 exercise 10.xlsx") %>% data.frame()
+model410 <- lm(Y ~ X, data = data410)
+cov(model410$residuals, data410$X)
+```
+
+(2) E$(u_i^2|X_i) = 0.690318 \neq 0$.
+散布図を描くと, $\hat{Y}_i$が大きくなるに従って残差の分散が大きくなっていることが確認できる.
+```{r collapse=T}
+mean(model410$residuals^2)
+
+model410 %>%
+    ggplot(aes(x = .fitted, y = .resid)) +
+    geom_point() +
+    geom_hline(yintercept = 0)
+```
+
+(3) 不均一分散に頑健な標準誤差は`estimatr::lm_robust()`を用いて求める.
+```{r collapse=T}
+model410_robust <- lm_robust(Y ~ X, data = data410)
+summary(model410_robust)
+```
+`summary()`によると, $\beta_1$の95%信頼区間に0.8は入っていないため, 帰無仮説は棄却されない.
+
+(4) 不均一分散に頑健な標準誤差は`estimatr::lm_robust()`を用いて求める.
+```{r collapse=T}
+confint(model410)
+```
+`summary()`によると, $\beta_1$の95%信頼区間に0.8は入っており, 帰無仮説は棄却される.
+
+(5) 分散が均一でないデータに均一分散を仮定した標準誤差を用いると, 上のように異なる結果が導かれることがある.

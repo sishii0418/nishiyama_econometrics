@@ -6,14 +6,14 @@
 ```{r collapse=T}
 library(tidyverse)
 ```
-## 練習問題 3-1 [確認] {-}
+<!-- ## 練習問題 3-1 [確認] {-} -->
 
 ## 練習問題 3-2 [確認] {-}
 第2章練習問題2-1で用いたデータを読み込み、両側t検定を実行する.
 $\alpha=0.10$の場合90\%信頼区間は$[8.354811, 11.645189]$となり, これは8を含まないことから帰無仮説は棄却できる.
 一方で$\alpha=0.01$のとき、99\%信頼区間は$[7.277955, 12.722045]$となり8を含むことから, 帰無仮説は棄却されない.
 ```{r collapse=T}
-data32 <- read.table("data/02_第2章/02_practice_01.csv")
+data32 <- read.csv("data/02_第2章/02_practice_01.csv", header = FALSE)
 x <- data32$V1
 
 t.test(x, alternative = "two.sided", mu = 8, conf.level = 0.90)
@@ -21,6 +21,6 @@ t.test(x, alternative = "two.sided", mu = 8, conf.level = 0.90)
 t.test(x, alternative = "two.sided", mu = 8, conf.level = 0.99)
 ```
 
-## 練習問題 3-3 [確認] {-}
+<!-- ## 練習問題 3-3 [確認] {-}
 
-## 練習問題 3-4 [発展] {-}
+## 練習問題 3-4 [発展] {-} -->

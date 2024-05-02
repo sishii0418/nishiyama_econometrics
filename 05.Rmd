@@ -28,9 +28,247 @@ if(.Platform$OS.type == "unix") {
 
 ```{r collapse=T}
 library(tidyverse)
+library(estimatr)
+library(knitr)
+library(modelsummary)
+library(gt)
+library(car)
+library(wooldridge)
+library(haven)
 ```
 
-## 練習問題 5-1 [確認] {.unnumbered}
+## 単回帰(5.1), (5.2) {.unnumbered}
+
+先にデータを読み込み, 変数を作成する. 不均一分散に頑健な標準誤差を求めるために, `estimatr::lm_robust()`を使う.
+
+```{r collapse=T}
+youdou <- read.csv("data/05_第5章/youdou.csv")
+youdou <- youdou %>%
+    mutate(lny80 = log(y80)) %>%
+    mutate(lny99 = log(y99)) %>%
+    mutate(lny90 = log(y90)) %>%
+    mutate(growthrate8099 = (lny99-lny80)/19*100) %>%
+    mutate(growthrate8090 = (lny90-lny80)/10)
+youdou_51 <- lm_robust(growthrate8099 ~ trust80, data = youdou, se_type = "stata")
+summary(youdou_51)
+youdou_52 <- lm_robust(growthrate8099 ~ norm80, data = youdou, se_type = "stata")
+summary(youdou_52)
+```
+
+## 実証例5.1 信頼と規範が経済成長に与える影響の重回帰分析 {#ex5.1 .unnumbered}
+
+```{r collapse=T}
+youdou_55 <- lm_robust(growthrate8099 ~ trust80 + education80 + lny80, data = youdou, se_type = "stata")
+summary(youdou_55)
+youdou_55_2 <- lm_robust(growthrate8099 ~ norm80 + education80 + lny80, data = youdou, se_type = "stata")
+summary(youdou_55_2)
+```
+
+## 実証例5.2 FWL定理の確認 {.unnumbered}
+
+定数項なしの回帰を実行するには, `formula`に`+0`か`-1`を追加する([参考](https://indenkun.hatenablog.com/entry/2020/02/29/013000)). なお, `estimatr::lm_robust()`には`lm`のように`residuals`がないため, 必要ならば手動で追加する([参考](https://stackoverflow.com/questions/74577781/extract-residuals-from-heteroskedasticity-robust-standard-model-lm-robust)). ただしこの例では標準偏差は必要でないため, `lm`を用いた.
+
+```{r collapse=T}
+fwl_1 <- lm(trust80 ~ education80 + lny80, data = youdou)
+summary(fwl_1)
+fwl_2 <- lm(growthrate8099 ~ education80 + lny80, data = youdou)
+summary(fwl_2)
+lm(fwl_2$residuals ~ 0 + fwl_1$residuals) %>% summary()
+```
+
+## 実証例5.3 FWL定理の別表現の確認 {.unnumbered}
+
+```{r collapse=T}
+lm(growthrate8099 ~ fwl_1$residuals-1, data = youdou) %>% summary()
+```
+
+## 実証例5.4 信頼と規範が経済成長に与える影響の重回帰分析の標準誤差 {.unnumbered}
+
+[実証例5.1](#ex5.1)を参照せよ.
+
+## 実証例5.5 信頼と規範が経済成長に与える影響の多項式モデル {#ex5.5 .unnumbered}
+
+```{r collapse=T}
+youdou_515 <- lm_robust(growthrate8099 ~ y80 + I(y80^2), data = youdou, se_type = "stata")
+summary(youdou_515)
+```
+
+## 図5-1 散布図と推定された回帰曲線 {.unnumbered}
+
+```{r collapse=T}
+youdou %>%
+    ggplot(aes(x = y80, y = growthrate8099)) +
+    geom_point() +
+    xlab("初期時点GDP") +
+    ylab("経済成長率") +
+    geom_smooth(method = "lm", formula = y ~ x + I(x^2), se = FALSE, color = "black")
+```
+
+## 例題5.5 {.unnumbered}
+
+```{r collapse=T}
+lm_robust(growthrate8099 ~ lny80 * education80, data = youdou, se_type = "stata") %>% summary()
+```
+
+## 実証例5.6 都市化の度合いと初期時点GDPの交互作用 {.unnumbered}
+
+先にダミー変数`urban`を作成してから回帰分析を実行する(下では`urban`の型は`int`ではなく`bool`になるが構わない). `urban`の値により標本を分ける場合は, `lm()`の`data`で`filter()`を使えばよい.
+
+```{r collapse=T}
+youdou <- youdou %>%
+    mutate(urban = did > 0.4)
+lm(growthrate8099 ~ urban * lny80, data = youdou) %>% summary()
+lm(growthrate8099 ~ lny80, data = (youdou %>% filter(!urban))) %>% summary()
+lm(growthrate8099 ~ lny80, data = (youdou %>% filter(urban))) %>% summary()
+```
+
+## 実証例5.7 都市化の度合いと初期時点GDPのダミー変数同士の交互作用 {.unnumbered}
+
+やはり, 先にダミー変数`lny80d`を作成する.
+
+```{r collapse=T}
+youdou <- youdou %>%
+    mutate(lny80d = lny80 > 1.4)
+lm(growthrate8099 ~ urban * lny80d, data = youdou) %>% summary()
+```
+
+## 実証例5.8 非線形モデルにおける結合仮説の検定 {.unnumbered}
+
+[実証例5.5](#ex5.5)を参照せよ.
+
+## 実証例5.9 ポンフェローニ検定 {.unnumbered}
+
+式は[実証例5.1](#ex5.1)を参照せよ. 規範と教育水準の係数が両方とも0であるという帰無仮説を検定する. F検定統計値は`car::linearHypothesis()`を使うことで求められる.
+
+```{r collapse=T}
+linearHypothesis(youdou_55_2, c("norm80","education80"), test = "F")
+```
+
+## 表5-5 記述統計量 {.unnumbered}
+
+`modelsummary::datasummary()`を使うことで簡単に記述統計表が作成できる. ここでは統計量と変数名の表示を日本語に直すため, 一旦dataframeで書き出し, 再度`gt`で修正した表を表示している.
+
+```{r collapse=T, results='asis', message=FALSE}
+# 変数を選択
+vars <- youdou %>%
+    select(growthrate8099, trust80, norm80, education80, lny80)
+table55 <- datasummary(All(vars) ~ N + Mean + SD + Min + Max,
+            data = youdou,
+            output = "data.frame",
+            fmt = 3)
+# 列名
+colnames(table55) <- c("変数", "サンプルサイズ", "平均", "標準偏差", "最小値", "最大値")
+# 変数名
+table55[,1] <- c("経済成長率", "信頼", "規範", "教育水準", "初期時点対数GDP")
+# 表を出力
+gt(table55)
+```
+
+## 表5-6 推定結果: 被説明変数は経済成長率 {#table5-6 .unnumbered}
+
+回帰結果の表は`modelsummary`を使う (`stargazer`でも可能だが更新が止まっており, `estimatr`の結果を表示できないなどデメリットがある). `modelsummary::msummary()`の`goef_omit`で表示しない統計量を指定できるが, これは正規表現を使っているため, 自由度修正済み決定係数$\bar{R}^2$を表示し, 通常の決定係数$R^2$を表示させないためには`R2$`とすればよい. F検定統計量の値を表示するにあたっては, [このサイト](https://stackoverflow.com/questions/69582118/extracting-information-from-r-objects-and-importing-it-to-a-modelsummary-table)を参考にした.
+
+```{r collapse=T, results='asis', message=FALSE}
+models <- list(
+    "(1)" = lm_robust(growthrate8099 ~ trust80, data = youdou, se_type = "stata"),
+    "(2)" = lm_robust(growthrate8099 ~ norm80, data = youdou, se_type = "stata"),
+    "(3)" = lm_robust(growthrate8099 ~ trust80 + norm80, data = youdou, se_type = "stata"),
+    "(4)" = lm_robust(growthrate8099 ~ trust80 + lny80 + education80, data = youdou, se_type = "stata"),
+    "(5)" = lm_robust(growthrate8099 ~ norm80 + lny80 + education80, data = youdou, se_type = "stata"),
+    "(6)" = lm_robust(growthrate8099 ~ trust80 + norm80 + lny80 + education80, data = youdou, se_type = "stata"))
+
+# F検定統計量の値を表示するモデルを指定
+attr(models[3]$`(3)`, "FTEST") <- TRUE
+attr(models[6]$`(6)`, "FTEST") <- TRUE
+
+glance_custom.lm_robust <- function(x) {
+    # 上で指定した, F検定統計量の値を表示したいモデルでなければパス
+    if (!isTRUE(attr(x, "FTEST"))) return(NULL)
+
+    # F検定を実行
+    ftest <- linearHypothesis(x, test = "F", c("trust80", "norm80"))
+
+    # F検定統計量の値とp値をまとめたtibbleを作成
+    out <- tibble(
+        "F検定統計量の値 $H_0: \\beta_{信頼}=0, \\beta_{規範}=0$" = ftest[["F"]][2],
+        "     " = sprintf("(%.3f)", ftest[["Pr(>F)"]][2]))
+    return(out)
+}
+
+gm <- tribble(
+    ~raw,        ~clean,          ~fmt,
+    "F検定統計量の値 $H_0: \\beta_{信頼}=0, \\beta_{規範}=0$", "F検定統計量の値 $H_0: \\beta_{信頼}=0, \\beta_{規範}=0$", 3,
+    "     ", "     ", 3,
+    "adj.r.squared", "$\\bar{R}^2$", 3,
+    "nobs", "サンプルサイズ", 0)
+
+msummary(models,
+         stars = TRUE,
+         gof_omit='R2$|RMSE|AIC|BIC|Log.Lik.',
+         gof_map = gm,
+         coef_map = c("trust80" = "信頼", "norm80" = "規範", "lny80" = "初期時点対数GDP", "education80" = "教育水準", "(Intercept)" = "定数項"))
+```
+
+F検定統計量の星の表示は, 手動で追加する必要があると思われるので, 一旦省略とする.
+
+## 表5-7 推定結果 {.unnumbered}
+
+サポートサイトにはデータはないが, Rでは`wooldridge`パッケージにまとめられているデータ`attend`を用いることができる.
+
+```{r collapse=T, results='asis', message=FALSE}
+data('attend')
+models_57 <- list(
+    "(1)" = lm_robust(stndfnl ~ atndrte + frosh + soph, data = attend, se_type = "stata"),
+    "(2)" = lm_robust(stndfnl ~ atndrte + priGPA + ACT + frosh + soph, data = attend, se_type = "stata"),
+    "(3)" = lm_robust(stndfnl ~ atndrte * priGPA + ACT + frosh + soph, data = attend, se_type = "stata"),
+    "(4)" = lm_robust(stndfnl ~ atndrte + priGPA + I(priGPA^2) + ACT + I(ACT^2) + frosh + soph, data = attend, se_type = "stata"),
+    "(5)" = lm_robust(stndfnl ~ atndrte * priGPA + atndrte * I(priGPA^2) + ACT + I(ACT^2) + frosh + soph, data = attend, se_type = "stata"))
+
+cm <- c("atndrte" = "出席割合",
+        "priGPA" = "前学期までのGPA",
+        "I(priGPA^2)" = "前学期までのGPA$^2$",
+        "atndrte:priGPA" = "出席割合 $\\times$ 前学期までのGPA",
+        "atndrte:I(priGPA^2)" = "出席割合 $\\times$ 前学期までのGPA$^2$",
+        "ACT" = "ACT",
+        "I(ACT^2)" = "ACT$^2$",
+        "frosh" = "1年生",
+        "soph" = "2年生",
+        "(Intercept)" = "定数項")
+
+gm <- tribble(
+    ~raw,            ~clean,           ~fmt,
+    "adj.r.squared", "$\\bar{R}^2$",   2,
+    "nobs",          "サンプルサイズ", 0)
+
+# 丸め関数を定義
+custom_format <- function(values) {
+    formatted_values <- ifelse(values < 1,
+                                signif(values, digits=2),
+                                round(values, digits=2))
+    return(formatted_values)
+}
+
+# なぜか定数項だけ丸めがおかしい?
+msummary(models_57,
+         stars = TRUE,
+         gof_omit='R2$|RMSE|AIC|BIC|Log.Lik.',
+         coef_map = cm,
+         gof_map = gm,
+         fmt = custom_format)
+```
+
+F検定統計量の表への記載は省略とし, 下に検定結果を示す.
+
+```{r collapse=T, message=FALSE}
+linearHypothesis(models_57[3]$`(3)`, test = "F", c("atndrte", "atndrte:priGPA"))
+linearHypothesis(models_57[4]$`(4)`, test = "F", c("I(priGPA^2)", "I(ACT^2)"))
+linearHypothesis(models_57[5]$`(5)`, test = "F", c("atndrte", "atndrte:priGPA", "atndrte:I(priGPA^2)"))
+linearHypothesis(models_57[5]$`(5)`, test = "F", c("I(priGPA^2)", "atndrte:I(priGPA^2)", "I(ACT^2)"))
+linearHypothesis(models_57[5]$`(5)`, test = "F", c("atndrte:priGPA", "atndrte:I(priGPA^2)"))
+```
+
+```{=html}
+<!-- ## 練習問題 5-1 [確認] {.unnumbered}
 
 ## 練習問題 5-2 [確認] {.unnumbered}
 
@@ -54,8 +292,80 @@ library(tidyverse)
 
 ## 練習問題 5-12 [発展] {.unnumbered}
 
-## 練習問題 5-13 [\*発展] {.unnumbered}
-
+## 練習問題 5-13 [\*発展] {.unnumbered} -->
+```
 ## 練習問題 5-14 [実証] {.unnumbered}
 
+a.  表5-6を参照せよ.
+
+b.  自由度修正済み決定係数$\bar{R}^2$は以下のように定義される (p.158).
+
+$$\bar{R}^2 = 1 - \frac{N-1}{N-k-1}\frac{\sum_{i=1}^N\hat{u}_i^2}{\sum_{i=1}^N(Y_i-\bar{Y}^2)}$$.
+
+これを決定係数$R^2$の定義と比べると, 自由度修正済み決定係数は変数の数$k$が増えるたびに値が小さくなることがわかる. 決定係数$R^2$ではこのようなことは起きず, 変数の数を増やすと$R^2$の値は必ず変わらないか大きくなり, 小さくなることはない.
+
+c.  問題文の指示の通り回帰分析を実行する. 1つめの方法では標準偏差の値は一致しないが, 2つ目の方法では一致することが確認できる.
+
+```{r collapse=T, message=FALSE}
+practice514c_1 <- lm(trust80 ~ norm80, data = youdou)
+practice514c_2 <- lm_robust(growthrate8099 ~ 0 + practice514c_1$residuals, data = youdou, se_type = "stata")
+summary(practice514c_2)$coefficients
+
+practice514c_3 <- lm(growthrate8099 ~ norm80, data = youdou)
+practice514c_4 <- lm(trust80 ~ 0 + norm80, data = youdou)
+practice514c_5 <- lm_robust(practice514c_3$residuals ~ 0 + practice514c_4$residuals, se_type = "stata")
+summary(practice514c_5)$coefficients
+```
+
 ## 練習問題 5-15 [実証] {.unnumbered}
+
+データはSTATAで用いられる`.dta`形式になっているが, これをRで読み込むには`haven::read_dta()`を使う.
+
+```{r collapse=T, message=FALSE}
+timss <- read_dta("data/05_第5章/timss.dta")
+
+practice5_15_a <- lm_robust(mathscore ~ agese_q2 + agese_q3 + agese_q4, data = timss, se_type = "stata")
+practice5_15_c <- lm_robust(mathscore ~ gender*agese_q2 + gender*agese_q3 + gender*agese_q4, data = timss, se_type = "stata")
+practice5_15_d <- lm_robust(mathscore ~ agese_q2 + agese_q3 + agese_q4 + comu_1 + comu_2 + comu_3 + comu_4 + comu_5 + computer + numpeople + mothereduc_1 + mothereduc_2 + mothereduc_3 + mothereduc_4 + mothereduc_5 + fathereduc_1 + fathereduc_2 + fathereduc_3 + fathereduc_4 + fathereduc_5, data = timss, se_type = "stata")
+practice5_15_ea <- lm_robust(sciencescore ~ agese_q2 + agese_q3 + agese_q4, data = timss, se_type = "stata")
+practice5_15_ec <- lm_robust(sciencescore ~ gender*agese_q2 + gender*agese_q3 + gender*agese_q4, data = timss, se_type = "stata")
+practice5_15_ed <- lm_robust(sciencescore ~ agese_q2 + agese_q3 + agese_q4 + comu_1 + comu_2 + comu_3 + comu_4 + comu_5 + computer + numpeople + mothereduc_1 + mothereduc_2 + mothereduc_3 + mothereduc_4 + mothereduc_5 + fathereduc_1 + fathereduc_2 + fathereduc_3 + fathereduc_4 + fathereduc_5, data = timss, se_type = "stata")
+```
+
+結果を`modelsummary`で表にまとめる. (d)で用いるダミー変数は`coef_map`で指定して表示を省略している.
+
+```{r collapse=T, results='asis', message=FALSE}
+models_5_15 <- list()
+models_5_15[['a']] <- practice5_15_a
+models_5_15[['c']] <- practice5_15_c
+models_5_15[['d']] <- practice5_15_d
+models_5_15[['ea']] <- practice5_15_ea
+models_5_15[['ec']] <- practice5_15_ec
+models_5_15[['ed']] <- practice5_15_ed
+cm <- c("agese_q2",
+        "agese_q3",
+        "agese_q4",
+        "gender",
+        "gender:agese_q2",
+        "gender:agese_q3",
+        "gender:agese_q4",
+        "(Intercept)")
+gm <- tribble(
+    ~raw,            ~clean,           ~fmt,
+    "adj.r.squared", "$\\bar{R}^2$",   2,
+    "nobs",          "サンプルサイズ", 0)
+msummary(models_5_15,
+         coef_map = cm,
+         gof_map = gm,
+         stars = TRUE)
+```
+
+a.  上の表のa式を見ると, `agese_q4`の係数は有意に負であることがわかる. つまり, この結果では早生まれの人の成績は4月から6月に生まれた人に比べて低いといえる.
+
+b.  生まれた四半期のダミー変数を4つすべて含むと, ダミー変数の罠に陥る. 4月から6月に生まれた人を表すダミー変数を使用する場合, 定数項なしの回帰を行うことでダミー変数の罠を避けられる. 4月から6月に生まれた人, 早生まれの人を表すダミー変数の係数をそれぞれ$\beta_{Q1}, \beta_{Q4}$とおくと, 帰無仮説は$H_0: \beta_{Q4} < \beta_{Q1}$とすればよい.
+
+c.  上の表のc式を見ると, `gender`とそれを含む交差項の係数はみな有意とは言えない. つまり, 早生まれの人の成績差に性別は関係がみられなかったとわかる.
+
+d.  上の表のd式を見ると, やはり`agese_q4`の係数は有意に負であることがわかる (表ではダミー変数の結果は省略している).
+
+e.  対応するモデルを上の表のea, ec, ed式に示す. ea, ed式においては`agese_q4`の係数はやはり有意に負であり,その大きさは数学に比べてわずかに大きい.

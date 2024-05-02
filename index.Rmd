@@ -18,6 +18,7 @@ github-repo: rstudio/bookdown-demo
 # はじめに {.unnumbered}
 
 西山ほか(2019)『計量経済学』有斐閣 ([出版社リンク](https://www.yuhikaku.co.jp/books/detail/9784641053854)) の練習問題解答とRでの再現です.
+
 必要なRパッケージをインストール:
 ```{r collapse=T, eval=F}
 install.packages("tidyverse")
@@ -25,40 +26,25 @@ install.packages("openxlsx")
 install.packages("haven")
 install.packages("wooldridge")
 install.packages("fixest")
+install.packages("car")
+install.packages("knitr")
+install.packages("modelsummary")
+install.packages("estimatr")
 ```
 
+## 方針 {.unnumbered}
 
-## Usage
+- 不均一分散に頑健な回帰分析は`estimatr::lm_robust()`を使っています.
+- 回帰結果の表は`modelsummary`, その他の表は`gt`などを使い, 容易にHTML, LaTeX間で変換ができるようにしています.
+- `tidyverse`を使い, 図は`ggplot2`で出力しています.
 
-Each **bookdown** chapter is an .Rmd file, and each .Rmd file can contain one (and only one) chapter. A chapter *must* start with a first-level heading: `# A good chapter`, and can contain one (and only one) first-level heading.
+## 似たようなサイト {.unnumbered}
+公式の解答はないようですが, ほかに似たようなサイトとして以下があります (ほかにもご存知でしたらご教授ください).
 
-Use second-level and higher headings within chapters like: `## A short section` or `### An even shorter section`.
+- 北川梨津 (2020) 『西山 他『計量経済学』のためのR』(https://ritsu1997.github.io/r-for-nlas-econometrics/)[^1].
+- \@kpd0605(ビル・エヴァンス ギャンビット) (2024) 『『計量経済学』（有斐閣）実践問題解答例（順次追加）』(https://qiita.com/kpd0605/items/28ca24fe8b192612e67c).
 
-The `index.Rmd` file is required, and is also your first book chapter. It will be the homepage when you render the book.
-
-## Render book
-
-You can render the HTML version of this example book without changing anything:
-
-1.  Find the **Build** pane in the RStudio IDE, and
-
-2.  Click on **Build Book**, then select your output format, or select "All formats" if you'd like to use multiple formats from the same book source files.
-
-Or build the book from the R console:
-
-```{r, eval=FALSE}
-bookdown::render_book()
-```
-
-To render this example to PDF as a `bookdown::pdf_book`, you'll need to install XeLaTeX. You are recommended to install TinyTeX (which includes XeLaTeX): <https://yihui.org/tinytex/>.
-
-## Preview book
-
-As you work, you may start a local server to live preview this HTML book. This preview will update as you edit the book when you save individual .Rmd files. You can start the server in a work session by using the RStudio add-in "Preview book", or from the R console:
-
-```{r eval=FALSE}
-bookdown::serve_book()
-```
+[^1]: 勝手ながら, だいぶ参考にさせていただきました.
 
 ```{r include=FALSE}
 # automatically create a bib database for R packages

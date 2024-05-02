@@ -3,6 +3,10 @@
 .RData
 .Ruserdata
 
+_bookdown_files
+_book
+packages.bib
+
 .radian_profile
 
 downloads
