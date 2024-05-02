@@ -319,7 +319,7 @@ summary(practice514c_5)$coefficients
 
 ## 練習問題 5-15 [実証] {.unnumbered}
 
-データはSTATAで用いられる`.dta`形式になっているが, これをRで読み込むには`haven::read_dta()`を使う.
+データはStataで用いられる`.dta`形式になっているが, これをRで読み込むには`haven::read_dta()`を使う.
 
 ```{r collapse=T, message=FALSE}
 timss <- read_dta("data/05_第5章/timss.dta")
