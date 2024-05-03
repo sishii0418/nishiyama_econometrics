@@ -33,7 +33,8 @@ install.packages("estimatr")
 ## 方針 {.unnumbered}
 
 - 不均一分散に頑健な回帰分析は`estimatr::lm_robust()`を使っています.
-- 回帰結果の表は`modelsummary`, その他の表は`gt`などを使い, 容易にHTML, LaTeX間で変換ができるようにしています.
+- 固定効果モデル([第6章](#ch6))は`estimatr::lm_robust()`に加え処理が高速とされる`fixest::feols()`を併用し比較検討しています.
+- 回帰結果の表は`modelsummary`, その他の表は`gt`などを使い, 容易にHTML, $\rm\LaTeX$間で変換ができるようにしています (レポートなどでの利用を想定).
 - `tidyverse`を使い, 図は`ggplot2`で出力しています.
 
 ## 似たようなサイト {.unnumbered}

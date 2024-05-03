@@ -37,7 +37,7 @@ library(wooldridge)
 library(haven)
 ```
 
-## 単回帰(5.1), (5.2) {.unnumbered}
+## 単回帰 (5.1), (5.2) {.unnumbered}
 
 先にデータを読み込み, 変数を作成する. 不均一分散に頑健な標準誤差を求めるために, `estimatr::lm_robust()`を使う.
 
@@ -144,7 +144,7 @@ lm(growthrate8099 ~ urban * lny80d, data = youdou) %>% summary()
 linearHypothesis(youdou_55_2, c("norm80","education80"), test = "F")
 ```
 
-## 表5-5 記述統計量 {.unnumbered}
+## 表5-5 記述統計量 {#table5-5 .unnumbered}
 
 `modelsummary::datasummary()`を使うことで簡単に記述統計表が作成できる. ここでは統計量と変数名の表示を日本語に直すため, 一旦dataframeで書き出し, 再度`gt`で修正した表を表示している.
 
