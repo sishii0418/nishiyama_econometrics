@@ -23,7 +23,7 @@
 <meta name="author" content="石井 俊輔" />
 
 
-<meta name="date" content="2024-05-03" />
+<meta name="date" content="2024-05-04" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -217,6 +217,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="ch6.html"><a href="ch6.html#実証例6.6-保育所が母親の就業に与える影響の個別トレンドと年効果を入れた分析"><i class="fa fa-check"></i>実証例6.6 保育所が母親の就業に与える影響の個別トレンドと年効果を入れた分析</a></li>
 <li class="chapter" data-level="" data-path="ch6.html"><a href="ch6.html#表6-3-記述統計量"><i class="fa fa-check"></i>表6-3 記述統計量</a></li>
 <li class="chapter" data-level="" data-path="ch6.html"><a href="ch6.html#表6-4-年ごとの記述統計量"><i class="fa fa-check"></i>表6-4 年ごとの記述統計量</a></li>
+<li class="chapter" data-level="" data-path="ch6.html"><a href="ch6.html#表6-5-推定結果"><i class="fa fa-check"></i>表6-5 推定結果</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="ch7.html"><a href="ch7.html"><i class="fa fa-check"></i>第7章 操作変数法</a></li>
 <li class="chapter" data-level="" data-path="ch8.html"><a href="ch8.html"><i class="fa fa-check"></i>第8章 制限従属変数モデル</a></li>
@@ -247,25 +248,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="ch11" class="section level1 unnumbered hasAnchor">
 <h1>第11章 トレンドと構造変化<a href="ch11.html#ch11" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>先に<a href="https://www.yuhikaku.co.jp/books/detail/9784641053854">出版社サイト</a>よりデータをダウンロードする.</p>
-<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="ch11.html#cb56-1" tabindex="-1"></a><span class="co"># サポートファイルへのリンク</span></span>
-<span id="cb56-2"><a href="ch11.html#cb56-2" tabindex="-1"></a>curl <span class="ot">&lt;-</span> <span class="st">&quot;https://www.yuhikaku.co.jp/static_files/05385_support11.zip&quot;</span></span>
-<span id="cb56-3"><a href="ch11.html#cb56-3" tabindex="-1"></a><span class="co"># ダウンロード保存用フォルダが存在しない場合, 作成</span></span>
-<span id="cb56-4"><a href="ch11.html#cb56-4" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">dir.exists</span>(<span class="st">&quot;downloads&quot;</span>)){</span>
-<span id="cb56-5"><a href="ch11.html#cb56-5" tabindex="-1"></a>    <span class="fu">dir.create</span>(<span class="st">&quot;downloads&quot;</span>)</span>
-<span id="cb56-6"><a href="ch11.html#cb56-6" tabindex="-1"></a>}</span>
-<span id="cb56-7"><a href="ch11.html#cb56-7" tabindex="-1"></a>cdestfile <span class="ot">&lt;-</span> <span class="st">&quot;downloads/support11.zip&quot;</span></span>
-<span id="cb56-8"><a href="ch11.html#cb56-8" tabindex="-1"></a><span class="fu">download.file</span>(curl, cdestfile)</span>
-<span id="cb56-9"><a href="ch11.html#cb56-9" tabindex="-1"></a><span class="co"># データ保存用フォルダが存在しない場合, 作成</span></span>
-<span id="cb56-10"><a href="ch11.html#cb56-10" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">dir.exists</span>(<span class="st">&quot;data&quot;</span>)){</span>
-<span id="cb56-11"><a href="ch11.html#cb56-11" tabindex="-1"></a>    <span class="fu">dir.create</span>(<span class="st">&quot;data&quot;</span>)</span>
-<span id="cb56-12"><a href="ch11.html#cb56-12" tabindex="-1"></a>}</span>
-<span id="cb56-13"><a href="ch11.html#cb56-13" tabindex="-1"></a><span class="co"># WSL上のRで解凍すると文字化けするので、Linuxのコマンドを外部呼び出し</span></span>
-<span id="cb56-14"><a href="ch11.html#cb56-14" tabindex="-1"></a><span class="co"># Windowsの場合は別途コマンドを用いる.</span></span>
-<span id="cb56-15"><a href="ch11.html#cb56-15" tabindex="-1"></a><span class="cf">if</span>(.Platform<span class="sc">$</span>OS.type <span class="sc">==</span> <span class="st">&quot;unix&quot;</span>) {</span>
-<span id="cb56-16"><a href="ch11.html#cb56-16" tabindex="-1"></a>    <span class="fu">system</span>(<span class="fu">sprintf</span>(<span class="st">&#39;unzip -n -Ocp932 %s -d %s&#39;</span>, <span class="st">&quot;downloads/support11.zip&quot;</span>, <span class="st">&quot;./data&quot;</span>))</span>
-<span id="cb56-17"><a href="ch11.html#cb56-17" tabindex="-1"></a>} <span class="cf">else</span> {</span>
-<span id="cb56-18"><a href="ch11.html#cb56-18" tabindex="-1"></a>    <span class="fu">print</span>(<span class="st">&quot;Windowsで解凍するコマンドを別途追加せよ.&quot;</span>)</span>
-<span id="cb56-19"><a href="ch11.html#cb56-19" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="ch11.html#cb57-1" tabindex="-1"></a><span class="co"># サポートファイルへのリンク</span></span>
+<span id="cb57-2"><a href="ch11.html#cb57-2" tabindex="-1"></a>curl <span class="ot">&lt;-</span> <span class="st">&quot;https://www.yuhikaku.co.jp/static_files/05385_support11.zip&quot;</span></span>
+<span id="cb57-3"><a href="ch11.html#cb57-3" tabindex="-1"></a><span class="co"># ダウンロード保存用フォルダが存在しない場合, 作成</span></span>
+<span id="cb57-4"><a href="ch11.html#cb57-4" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">dir.exists</span>(<span class="st">&quot;downloads&quot;</span>)){</span>
+<span id="cb57-5"><a href="ch11.html#cb57-5" tabindex="-1"></a>    <span class="fu">dir.create</span>(<span class="st">&quot;downloads&quot;</span>)</span>
+<span id="cb57-6"><a href="ch11.html#cb57-6" tabindex="-1"></a>}</span>
+<span id="cb57-7"><a href="ch11.html#cb57-7" tabindex="-1"></a>cdestfile <span class="ot">&lt;-</span> <span class="st">&quot;downloads/support11.zip&quot;</span></span>
+<span id="cb57-8"><a href="ch11.html#cb57-8" tabindex="-1"></a><span class="fu">download.file</span>(curl, cdestfile)</span>
+<span id="cb57-9"><a href="ch11.html#cb57-9" tabindex="-1"></a><span class="co"># データ保存用フォルダが存在しない場合, 作成</span></span>
+<span id="cb57-10"><a href="ch11.html#cb57-10" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">dir.exists</span>(<span class="st">&quot;data&quot;</span>)){</span>
+<span id="cb57-11"><a href="ch11.html#cb57-11" tabindex="-1"></a>    <span class="fu">dir.create</span>(<span class="st">&quot;data&quot;</span>)</span>
+<span id="cb57-12"><a href="ch11.html#cb57-12" tabindex="-1"></a>}</span>
+<span id="cb57-13"><a href="ch11.html#cb57-13" tabindex="-1"></a><span class="co"># WSL上のRで解凍すると文字化けするので、Linuxのコマンドを外部呼び出し</span></span>
+<span id="cb57-14"><a href="ch11.html#cb57-14" tabindex="-1"></a><span class="co"># Windowsの場合は別途コマンドを用いる.</span></span>
+<span id="cb57-15"><a href="ch11.html#cb57-15" tabindex="-1"></a><span class="cf">if</span>(.Platform<span class="sc">$</span>OS.type <span class="sc">==</span> <span class="st">&quot;unix&quot;</span>) {</span>
+<span id="cb57-16"><a href="ch11.html#cb57-16" tabindex="-1"></a>    <span class="fu">system</span>(<span class="fu">sprintf</span>(<span class="st">&#39;unzip -n -Ocp932 %s -d %s&#39;</span>, <span class="st">&quot;downloads/support11.zip&quot;</span>, <span class="st">&quot;./data&quot;</span>))</span>
+<span id="cb57-17"><a href="ch11.html#cb57-17" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb57-18"><a href="ch11.html#cb57-18" tabindex="-1"></a>    <span class="fu">print</span>(<span class="st">&quot;Windowsで解凍するコマンドを別途追加せよ.&quot;</span>)</span>
+<span id="cb57-19"><a href="ch11.html#cb57-19" tabindex="-1"></a>}</span></code></pre></div>
 <!-- ## 練習問題 11-1 [確認] {-}
 
 ## 練習問題 11-2 [確認] {-}

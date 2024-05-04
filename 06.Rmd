@@ -137,6 +137,43 @@ table64[,2] <- c("平均", "標準偏差", "平均", "標準偏差")
 gt(table64)
 ```
 
+## 表6-5 推定結果 {.unnumbered}
+`fixest::esttable()`を使うと`feols()`の推定結果を容易に表に出力できる.
+それぞれのモデルについて, 固定効果の有無なども自動で記載されるため, 非常に強力である.
+
+ただし, 上に記した通り都道府県効果`pref`を`formula`に加えるのではなく, パイプの後ろに固定効果として指定するとStataとは異なる標準誤差が出力される.
+このため下の表のモデル(2), (4), (6)の標準誤差は教科書の表とは異なっている.
+また, 表示の都合上`esttable()`が出力したデータフレームを直接編集している.
+```{r collapse=T, results='asis', message=FALSE}
+models_65 <- list("(1)" = feols(emp.rate ~ cap.rate, vcov = ~pref, data = yamaguchi),
+                  "(2)" = feols(emp.rate ~ cap.rate | pref, cluster = ~pref, data = yamaguchi),
+                  "(3)" = feols(emp.rate ~ cap.rate | year, cluster = ~pref, data = yamaguchi),
+                  "(4)" = feols(emp.rate ~ cap.rate | pref + year, cluster = ~pref, data = yamaguchi),
+                  "(5)" = feols(emp.rate ~ cap.rate + age + age.hus + emp.rate.hus + urate | year, cluster = ~pref, data = yamaguchi),
+                  "(6)" = feols(emp.rate ~ cap.rate + age + age.hus + emp.rate.hus + urate | pref + year, cluster = ~pref, data = yamaguchi))
+keep = "%cap.rate|age|age.hus|emp.rate.hus|urate"
+dict = c("cap.rate" = "保育所定員率",
+         "age" = "母親平均年齢",
+         "age.hus" = "父親平均年齢",
+         "emp.rate.hus" = "父親就業率",
+         "urate" = "失業率",
+         "pref" = "都道府県効果",
+         "year" = "年効果")
+# 結果表をデータフレームで出力
+table_65 <- esttable(models_65,
+       keep = keep,
+       dict = dict,
+       depvar = FALSE,
+       digits = 3,
+       digits.stats = 3,
+       fitstat = ~ ar2 + n,
+       se.below = TRUE)
+# tibbleの都合上1列目の列名を空白1文字とする
+colnames(table_65)[1] <- " "
+# gtで出力. データフレームの14行目 (下線) と15行目 (標準誤差が都道府県クラスター構造に頑健である旨) を削除
+gt(table_65[-c(14, 15), ])
+```
+
 <!-- ## 練習問題 6-1 [確認] {-}
 
 ## 練習問題 6-2 [確認] {-}
