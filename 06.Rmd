@@ -30,21 +30,25 @@ library(estimatr)
 library(modelsummary)
 library(fixest)
 library(gt)
+library(haven)
 ```
 
 固定効果モデルをRで推定するためのパッケージは複数あり, これまで使ってきた`estimatr`のほかに`fixest`や`plm`などが挙げられる.
 ここでは`estimatr`に加えて, 処理が高速とされる`fixest`での推定方法も記す.
 
 ## (6.1) 式 {#exp6.1 .unnumbered}
+はじめにデータを読み込む.
 データ読込時, 本文中で分析されている通りに絞り込みを行う.
-通常通り`estimatr::lm_robust()`で不均一分散を仮定して回帰するか, `feols()`を用いることもできる.
-`feols()`では`vcov = "HC1"`と指定することでStataと同じ標準偏差を得られる.
 ```{r collapse=T}
 yamaguchi <- read.csv("data/06_第6章/yamaguchi.csv")
 yamaguchi <- yamaguchi %>%
                 filter(year > 1999) %>%
                 filter(hh.type == "all")
+```
 
+通常通り`estimatr::lm_robust()`で不均一分散を仮定して回帰するか, `feols()`を用いることもできる.
+`feols()`では`vcov = "HC1"`と指定することでStataと同じ標準偏差を得られる.
+```{r collapse=T, cache = TRUE}
 lm_robust(emp.rate ~ cap.rate, data = yamaguchi, se_type = "stata")
 feols(emp.rate ~ cap.rate, vcov = "HC1", data = yamaguchi)
 ```
@@ -53,7 +57,7 @@ feols(emp.rate ~ cap.rate, vcov = "HC1", data = yamaguchi)
 固定効果モデルも`lm_robust()`で推定できる. `clusters`引数にクラスタのレベル, `fixed_effects`に固定効果の変数を指定する.
 `feols`ではパイプ`|`の後ろに固定効果の変数を指定するのが本来の方法で, デフォルトでクラスター構造に頑健な標準誤差が得られるはずだが, なぜか異なる値となった. ご存じの方ご教授ください.
 かわりに固定効果の変数とする`pref`を直接`formula`に足すことで, Stataと同じ標準誤差を得られた.
-```{r collapse=T}
+```{r collapse=T, cache = TRUE}
 lm_robust(emp.rate ~ cap.rate, data = yamaguchi, clusters = pref, fixed_effects = pref, se_type = "stata")
 feols(emp.rate ~ cap.rate + pref, cluster = ~pref, data = yamaguchi)
 # このやり方のほうが直感的だと思うのですが, なぜか同じ標準誤差を得られず... ご存じの方ご教授ください.
@@ -67,7 +71,7 @@ feols(emp.rate ~ cap.rate + pref, cluster = ~pref, data = yamaguchi)
 自由度修正ホワイト標準誤差を得る式は[(6.1)式](#exp6.1)を参照せよ.
 `lm_robust()`でクラスター構造に頑健な標準誤差を求めるには`clusters`引数を指定する.
 一方`feols()`では`vcov`引数にクラスター構造を指定すればよい.
-```{r collapse=T}
+```{r collapse=T, cache = TRUE}
 # クラスター構造に頑健な標準誤差
 lm_robust(emp.rate ~ cap.rate, data = yamaguchi, clusters = pref, se_type = "stata")
 feols(emp.rate ~ cap.rate, vcov = ~pref, data = yamaguchi)
@@ -76,7 +80,7 @@ feols(emp.rate ~ cap.rate, vcov = ~pref, data = yamaguchi)
 ## 実証例6.4 保育所が母親の就業に与える影響の時間効果を入れた分析 {.unnumbered}
 `lm_robust()`では, `fixed_effects`引数に時間効果の変数`year`を指定する.
 一方`feols()`では`formula`の後ろに`|`を付けて固定効果の変数を指定する.
-```{r collapse=T}
+```{r collapse=T, cache = TRUE}
 lm_robust(emp.rate ~ cap.rate, data = yamaguchi, clusters = pref, fixed_effects = year, se_type = "stata")
 feols(emp.rate ~ cap.rate | year, cluster = ~pref, data = yamaguchi)
 ```
@@ -84,7 +88,7 @@ feols(emp.rate ~ cap.rate | year, cluster = ~pref, data = yamaguchi)
 ## 実証例6.5 保育所が母親の就業に与える影響の都道府県効果と年効果を入れた分析 {.unnumbered}
 `lm_robust()`では, `fixed_effects`引数に都道府県効果と年効果両方`pref + year`を指定する.
 一方で`feols()`では[実証例6.1](#ex6.1)同様`pref`をパイプ`|`の後ろにいれると異なる標準誤差が出力されるため, やはり`formula`に直接加え, `cluster`引数に都道府県を指定する.
-```{r collapse=T}
+```{r collapse=T, cache = TRUE}
 lm_robust(emp.rate ~ cap.rate, data = yamaguchi, clusters = pref, fixed_effects = pref + year, se_type = "stata")
 feols(emp.rate ~ cap.rate + pref | year, cluster = ~pref, data = yamaguchi)
 # 下では異なる標準誤差が出力される.
@@ -94,16 +98,16 @@ feols(emp.rate ~ cap.rate + pref | year, cluster = ~pref, data = yamaguchi)
 ## 実証例6.6 保育所が母親の就業に与える影響の個別トレンドと年効果を入れた分析 {.unnumbered}
 `lm_robust()`で複数の固定効果を入れるとき, `formula`や`fixed_effects`の指定の仕方によっては一部の変数が`NA`になるなど挙動がおかしくなることがある ([参考](https://keita43a.hatenablog.com/entry/2019/04/17/232548)).
 `feols()`では, `formula`中に`i()`を使って固定効果変数を指定することで, 正しい標準誤差が得られるが, 正しい標準誤差が必要ない場合はコメントした3つめの方法のほうが速いとのこと (`feols`公式リファレンスのInteractionsの節を見よ).
-```{r collapse=T}
+```{r collapse=T, cache = TRUE}
 lm_robust(emp.rate ~ cap.rate + pref + pref:year + factor(year), data = yamaguchi, clusters = pref, se_type = "stata")
 feols(emp.rate ~ cap.rate + i(pref) + i(year) + i(pref, year), vcov = ~pref, data = yamaguchi)
 # 係数の大きさは正しく, 速度も速い (はず) だが標準誤差が異なる.
 # feols(emp.rate ~ cap.rate | pref + year + pref[year], vcov = ~pref, data = yamaguchi)
 ```
 
-## 表6-3 記述統計量 {.unnumbered}
+## 表6-3 記述統計量 {#table6-3 .unnumbered}
 第5章の[表5-5](#table5-5)と同様に`datasummary()`を用いてデータフレームを書き出し, 適宜リネームを行えばよい.
-```{r collapse=T, results='asis', message=FALSE}
+```{r collapse=T, results='asis', message=FALSE, cache = TRUE}
 # 変数を選択
 vars <- yamaguchi %>%
     select(emp.rate, cap.rate, age, age.hus, emp.rate.hus, urate)
@@ -121,7 +125,7 @@ gt(table63)
 
 ## 表6-4 年ごとの記述統計量 {.unnumbered}
 やはり`datasummary()`を用いる. `formula`引数を適宜変更するだけで容易に作成できる.
-```{r collapse=T, results='asis', message=FALSE}
+```{r collapse=T, results='asis', message=FALSE, cache = TRUE}
 # 変数を選択
 table64 <- datasummary(emp.rate * (Mean + SD) + cap.rate * (Mean + SD) ~ factor(year),
             output = "data.frame",
@@ -137,14 +141,14 @@ table64[,2] <- c("平均", "標準偏差", "平均", "標準偏差")
 gt(table64)
 ```
 
-## 表6-5 推定結果 {.unnumbered}
+## 表6-5 推定結果 {#table6-5 .unnumbered}
 `fixest::esttable()`を使うと`feols()`の推定結果を容易に表に出力できる.
 それぞれのモデルについて, 固定効果の有無なども自動で記載されるため, 非常に強力である.
 
 ただし, 上に記した通り都道府県効果`pref`を`formula`に加えるのではなく, パイプの後ろに固定効果として指定するとStataとは異なる標準誤差が出力される.
 このため下の表のモデル(2), (4), (6)の標準誤差は教科書の表とは異なっている.
 また, 表示の都合上`esttable()`が出力したデータフレームを直接編集している.
-```{r collapse=T, results='asis', message=FALSE}
+```{r collapse=T, results='asis', message=FALSE, cache = TRUE}
 models_65 <- list("(1)" = feols(emp.rate ~ cap.rate, vcov = ~pref, data = yamaguchi),
                   "(2)" = feols(emp.rate ~ cap.rate | pref, cluster = ~pref, data = yamaguchi),
                   "(3)" = feols(emp.rate ~ cap.rate | year, cluster = ~pref, data = yamaguchi),
@@ -190,8 +194,95 @@ gt(table_65[-c(14, 15), ])
 
 ## 練習問題 6-8 [発展] {-}
 
-## 練習問題 6-9 [発展] {-}
+## 練習問題 6-9 [発展] {-} -->
 
 ## 練習問題 6-10 [実証] {-}
+1.
+[表6-5](#table6-5)を参照せよ.
 
-## 練習問題 6-11 [実証] {-} -->
+2.
+この問題では, クラスター構造に頑健な標準誤差がStataでの出力と同じになるように, `pref`を`formula`に加える.
+1つめの式ではクラスター構造に頑健な標準誤差を, 2つめでは不均一分散に頑健な標準誤差を指定している.
+結果を比較すると, 後者では標準誤差が小さくなっており, より係数が有意になりやすいことがわかる.
+```{r collapse=T, message=FALSE, cache = TRUE}
+# クラスター構造に頑健な標準誤差
+feols(emp.rate ~ cap.rate + age + age.hus + emp.rate.hus + urate + pref | year, cluster = ~pref, data = yamaguchi)
+# 不均一分散に頑健な標準誤差
+feols(emp.rate ~ cap.rate + age + age.hus + emp.rate.hus + urate + pref | year, vcov = "HC1", data = yamaguchi)
+```
+
+3.
+`feols()`で推定したモデルを`r2()`に渡して実行することで, そのモデルの様々な決定係数を得ることができる.
+特に, 固定効果推定の全体での自由度修正済み決定係数は`ar2` (`a`は"adjusted"を示す), 個体内変動に基づく自由度修正済み決定係数は`war2` (`w`は"within")の欄を見ればよい.
+これら2つの値は12\%ほど異なり, 後者のほうが小さいことがわかる.
+```{r collapse=T, message=FALSE, cache = TRUE}
+feols(emp.rate ~ cap.rate | pref, cluster = ~pref, data = yamaguchi) %>% r2()
+```
+
+4.
+前問と同様にする.
+前者の決定係数ではほぼ1近いのに対し, 後者はたった2.8\%に過ぎないことがわかる.
+```{r collapse=T, message=FALSE, cache = TRUE}
+feols(emp.rate ~ cap.rate | pref + year, cluster = ~pref, data = yamaguchi) %>% r2()
+```
+
+## 練習問題 6-11 [実証] {-}
+まずはデータを読み込む.
+
+```{r collapse=T, message=FALSE}
+timss <- read_dta("data/06_第6章/timss.dta")
+```
+
+1.
+`lm_robust()`では, `clusters = idschool`, `se_type = "stata"`とすればよい.
+一方で`feols()`では, `cluster`引数に`idschool`を指定すればクラスター構造に頑健な標準誤差が得られる.
+```{r collapse=T, message=FALSE, cache = TRUE}
+lm_robust(mathscore ~ agese_q2 + agese_q3 + agese_q4, clusters = idschool, se_type = "stata", data = timss)
+feols(mathscore ~ agese_q2 + agese_q3 + agese_q4, cluster = ~ idschool, data = timss)
+```
+
+2.
+`feols()`では上述の通りパイプ`|`の後ろに固定効果変数を追加するとStataとは異なる標準誤差を得る.
+下の例では代わりに`formula`中に直接固定効果変数を追加することで, Stataと同等の標準誤差を得られた.
+```{r collapse=T, message=FALSE, cache = TRUE}
+lm_robust(mathscore ~ agese_q2 + agese_q3 + agese_q4, fixed_effects = idschool, clusters = idschool, se_type = "stata", data = timss)
+feols(mathscore ~ agese_q2 + agese_q3 + agese_q4 + factor(idschool), cluster = ~ idschool, data = timss)
+```
+
+3.
+前章の練習問題5-15 (d)で推定したモデルについて, クラスター構造に頑健な標準誤差を求める.
+
+```{r collapse=T, message=FALSE, cache = TRUE}
+lm_robust(mathscore ~ agese_q2 + agese_q3 + agese_q4 + comu_1 + comu_2 + comu_3 + comu_4 + comu_5 + computer + numpeople + mothereduc_1 + mothereduc_2 + mothereduc_3 + mothereduc_4 + mothereduc_5 + fathereduc_1 + fathereduc_2 + fathereduc_3 + fathereduc_4 + fathereduc_5, clusters = idschool, data = timss, se_type = "stata")
+feols(mathscore ~ agese_q2 + agese_q3 + agese_q4 + comu_1 + comu_2 + comu_3 + comu_4 + comu_5 + computer + numpeople + mothereduc_1 + mothereduc_2 + mothereduc_3 + mothereduc_4 + mothereduc_5 + fathereduc_1 + fathereduc_2 + fathereduc_3 + fathereduc_4 + fathereduc_5, cluster = ~idschool, data = timss)
+```
+
+[参考] 上の処理では, `fixest`パッケージの高速さが感じられた.
+参考までに, `microbenchmark`パッケージを用いたベンチマークによる比較を下に示す[^6].
+
+[^6]: 次のブログ記事を参考にさせていただいた: https://keita43a.hatenablog.com/entry/2020/12/01/202122.
+
+```{r collapse=T, message=FALSE, cache = TRUE}
+# install.packages("microbenchmark")
+mbm <- microbenchmark::microbenchmark(
+    lm_robust = lm_robust(mathscore ~ agese_q2 + agese_q3 + agese_q4 + comu_1 + comu_2 + comu_3 + comu_4 + comu_5 + computer + numpeople + mothereduc_1 + mothereduc_2 + mothereduc_3 + mothereduc_4 + mothereduc_5 + fathereduc_1 + fathereduc_2 + fathereduc_3 + fathereduc_4 + fathereduc_5, clusters = idschool, data = timss, se_type = "stata"),
+    fixest = feols(mathscore ~ agese_q2 + agese_q3 + agese_q4 + comu_1 + comu_2 + comu_3 + comu_4 + comu_5 + computer + numpeople + mothereduc_1 + mothereduc_2 + mothereduc_3 + mothereduc_4 + mothereduc_5 + fathereduc_1 + fathereduc_2 + fathereduc_3 + fathereduc_4 + fathereduc_5, cluster = ~idschool, data = timss)
+)
+
+autoplot(mbm)
+```
+
+4.
+同様に, `idschool`を固定変数として推定を行う.
+`feols()`では`factor(idschool)`を`formula`中に追加することで, Stataと同じ標準誤差が得られた.
+```{r collapse=T, message=FALSE, cache = TRUE}
+lm_robust(mathscore ~ agese_q2 + agese_q3 + agese_q4 + comu_1 + comu_2 + comu_3 + comu_4 + comu_5 + computer + numpeople + mothereduc_1 + mothereduc_2 + mothereduc_3 + mothereduc_4 + mothereduc_5 + fathereduc_1 + fathereduc_2 + fathereduc_3 + fathereduc_4 + fathereduc_5, fixed_effects = idschool, clusters = idschool, data = timss, se_type = "stata")
+feols(mathscore ~ agese_q2 + agese_q3 + agese_q4 + comu_1 + comu_2 + comu_3 + comu_4 + comu_5 + computer + numpeople + mothereduc_1 + mothereduc_2 + mothereduc_3 + mothereduc_4 + mothereduc_5 + fathereduc_1 + fathereduc_2 + fathereduc_3 + fathereduc_4 + fathereduc_5 + factor(idschool), cluster = ~idschool, data = timss)
+```
+
+5.
+練習問題5-15(a)と, (1)で求めたモデルを比較すると, 係数の大きさは同じである一方, 標準誤差については後者 (クラスター構造に頑健な標準誤差) のほうが大きくなった.
+しかし, その差はそれほど大きくなく, 早生まれの人の成績が有意に低いという主張に変わりはなかった.
+(2)にて学校効果をモデルに組み込むと, 早生まれの人を示すダミー変数の係数はわずかに小さくなったが, やはり有意性に変わりはなかった.
+練習問題5-15(d)と, (3)で求めたモデルを比較すると, 標準誤差が後者のほうが小さくなったが, その差はさほど大きくはなく, 有意性に変わりはなかった.
+(4)にて学校効果をモデルに組み込むと, やはりダミー変数の係数はわずかに小さくなった.

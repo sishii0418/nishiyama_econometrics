@@ -28,6 +28,7 @@ install.packages("car")
 install.packages("knitr")
 install.packages("modelsummary")
 install.packages("estimatr")
+install.packages("AER")
 ```
 
 ## 方針 {.unnumbered}

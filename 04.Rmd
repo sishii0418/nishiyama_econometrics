@@ -120,7 +120,7 @@ cov(model410$residuals, data410$X)
 
 (2) E$(u_i^2|X_i) = 0.690318 \neq 0$.
 散布図を描くと, $\hat{Y}_i$が大きくなるに従って残差の分散が大きくなっていることが確認できる.
-```{r collapse=T}
+```{r collapse=T, cache = TRUE}
 mean(model410$residuals^2)
 
 model410 %>%
@@ -130,14 +130,14 @@ model410 %>%
 ```
 
 (3) 不均一分散に頑健な標準誤差は`estimatr::lm_robust()`を用いて求める.
-```{r collapse=T}
+```{r collapse=T, cache = TRUE}
 model410_robust <- lm_robust(Y ~ X, data = data410)
 summary(model410_robust)
 ```
 `summary()`によると, $\beta_1$の95%信頼区間に0.8は入っていないため, 帰無仮説は棄却されない.
 
 (4) 不均一分散に頑健な標準誤差は`estimatr::lm_robust()`を用いて求める.
-```{r collapse=T}
+```{r collapse=T, cache = TRUE}
 confint(model410)
 ```
 `summary()`によると, $\beta_1$の95%信頼区間に0.8は入っており, 帰無仮説は棄却される.

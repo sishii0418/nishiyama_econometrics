@@ -22,6 +22,170 @@ if(.Platform$OS.type == "unix") {
 }
 ```
 
+必要なライブラリを読み込む.
+
+```{r collapse=T}
+library(tidyverse)
+library(estimatr)
+library(AER)
+library(kableExtra)
+```
+
+## 実証例7.1 単回帰モデルの操作変数推定 {-#ex7.1}
+まずはデータを読み込む.
+```{r collapse=T}
+ipehd_qje2009_master <- read.csv("data/07_第7章/ipehd_qje2009_master.csv")
+```
+
+操作変数法は`estimatr::iv_robust()`や`AER::ivreg()`などで実行できる.
+```{r collapse=T, cache = TRUE}
+lm_robust(f_rw ~ f_prot, se_type = "stata", data = ipehd_qje2009_master) %>% summary()
+iv_robust(f_rw ~ f_prot | kmwittenberg, se_type = "stata", data = ipehd_qje2009_master) %>% summary()
+ivreg(f_rw ~ f_prot | kmwittenberg, data = ipehd_qje2009_master) %>% summary(vcov = sandwich::sandwich)
+```
+
+## 実証例7.2 操作変数推定量の標準誤差 {-}
+[実証例7.1](#ex7.1)を参照せよ.
+
+## 実証例7.3 19世紀プロイセンのデータの外生性を含めた2SLS推定による分析 {-}
+1段階目, 2段階目の両方にコントロール変数を追加する.
+```{r collapse=T, cache = TRUE}
+iv_robust(f_rw ~ f_prot + f_young + f_jew + f_fem + f_ortsgeb + f_pruss + hhsize + lnpop + gpop + f_blind + f_deaf + f_dumb + f_miss | kmwittenberg + f_young + f_jew + f_fem + f_ortsgeb + f_pruss + hhsize + lnpop + gpop + f_blind + f_deaf + f_dumb + f_miss, se_type = "stata", data = ipehd_qje2009_master) %>% summary()
+ivreg(f_rw ~ f_prot + f_young + f_jew + f_fem + f_ortsgeb + f_pruss + hhsize + lnpop + gpop + f_blind + f_deaf + f_dumb + f_miss | kmwittenberg + f_young + f_jew + f_fem + f_ortsgeb + f_pruss + hhsize + lnpop + gpop + f_blind + f_deaf + f_dumb + f_miss, data = ipehd_qje2009_master) %>% summary(vcov = sandwich::sandwich)
+
+iv_robust(f_rw ~ f_prot + f_young + f_jew + f_fem + f_ortsgeb + f_pruss + hhsize + lnpop + gpop + f_blind + f_deaf + f_dumb + f_miss | kmwittenberg * (lnpop + gpop) + f_young + f_jew + f_fem + f_ortsgeb + f_pruss + hhsize + f_blind + f_deaf + f_dumb + f_miss, se_type = "stata", data = ipehd_qje2009_master) %>% summary()
+ivreg(f_rw ~ f_prot + f_young + f_jew + f_fem + f_ortsgeb + f_pruss + hhsize + lnpop + gpop + f_blind + f_deaf + f_dumb + f_miss | kmwittenberg * (lnpop + gpop) + f_young + f_jew + f_fem + f_ortsgeb + f_pruss + hhsize + f_blind + f_deaf + f_dumb + f_miss, data = ipehd_qje2009_master) %>% summary(vcov = sandwich::sandwich)
+```
+
+## 実証例7.4 操作変数の強さの判定 {-}
+```{r collapse=T, cache = TRUE}
+lm_robust(f_prot ~ kmwittenberg + f_young + f_jew + f_fem + f_ortsgeb + f_pruss + hhsize + lnpop + gpop + f_blind + f_deaf + f_dumb + f_miss, se_type = "stata", data = ipehd_qje2009_master) %>% summary()
+
+lm_robust(f_prot ~ kmwittenberg * (lnpop + gpop) + f_young + f_jew + f_fem + f_ortsgeb + f_pruss + hhsize + f_blind + f_deaf + f_dumb + f_miss, se_type = "stata", data = ipehd_qje2009_master) %>% summary()
+```
+
+## 実証例7.5 操作変数の外生性の検定 {-}
+ここでは均一分散用の標準誤差で計算する.
+HansenのJ検定は, `iv_robust()`で`diagnostics = TRUE`とすると, `summary()`の`Overidentifying`の欄に表示される.
+(`ivreg()`でも`summary(diagnostics = TRUE)`とすると同様にできるはずだが, 同じ値が得られなかった.)
+```{r collapse=T, cache = TRUE}
+model_73_1 <- ivreg(f_rw ~ f_prot + f_young + f_jew + f_fem + f_ortsgeb + f_pruss + hhsize + lnpop + gpop + f_blind + f_deaf + f_dumb + f_miss | kmwittenberg + f_young + f_jew + f_fem + f_ortsgeb + f_pruss + hhsize + lnpop + gpop + f_blind + f_deaf + f_dumb + f_miss, data = ipehd_qje2009_master)
+model_75_1 <- lm(model_73_1$residuals ~ kmwittenberg + f_young + f_jew + f_fem + f_ortsgeb + f_pruss + hhsize + lnpop + gpop + f_blind + f_deaf + f_dumb + f_miss, data = ipehd_qje2009_master)
+summary(model_75_1)
+hypothesis <- c("kmwittenberg", "lnpop", "gpop", "f_young", "f_jew", "f_fem", "f_ortsgeb", "f_pruss", "hhsize", "f_blind", "f_deaf", "f_dumb", "f_miss")
+linearHypothesis(model_75_1, hypothesis, rep(0, length(hypothesis)), "Chisq")
+
+model_73_2 <- ivreg(f_rw ~ f_prot + f_young + f_jew + f_fem + f_ortsgeb + f_pruss + hhsize + lnpop + gpop + f_blind + f_deaf + f_dumb + f_miss | kmwittenberg * (lnpop + gpop) + f_young + f_jew + f_fem + f_ortsgeb + f_pruss + hhsize + f_blind + f_deaf + f_dumb + f_miss, data = ipehd_qje2009_master)
+model_75_2 <- lm(model_73_2$residuals ~ kmwittenberg * (lnpop + gpop) + f_young + f_jew + f_fem + f_ortsgeb + f_pruss + hhsize + f_blind + f_deaf + f_dumb + f_miss, data = ipehd_qje2009_master)
+summary(model_75_2)
+hypothesis <- c("kmwittenberg", "lnpop", "gpop", "kmwittenberg:lnpop", "kmwittenberg:gpop", "f_young", "f_jew", "f_fem", "f_ortsgeb", "f_pruss", "hhsize", "f_blind", "f_deaf", "f_dumb", "f_miss")
+linearHypothesis(model_75_2, hypothesis, rep(0, length(hypothesis)), "Chisq")
+qchisq(0.9, 2)
+
+# HansenのJ検定
+iv_robust(f_rw ~ f_prot + f_young + f_jew + f_fem + f_ortsgeb + f_pruss + hhsize + lnpop + gpop + f_blind + f_deaf + f_dumb + f_miss | kmwittenberg * (lnpop + gpop) + f_young + f_jew + f_fem + f_ortsgeb + f_pruss + hhsize + f_blind + f_deaf + f_dumb + f_miss, se_type = "stata", data = ipehd_qje2009_master, diagnostics = T) %>% summary()
+# 異なる値になる?
+#summary(model_73_2, diagnostics = TRUE)
+```
+
+## 表7-2 記述統計量 {.unnumbered}
+やはり第5章の[表5-5](#table5-5)や第6章の[表6-3](#table6-3)と同様に`datasummary()`を用いてデータフレームを書き出し, 適宜リネームを行えばよい.
+```{r collapse=T, results='asis', message=FALSE, cache = TRUE}
+# 変数を選択
+vars <- ipehd_qje2009_master %>%
+    select(f_rw, f_prot, kmwittenberg, f_young, f_jew, f_fem, f_ortsgeb, f_pruss, hhsize, lnpop, gpop, f_blind, f_deaf, f_dumb, f_miss)
+table63 <- datasummary(All(vars) ~ N + Mean + SD + Min + Max,
+            output = "data.frame",
+            data = ipehd_qje2009_master,
+            fmt = 3)
+# 列名
+colnames(table63) <- c("変数", "サンプルサイズ", "平均", "標準偏差", "最小値", "最大値")
+# 変数名
+table63[,1] <- c("識字率", "新教徒率", "距離", "子供率", "ユダヤ率", "女性率", "出身者率", "普人率", "平均家計人数", "対数人口", "人口成長率", "視覚障害率", "聴覚障害率", "知的・精神障害率", "欠落率")
+# 表を出力
+gt(table63)
+```
+
+## 表7-3 推定結果 {#table7-3 .unnumbered}
+(6)の標準誤差がStataと一致していないため注意.
+`modelsummary`の出力は`kableExtra`, `gt`などで整形することができるが, 前者が数式との相性がよい.
+```{r collapse=T, message=FALSE, results='asis', cache = TRUE}
+models_73 <- list("(1)" = lm_robust(f_rw ~ f_prot, se_type = "stata", data = ipehd_qje2009_master),
+                  "(2)" = iv_robust(f_rw ~ f_prot | kmwittenberg, se_type = "stata", data = ipehd_qje2009_master, diagnostics = TRUE),
+                  "(3)" = lm_robust(f_rw ~ f_prot + f_young + f_jew + f_fem + f_ortsgeb + f_pruss + hhsize + lnpop + gpop + f_blind + f_deaf + f_dumb + f_miss, se_type = "stata", data = ipehd_qje2009_master),
+                  "(4)" = iv_robust(f_rw ~ f_prot + f_young + f_jew + f_fem + f_ortsgeb + f_pruss + hhsize + lnpop + gpop + f_blind + f_deaf + f_dumb + f_miss | kmwittenberg + f_young + f_jew + f_fem + f_ortsgeb + f_pruss + hhsize + lnpop + gpop + f_blind + f_deaf + f_dumb + f_miss, se_type = "stata", data = ipehd_qje2009_master, diagnostics = TRUE),
+                  "(5)" = lm_robust(f_prot ~ kmwittenberg + f_young + f_jew + f_fem + f_ortsgeb + f_pruss + hhsize + lnpop + gpop + f_blind + f_deaf + f_dumb + f_miss, se_type = "stata", data = ipehd_qje2009_master),
+                  "(6)" = iv_robust(f_rw ~ f_prot + f_young + f_jew + f_fem + f_ortsgeb + f_pruss + hhsize + lnpop + gpop + f_blind + f_deaf + f_dumb + f_miss | kmwittenberg * (lnpop + gpop) + f_young + f_jew + f_fem + f_ortsgeb + f_pruss + hhsize + f_blind + f_deaf + f_dumb + f_miss, se_type = "HC1", data = ipehd_qje2009_master, diagnostics = TRUE))
+cm <- c("f_rw" = "識字率",
+        "f_prot" = "新教徒率",
+        "kmwittenberg" = "距離",
+        "f_young" = "子供率",
+        "f_jew" = "ユダヤ率",
+        "f_fem" = "女性率",
+        "f_ortsgeb" = "出身者率",
+        "f_pruss" = "普人率",
+        "hhsize" = "平均家計人数",
+        "lnpop" = "対数人口",
+        "gpop" = "人口成長率",
+        "f_blind" = "視覚障害率",
+        "f_deaf" = "聴覚障害率",
+        "f_dumb" = "知的・精神障害率",
+        "f_miss" = "欠落率",
+        "(Intercept)" = "定数項")
+# スタイガー=ストック検定統計量の値を表示するモデルを指定
+attr(models_73$`(2)`, "STAIGERSTOCK") <- TRUE
+attr(models_73$`(4)`, "STAIGERSTOCK") <- TRUE
+attr(models_73$`(6)`, "STAIGERSTOCK") <- TRUE
+# J検定統計量の値を表示するモデルを指定
+attr(models_73$`(6)`, "J") <- TRUE
+
+glance_custom.iv_robust <- function(x) {
+    # 上で指定した, スタイガー=ストック検定統計量の値を表示したいモデルでなければパス
+    if (!isTRUE(attr(x, "STAIGERSTOCK"))) return(NULL)
+
+    # スタイガー=ストック検定統計量の値を取得
+    staigerstock <- summary(x)$diagnostic_first_stage_fstatistic
+
+    # スタイガー=ストック検定統計量の値をまとめたtibbleを作成
+    out <- tibble("staiger_stock_test" = staigerstock["value"],
+                  "adj.r.squared" = "") # adjR2を消す
+
+    # J検定統計量の値を表示するモデル
+    if (isTRUE(attr(x, "J"))) {
+        # J検定量の値を取得
+        j <- summary(x)$diagnostic_overid_test
+        # tibbleにJ検定量の値とそのP値を追加
+        out <- out %>% mutate("j_test" = j["value"],
+                              "p_value" = sprintf("(%.3f)", j["p.value"]))
+    }
+    return(out)
+}
+gm <- tribble(~raw,                 ~clean,                          ~fmt,
+              "staiger_stock_test", "スタイガー=ストック検定統計量", 2,
+              "j_test",             "$J$検定統計量",                 3,
+              "p_value",            "     ",                         3,
+              "adj.r.squared",      "$\\bar{R}^2$",                  3,
+              "nobs",               "サンプルサイズ",                0)
+rows <- tribble(~term, ~`(1)`, ~`(2)`, ~`(3)`, ~`(4)`, ~`(5)`, ~`(6)`,
+                "被説明変数", "識字率", "識字率", "識字率", "識字率", "新教徒率", "識字率",
+                "推定法", "OLS", "2SLS", "OLS", "2SLS", "OLS", "2SLS")
+attr(rows, 'position') <- c(1, 2)
+
+# kableExtraで出力して, 手動で下線を追加する.
+# ただしkableExtraでHTML出力するとフッター(星の説明)の"<"の文字が消えてしまうので, estimateを手動してすることでフッターを自動生成させないようにし, notesで手動で追加する.
+modelsummary(models_73,
+             stars = c("*" = 0.05, "**" = 0.01, "***" = 0.001),
+             gof_omit = 'R2$|RMSE|AIC|BIC|Log.Lik.',
+             gof_map = gm,
+             coef_map = cm,
+             add_rows = rows,
+             estimate = "{estimate}{stars}",
+             output = "kableExtra",
+             notes = "* p &lt; 0.05, ** p &lt; 0.01, *** p &lt; 0.001") %>%
+    row_spec(c(0, 2, 35, 37), extra_css = "border-bottom: 1.5px solid") %>%
+    row_spec(32, extra_css = ";border-bottom: 1.5px solid") # 32行目の下 (estimateとstatisticsの境) のみコロンが必要
+```
+
 <!-- ## 練習問題 7-1 [確認] {-}
 
 ## 練習問題 7-2 [確認] {-}
@@ -44,6 +208,7 @@ if(.Platform$OS.type == "unix") {
 
 ## 練習問題 7-11 [発展] {-}
 
-## 練習問題 7-12 [発展] {-}
+## 練習問題 7-12 [発展] {-} -->
 
-## 練習問題 7-13 [実証] {-} -->
+## 練習問題 7-13 [実証] {-}
+[表7-3](#table7-3)を参照せよ.
