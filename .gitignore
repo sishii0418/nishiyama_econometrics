@@ -3,6 +3,7 @@
 .RData
 .Ruserdata
 
+_main_cache/
 _bookdown_files
 _book
 packages.bib
