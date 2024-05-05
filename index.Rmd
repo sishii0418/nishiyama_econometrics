@@ -1,5 +1,5 @@
 ---
-title: "西山ほか(2019)『計量経済学』有斐閣の練習問題解答とRでの再現"
+title: "西山ほか (2019)『計量経済学』有斐閣の練習問題解答とRでの再現"
 author: "石井 俊輔"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
@@ -8,14 +8,14 @@ bibliography: [book.bib, packages.bib]
 url: https://sishii0418.github.io/nishiyama_econometrics/index.html
 # cover-image: path to the social sharing image like images/cover.jpg
 description: |
-  西山ほか(2019)『計量経済学』有斐閣の練習問題解答とRでの再現.
+  西山ほか (2019)『計量経済学』有斐閣の練習問題解答とRでの再現.
 link-citations: yes
 github-repo: rstudio/bookdown-demo
 ---
 
 # はじめに {.unnumbered}
 
-西山ほか(2019)『計量経済学』有斐閣 ([出版社リンク](https://www.yuhikaku.co.jp/books/detail/9784641053854)) の練習問題解答とRでの再現です.
+西山ほか (2019)『計量経済学』有斐閣 ([出版社リンク](https://www.yuhikaku.co.jp/books/detail/9784641053854)) の練習問題解答とRでの再現です.
 
 必要なRパッケージをインストール:
 ```{r collapse=T, eval=F}
