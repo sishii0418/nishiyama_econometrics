@@ -175,7 +175,6 @@ attr(rows, 'position') <- c(1, 2)
 # ただしkableExtraでHTML出力するとフッター(星の説明)の"<"の文字が消えてしまうので, estimateを手動してすることでフッターを自動生成させないようにし, notesで手動で追加する.
 modelsummary(models_73,
              stars = c("*" = 0.05, "**" = 0.01, "***" = 0.001),
-             gof_omit = 'R2$|RMSE|AIC|BIC|Log.Lik.',
              gof_map = gm,
              coef_map = cm,
              add_rows = rows,

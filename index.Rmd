@@ -29,6 +29,10 @@ install.packages("knitr")
 install.packages("modelsummary")
 install.packages("estimatr")
 install.packages("AER")
+install.packages("marginaleffects")
+install.packages("pscl")
+install.packages("nnet")
+install.packages("sampleSelection")
 ```
 
 ## 方針 {.unnumbered}

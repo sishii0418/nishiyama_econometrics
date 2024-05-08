@@ -22,10 +22,281 @@ if(.Platform$OS.type == "unix") {
 }
 ```
 
+必要なライブラリを読み込む.
+
+```{r collapse=T}
+library(tidyverse)
+library(estimatr)
+library(margins)
+library(modelsummary)
+library(gt)
+library(MASS)
+library(marginaleffects)
+library(pscl)
+library(nnet)
+library(AER)
+library(sampleSelection)
+```
+
+## 実証例8.1 PIAACを用いた女性の就業選択の実証例 {-}
+まずはデータを読み込む.
+```{r collapse=T}
+piaac <- read.csv("data/08_第8章/piaac.csv")
+```
+
+プロビット/ロジットモデルの推定には, `glm()`を用い, 引数に`family = binomial(link = "probit")`などと指定する.
+限界効果は (Rの確率密度関数を用いて) 手計算でもできるが, `margins`パッケージを使うと自動で求められる ([参考](https://keita43a.hatenablog.com/entry/2018/05/09/065906)).
+
+```{r collapse=T, cache = TRUE}
+# 女性に限定し, さらに就業ダミー変数を作成
+piaac_female <- piaac %>%
+    filter(gender == "Female") %>%
+    mutate(emp = ifelse(lfs == "Employed", 1, 0))
+model_811 <- lm_robust(emp ~ educ + age + couple + child, data = piaac_female, se_type = "stata")
+summary(model_811)
+model_812 <- glm(emp ~ educ + age + couple + child, data = piaac_female, family = binomial(link = "probit"))
+summary(model_812)
+model_813 <- margins(model_812)
+summary(model_813)
+model_814 <- glm(emp ~ educ + age + couple + child, data = piaac_female, family = binomial(link = "logit"))
+summary(model_814)
+model_815 <- margins(model_814)
+summary(model_815)
+```
+
+## 表8-1 女性の就業決定 {#table8-1 .unnumbered}
+推定方法と$\bar{R}^2\text{/疑似}R^2$を表示する行を追加した.
+```{r collapse=T, message=FALSE, results='asis', cache = TRUE}
+models_81 <- list("(1)" = model_811,
+                  "(2)" = model_812,
+                  "(3)" = model_813,
+                  "(4)" = model_814,
+                  "(5)" = model_815)
+cm <- c("educ" = "教育年数",
+        "age" = "年齢",
+        "couple" = "配偶者あり",
+        "child" = "子供数",
+        "(Intercept)" = "定数項")
+glance_custom.lm_robust <- function(x) {
+    out <- tibble("adj.r.squared_or_peseudo.r.squared" = x$adj.r.squared)
+    return(out)
+}
+glance_custom.glm <- function(x) {
+    peseudo.r.squared <- 1 - (x$deviance / x$null.deviance)
+    out <- tibble("adj.r.squared_or_peseudo.r.squared" = peseudo.r.squared)
+    return(out)
+}
+gm <- tribble(~raw,                 ~clean,                          ~fmt,
+              "adj.r.squared_or_peseudo.r.squared",      "$\\bar{R}^2$/疑似$R^2$",                  2,
+              "nobs",               "$N$",                0)
+rows <- tribble(~term, ~`(1)`, ~`(2)`, ~`(3)`, ~`(4)`, ~`(5)`,
+                "推定方法", "OLS", "プロビット", "限界効果", "ロジット", "限界効果")
+attr(rows, 'position') <- 1
+modelsummary(models_81,
+             coef_map = cm,
+             gof_map = gm,
+             add_rows = rows,
+             stars = c("*" = 0.05, "**" = 0.01, "***" = 0.001),
+             estimate = "{estimate}{stars}",
+             output = "kableExtra",
+             notes = "* p &lt; 0.05, ** p &lt; 0.01, *** p &lt; 0.001") %>%
+    row_spec(c(1, 13), extra_css = "border-bottom: 1.5px solid") %>%
+    row_spec(11, extra_css = ";border-bottom: 1.5px solid") # 32行目の下 (estimateとstatisticsの境) のみコロンが必要
+```
+
+## 実証例8.2 PIAACを用いた仕事満足度の決定要因の分析 {-}
+
+順序付きプロビットモデルの推定には, `MASS::polr`を使う. 他にも`oglmx::oprobit.reg()`などがある.
+`polr`で推定した順序付きプロビットモデルは, `marginaleffect::avg_slopes()`に渡すことで限界効果を求めることができる.
+ただし, `avg_slopes()`はデフォルトでは標準誤差の計算にt分布ではなく正規分布を仮定するため, `df`を指定してt分布を使うようにする.
+表の統計量欄にあるMcFaddenの擬似$R^2$は, `pscl::pR2()`を使って求めた.
+
+```{r collapse=T, message=FALSE, results='asis', cache = TRUE}
+# 男性に限定し, さらに仕事満足度を示す変数をファクター化し順序を与える
+piaac_male <- piaac %>%
+    filter(gender == "Male") %>%
+    mutate(jsrev = factor(js, levels = c("Extremely dissatisfied", "Dissatisfied", "Neither satisfied nor dissatisfied","Satisfied", "Extremely satisfied"),
+                          ordered = TRUE))
+model_82 <- polr(jsrev ~ educ + age + couple + child, data = piaac_male, method = "probit")
+# avg_slopesは標準ではt分布ではなく正規分布を仮定するため, dfを指定する
+model_82_marginal <- avg_slopes(model_82, df = insight::get_df(model_82))
+# %ポイント変化を求めるために一旦listに書き出し
+model_82_marginal <- modelsummary(model_82_marginal, shape = term ~ group, output = "modelsummary_list", fmt = 5)
+# パーセント表示に変換し, また表示のために仕事満足度順に並び替え
+model_82_marginal$tidy <- model_82_marginal$tidy %>%
+    mutate(estimate = estimate * 100) %>%
+    mutate(std.error = std.error * 100) %>%
+    mutate(conf.low = conf.low * 100) %>%
+    mutate(conf.high = conf.high * 100) %>%
+    mutate(group = factor(group, levels = c("Extremely dissatisfied", "Dissatisfied", "Neither satisfied nor dissatisfied","Satisfied", "Extremely satisfied"),
+                          labels = c("とても不満", "不満", "どちらでもない", "満足", "とても満足"),
+                          ordered = TRUE)) %>%
+    arrange(group)
+# 限界効果の統計量 (サンプルサイズ) は表示に不要なのでNULLを代入
+model_82_marginal$glance <- NULL
+models_82 <- list("モデル係数" = model_82,
+                  "限界効果 (% ポイント変化)" = model_82_marginal)
+cm <- c("educ" = "教育年数",
+        "age" = "年齢",
+        "couple" = "配偶者あり",
+        "child" = "子供数",
+        "Extremely dissatisfied|Dissatisfied" = "$\\mu_1$",
+        "Dissatisfied|Neither satisfied nor dissatisfied" = "$\\mu_2$",
+        "Neither satisfied nor dissatisfied|Satisfied" = "$\\mu_3$",
+        "Satisfied|Extremely satisfied" = "$\\mu_4$")
+# pscl::pR2()でMcFaddenの疑似R2を求める
+glance_custom.polr <- function(x) {
+    capture.output(McFadden <- pR2(x)["McFadden"]) # pR2のcat出力を抑制するためにcapture.output()で囲う
+    out <- tibble("pseudo.r.squared" = McFadden)
+    return(out)
+}
+gm <- tribble(~raw,               ~clean,           ~fmt,
+              "pseudo.r.squared", "疑似$R^2$",      3,
+              "nobs",             "サンプルサイズ", 0)
+modelsummary(models_82,
+             shape = term ~ group,
+             coef_map = cm,
+             gof_map = gm,
+             stars = c("*" = 0.05, "**" = 0.01, "***" = 0.001))
+```
+限界効果で配偶者ありの値だけ少しStataと異なっている (カテゴリー変数の処理の仕方の差によるものか?).
+
+## 実証例8.3 PIAACを用いた就業形態決定要因の分析 {-}
+
+多項ロジットモデルは下では`nnet::multinom()`を用いたが, 他にも`mlogit::mlogit()`などがある.
+
+```{r collapse=T, message=FALSE, results='asis', cache = TRUE}
+# 女性に限定
+piaac_female <- piaac %>%
+    filter(gender == "Female") %>%
+    mutate(empstat_edt = factor(empstat_edt, labels = c("フル", "パート", "不就業")) %>% relevel(ref = 3)) # 先にベースラインを設定
+model_83 <- multinom(empstat_edt ~ educ + age + couple + child, data = piaac_female, trace = FALSE)
+model_83_marginal <- avg_slopes(model_83, df = insight::get_df(model_83), type = "probs")
+
+# pscl::pR2()でMcFaddenの疑似R2を求める
+glance_custom.multinom <- function(x) {
+    capture.output(McFadden <- pR2(x)["McFadden"]) # pR2のcat出力を抑制するためにcapture.output()で囲う
+    out <- tibble("pseudo.r.squared" = McFadden)
+    return(out)
+}
+
+# 係数が対応する目的変数を示す列名が元の多項ロジットモデルではresponse, 限界効果ではgroupと異なっているため,
+# 元のモデルを限界効果に合わせてgroupという列を追加 (逆ではなぜかmodelsummaryの出力がうまくいかなかった)
+model_83 <- modelsummary(model_83, output = "modelsummary_list")
+model_83$tidy <- model_83$tidy %>% mutate(group = response)
+models_83 <- list(" " = model_83,
+                  "限界効果" = model_83_marginal)
+cm <- c("educ" = "教育年数",
+        "age" = "年齢",
+        "couple" = "配偶者あり",
+        "child" = "子供数",
+        "(Intercept)" = "定数項")
+gm <- tribble(~raw,               ~clean,           ~fmt,
+              "pseudo.r.squared", "疑似$R^2$",      3,
+              "nobs",             "サンプルサイズ", 0)
+modelsummary(models_83,
+             shape = term ~ group,
+             coef_map = cm,
+             gof_map = gm,
+             stars = c("*" = 0.05, "**" = 0.01, "***" = 0.001))
+```
+限界効果の配偶者ありの標準誤差の値がやはりStataと異なっている.
+
+## 実証例8.4 PIAACを用いた女性の労働時間決定の分析 {-}
+トビットモデルは`AER::tobit()`を用いて推定できる. 被説明変数の下限・上限はそれぞれ`left`, `right`パラメータで指定する.
+擬似$R^2$は, `AER::tobit()`で推定したモデルには`pscl::pR2()`が使えないため, 手動で計算する ((参考)[https://mailman.stat.ethz.ch/pipermail/r-help/2008-August/171197.html]).
+
+```{r collapse=T, message=FALSE, results='asis', cache = TRUE}
+# 女性に限定
+piaac_female <- piaac %>%
+    filter(gender == "Female")
+model_84_OLS <- lm(hours ~ educ + age + couple + child, data = piaac_female, y = TRUE)
+model_84_tobit <- tobit(hours ~ educ + age + couple + child, data = piaac_female, left = 0)
+models_84 <- list("(1)" = model_84_OLS,
+                  "(2)" = model_84_tobit)
+rows <- tribble(~term, ~`(1)`, ~`(2)`,
+                "推定方法", "OLS", "トービット")
+attr(rows, 'position') <- 1
+cm <- c("educ" = "教育年数",
+        "age" = "年齢",
+        "couple" = "配偶者あり",
+        "child" = "子供数",
+        "(Intercept)" = "定数項")
+glance_custom.tobit <- function(x) {
+    out <- tibble("r.squared" = 1 - x$loglik[2]/x$loglik[1],
+                  "nobs_zero" = sum(as.character(x$y) == "  0-"))
+    return(out)
+}
+glance_custom.lm <- function(x) {
+    out <- tibble("nobs_zero" = sum(x$y == 0))
+    return(out)
+}
+gm <- tribble(~raw,               ~clean,           ~fmt,
+              "r.squared", "$R^2$/疑似$R^2$",      3,
+              "nobs",             "$N$", 0,
+              "nobs_zero",         "うち0時間", 0)
+modelsummary(models_84,
+             coef_map = cm,
+             gof_map = gm,
+             add_rows = rows,
+             stars = c("*" = 0.05, "**" = 0.01, "***" = 0.001),
+             )
+```
+
+## 実証例8.5 PIAACを用いた女性賃金の決定要因の分析 {#ex8.5 .unnumbered}
+
+先にデータを加工しておく.
+`filter())`で女性のみに限定し, `drop_na()`で指定した変数で欠損がある行を削除する.
+さらに, `mutate()`を用いて変数を作成する.
+ヘキットモデルの推定には`sampleSelection::heckit()`を用いる.
+`method`引数で推定方法を指定でき, 2段階ヘキット法は`"2step"`, 最尤法は`"ml"`とすればよい.
+
+```{r collapse=T, message=FALSE, results='asis', cache = TRUE}
+piaac_female <- piaac %>%
+    filter(gender == "Female") %>%
+    drop_na(educ, age, couple, child) %>%
+    mutate(lwage = log(wage)) %>%
+    mutate(exp = age - educ - 6) %>%
+    mutate(exp2 = exp^2/100) %>%
+    mutate(selected = !is.na(wage))
+model_85_OLS <- lm(lwage ~ educ + exp + exp2, data = piaac_female)
+model_85_OLS <- modelsummary(model_85_OLS, output = "modelsummary_list")
+model_85_OLS$tidy$component = "" # modelsummaryのshapeで変形するために列を作成
+model_85_2step <- heckit(selected ~ educ + exp + exp2 + couple + child, lwage ~ educ + exp + exp2, data = piaac_female, method = "2step")
+model_85_2step <- modelsummary(model_85_2step, output = "modelsummary_list")
+model_85_2step$tidy <- model_85_2step$tidy %>%
+    mutate(component = ifelse(component == "selection", "セレクション式", "賃金式")) # componentを日本語に直し, auxiliarlyは賃金式に統合
+model_85_ml <- heckit(selected ~ educ + exp + exp2 + couple + child, lwage ~ educ + exp + exp2, data = piaac_female, method = "ml")
+model_85_ml <- modelsummary(model_85_ml, output = "modelsummary_list")
+model_85_ml$tidy <- model_85_ml$tidy %>%
+    mutate(component = ifelse(component == "selection", "セレクション式", "賃金式")) # componentを日本語に直し, auxiliarlyは賃金式に統合
+models_85 <- list("OLS" = model_85_OLS,
+                  "2段階ヘキット" = model_85_2step,
+                  "最尤法ヘキット" = model_85_ml)
+cm <- c("educ" = "教育年数",
+        "exp" = "経験年数",
+        "exp2" = "経験年数2乗/100",
+        "couple" = "配偶者あり",
+        "child" = "子供数",
+        "(Intercept)" = "定数項",
+        "invMillsRatio" = "逆ミルズ比",
+        "rho" = "誤差項の相関")
+gm <- tribble(~raw,               ~clean,           ~fmt,
+              "adj.r.squared", "$\\bar{R}^2$/疑似$R^2$",      2,
+              "nobs",             "$N$", 0)
+modelsummary(models_85,
+             coef_map = cm,
+             gof_map = gm,
+             stars = c("*" = 0.05, "**" = 0.01, "***" = 0.001),
+             shape = term ~ component)
+```
+
 <!-- ## 練習問題 8-1 [確認] {-}
 
 ## 練習問題 8-2 [確認] {-}
 
-## 練習問題 8-3 [発展] {-}
+## 練習問題 8-3 [発展] {-} -->
 
-## 練習問題 8-4 [実証] {-} -->
+## 練習問題 8-4 [実証] {-}
+a. [表8-1](#table8-1)を参照せよ.
+b. [実証例8.5](#ex8.5)を参照せよ.
