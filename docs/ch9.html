@@ -23,7 +23,7 @@
 <meta name="author" content="石井 俊輔" />
 
 
-<meta name="date" content="2024-05-08" />
+<meta name="date" content="2024-05-10" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -244,7 +244,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="ch8.html"><a href="ch8.html#ex8.5"><i class="fa fa-check"></i>実証例8.5 PIAACを用いた女性賃金の決定要因の分析</a></li>
 <li class="chapter" data-level="" data-path="ch8.html"><a href="ch8.html#練習問題-8-4-実証"><i class="fa fa-check"></i>練習問題 8-4 [実証]</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="ch9.html"><a href="ch9.html"><i class="fa fa-check"></i>第9章 政策評価モデル</a></li>
+<li class="chapter" data-level="" data-path="ch9.html"><a href="ch9.html"><i class="fa fa-check"></i>第9章 政策評価モデル</a>
+<ul>
+<li class="chapter" data-level="" data-path="ch9.html"><a href="ch9.html#図9-5-電子投票制度の導入が有効票率に与えた影響"><i class="fa fa-check"></i>図9-5 電子投票制度の導入が有効票率に与えた影響</a></li>
+</ul></li>
 <li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html"><i class="fa fa-check"></i>第10章 系列相関と時系列モデル</a></li>
 <li class="chapter" data-level="" data-path="ch11.html"><a href="ch11.html"><i class="fa fa-check"></i>第11章 トレンドと構造変化</a></li>
 <li class="chapter" data-level="" data-path="ch12.html"><a href="ch12.html"><i class="fa fa-check"></i>第12章 VARモデル</a></li>
@@ -290,6 +293,72 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb83-17"><a href="ch9.html#cb83-17" tabindex="-1"></a>} <span class="cf">else</span> {</span>
 <span id="cb83-18"><a href="ch9.html#cb83-18" tabindex="-1"></a>    <span class="fu">print</span>(<span class="st">&quot;Windowsで解凍するコマンドを別途追加せよ.&quot;</span>)</span>
 <span id="cb83-19"><a href="ch9.html#cb83-19" tabindex="-1"></a>}</span></code></pre></div>
+<p>必要なライブラリを読み込む.</p>
+<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb84-1"><a href="ch9.html#cb84-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb84-2"><a href="ch9.html#cb84-2" tabindex="-1"></a><span class="fu">library</span>(haven)</span></code></pre></div>
+<div id="図9-5-電子投票制度の導入が有効票率に与えた影響" class="section level2 unnumbered hasAnchor">
+<h2>図9-5 電子投票制度の導入が有効票率に与えた影響<a href="ch9.html#図9-5-電子投票制度の導入が有効票率に与えた影響" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>まずデータを読み込む.
+次に1998年選挙で電子投票となった投票所であることを示すダミー変数<code>treat</code>と, 登録有権者数を4000人ごとのビンに分けた変数<code>bin_voters96</code>を作成し, そのビンごとに各選挙の有効票率の平均値を計算する.
+次に<code>ggplot2</code>でレジェンドが表示されるようにデータフレームをlong型に変換し, 散布図と回帰直線を描画する.</p>
+<div class="sourceCode" id="cb85"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb85-1"><a href="ch9.html#cb85-1" tabindex="-1"></a>munic <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">&quot;data/09_第9章/Fujiwara2015/munic.dta&quot;</span>)</span>
+<span id="cb85-2"><a href="ch9.html#cb85-2" tabindex="-1"></a></span>
+<span id="cb85-3"><a href="ch9.html#cb85-3" tabindex="-1"></a>munic <span class="ot">&lt;-</span> munic<span class="sc">%&gt;%</span></span>
+<span id="cb85-4"><a href="ch9.html#cb85-4" tabindex="-1"></a>    <span class="co"># mutate(dep = voters96 - 40500) %&gt;%</span></span>
+<span id="cb85-5"><a href="ch9.html#cb85-5" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">treat =</span> voters96 <span class="sc">&gt;</span> <span class="dv">40500</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb85-6"><a href="ch9.html#cb85-6" tabindex="-1"></a>    <span class="co"># 一旦binに分けたあと, その範囲の中間値を代入</span></span>
+<span id="cb85-7"><a href="ch9.html#cb85-7" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">bin_voters96 =</span> <span class="fu">as.numeric</span>(<span class="fu">cut</span>(voters96, <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">500</span>, <span class="dv">200000</span>, <span class="at">by =</span> <span class="dv">4000</span>))) <span class="sc">*</span> <span class="dv">4000</span> <span class="sc">-</span> <span class="dv">1500</span>)</span>
+<span id="cb85-8"><a href="ch9.html#cb85-8" tabindex="-1"></a>munic <span class="ot">&lt;-</span> munic<span class="sc">%&gt;%</span></span>
+<span id="cb85-9"><a href="ch9.html#cb85-9" tabindex="-1"></a>    <span class="fu">group_by</span>(<span class="fu">factor</span>(bin_voters96)) <span class="sc">%&gt;%</span></span>
+<span id="cb85-10"><a href="ch9.html#cb85-10" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">bin_util94 =</span> <span class="fu">mean</span>(r_util94, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb85-11"><a href="ch9.html#cb85-11" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">bin_util98 =</span> <span class="fu">mean</span>(r_util98, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb85-12"><a href="ch9.html#cb85-12" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">bin_util02 =</span> <span class="fu">mean</span>(r_util02, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb85-13"><a href="ch9.html#cb85-13" tabindex="-1"></a></span>
+<span id="cb85-14"><a href="ch9.html#cb85-14" tabindex="-1"></a>munic <span class="ot">&lt;-</span> munic <span class="sc">%&gt;%</span></span>
+<span id="cb85-15"><a href="ch9.html#cb85-15" tabindex="-1"></a>    <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(<span class="st">&quot;bin_util94&quot;</span>, <span class="st">&quot;bin_util98&quot;</span>, <span class="st">&quot;bin_util02&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb85-16"><a href="ch9.html#cb85-16" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">name =</span> <span class="fu">factor</span>(name, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;bin_util94&quot;</span>, <span class="st">&quot;bin_util98&quot;</span>, <span class="st">&quot;bin_util02&quot;</span>)))</span>
+<span id="cb85-17"><a href="ch9.html#cb85-17" tabindex="-1"></a></span>
+<span id="cb85-18"><a href="ch9.html#cb85-18" tabindex="-1"></a>labels <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">bin_util94 =</span> <span class="st">&quot;有効票/投票数 - 1994選挙 (紙のみ)&quot;</span>,</span>
+<span id="cb85-19"><a href="ch9.html#cb85-19" tabindex="-1"></a>            <span class="at">bin_util98 =</span> <span class="st">&quot;有効票/投票数 - 1998 選挙 (4万人以上のみ電子投票)&quot;</span>,</span>
+<span id="cb85-20"><a href="ch9.html#cb85-20" tabindex="-1"></a>            <span class="at">bin_util02 =</span> <span class="st">&quot;有効票/投票数 - 2002 選挙 (電子投票のみ)&quot;</span>)</span>
+<span id="cb85-21"><a href="ch9.html#cb85-21" tabindex="-1"></a></span>
+<span id="cb85-22"><a href="ch9.html#cb85-22" tabindex="-1"></a><span class="co"># Stataに合わせてパレットの色を並べ替える</span></span>
+<span id="cb85-23"><a href="ch9.html#cb85-23" tabindex="-1"></a>palette <span class="ot">&lt;-</span> <span class="fu">c</span>(scales<span class="sc">::</span><span class="fu">hue_pal</span>()(<span class="dv">3</span>)[<span class="dv">2</span>], scales<span class="sc">::</span><span class="fu">hue_pal</span>()(<span class="dv">3</span>)[<span class="dv">3</span>], scales<span class="sc">::</span><span class="fu">hue_pal</span>()(<span class="dv">3</span>)[<span class="dv">1</span>])</span>
+<span id="cb85-24"><a href="ch9.html#cb85-24" tabindex="-1"></a></span>
+<span id="cb85-25"><a href="ch9.html#cb85-25" tabindex="-1"></a>munic <span class="sc">%&gt;%</span></span>
+<span id="cb85-26"><a href="ch9.html#cb85-26" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="dv">4500</span> <span class="sc">&lt;</span> bin_voters96 <span class="sc">&amp;</span> bin_voters96 <span class="sc">&lt;</span> <span class="dv">100000</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb85-27"><a href="ch9.html#cb85-27" tabindex="-1"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb85-28"><a href="ch9.html#cb85-28" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> bin_voters96, <span class="at">y =</span> value, <span class="at">color =</span> name, <span class="at">shape =</span> name)) <span class="sc">+</span></span>
+<span id="cb85-29"><a href="ch9.html#cb85-29" tabindex="-1"></a>    <span class="fu">scale_color_manual</span>(<span class="at">name =</span> <span class="fu">element_blank</span>(), <span class="at">labels =</span> labels, <span class="at">values =</span> palette) <span class="sc">+</span></span>
+<span id="cb85-30"><a href="ch9.html#cb85-30" tabindex="-1"></a>    <span class="fu">scale_shape</span>(<span class="at">name =</span> <span class="fu">element_blank</span>(), <span class="at">labels =</span> labels) <span class="sc">+</span></span>
+<span id="cb85-31"><a href="ch9.html#cb85-31" tabindex="-1"></a>    <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> palette) <span class="sc">+</span></span>
+<span id="cb85-32"><a href="ch9.html#cb85-32" tabindex="-1"></a>    <span class="fu">geom_smooth</span>(<span class="at">data =</span> munic <span class="sc">%&gt;%</span> <span class="fu">filter</span>(treat  <span class="sc">&amp;</span> name <span class="sc">==</span> <span class="st">&quot;bin_util94&quot;</span>), <span class="fu">aes</span>(<span class="at">x =</span> voters96, <span class="at">y =</span> value), <span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">formula =</span> <span class="st">&quot;y ~ x + I(x^2)&quot;</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> palette[<span class="dv">1</span>]) <span class="sc">+</span></span>
+<span id="cb85-33"><a href="ch9.html#cb85-33" tabindex="-1"></a>    <span class="fu">geom_smooth</span>(<span class="at">data =</span> munic <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="sc">!</span>treat <span class="sc">&amp;</span> name <span class="sc">==</span> <span class="st">&quot;bin_util94&quot;</span>), <span class="fu">aes</span>(<span class="at">x =</span> voters96, <span class="at">y =</span> value), <span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">formula =</span> <span class="st">&quot;y ~ x + I(x^2)&quot;</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> palette[<span class="dv">1</span>]) <span class="sc">+</span></span>
+<span id="cb85-34"><a href="ch9.html#cb85-34" tabindex="-1"></a>    <span class="fu">geom_smooth</span>(<span class="at">data =</span> munic <span class="sc">%&gt;%</span> <span class="fu">filter</span>(treat  <span class="sc">&amp;</span> name <span class="sc">==</span> <span class="st">&quot;bin_util98&quot;</span>), <span class="fu">aes</span>(<span class="at">x =</span> voters96, <span class="at">y =</span> value), <span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">formula =</span> <span class="st">&quot;y ~ x + I(x^2)&quot;</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> palette[<span class="dv">2</span>]) <span class="sc">+</span></span>
+<span id="cb85-35"><a href="ch9.html#cb85-35" tabindex="-1"></a>    <span class="fu">geom_smooth</span>(<span class="at">data =</span> munic <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="sc">!</span>treat <span class="sc">&amp;</span> name <span class="sc">==</span> <span class="st">&quot;bin_util98&quot;</span>), <span class="fu">aes</span>(<span class="at">x =</span> voters96, <span class="at">y =</span> value), <span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">formula =</span> <span class="st">&quot;y ~ x + I(x^2)&quot;</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> palette[<span class="dv">2</span>]) <span class="sc">+</span></span>
+<span id="cb85-36"><a href="ch9.html#cb85-36" tabindex="-1"></a>    <span class="fu">geom_smooth</span>(<span class="at">data =</span> munic <span class="sc">%&gt;%</span> <span class="fu">filter</span>(treat  <span class="sc">&amp;</span> name <span class="sc">==</span> <span class="st">&quot;bin_util02&quot;</span>), <span class="fu">aes</span>(<span class="at">x =</span> voters96, <span class="at">y =</span> value), <span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">formula =</span> <span class="st">&quot;y ~ x + I(x^2)&quot;</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> palette[<span class="dv">3</span>]) <span class="sc">+</span></span>
+<span id="cb85-37"><a href="ch9.html#cb85-37" tabindex="-1"></a>    <span class="fu">geom_smooth</span>(<span class="at">data =</span> munic <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="sc">!</span>treat <span class="sc">&amp;</span> name <span class="sc">==</span> <span class="st">&quot;bin_util02&quot;</span>), <span class="fu">aes</span>(<span class="at">x =</span> voters96, <span class="at">y =</span> value), <span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">formula =</span> <span class="st">&quot;y ~ x + I(x^2)&quot;</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> palette[<span class="dv">3</span>]) <span class="sc">+</span></span>
+<span id="cb85-38"><a href="ch9.html#cb85-38" tabindex="-1"></a>    <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">40500</span>) <span class="sc">+</span></span>
+<span id="cb85-39"><a href="ch9.html#cb85-39" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">&quot;登録有権者数 - 1996&quot;</span>) <span class="sc">+</span></span>
+<span id="cb85-40"><a href="ch9.html#cb85-40" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="fu">element_blank</span>()) <span class="sc">+</span></span>
+<span id="cb85-41"><a href="ch9.html#cb85-41" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">caption =</span> <span class="st">&quot;(出所) Fujiwara (2015), Figure 2, p.435.&quot;</span>) <span class="sc">+</span></span>
+<span id="cb85-42"><a href="ch9.html#cb85-42" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>, <span class="at">legend.direction =</span> <span class="st">&quot;vertical&quot;</span>) <span class="sc">+</span></span>
+<span id="cb85-43"><a href="ch9.html#cb85-43" tabindex="-1"></a>    <span class="fu">xlim</span>(<span class="dv">4500</span>, <span class="dv">100000</span>)</span>
+<span id="cb85-44"><a href="ch9.html#cb85-44" tabindex="-1"></a><span class="do">## Warning: Removed 103 rows containing non-finite outside the scale range</span></span>
+<span id="cb85-45"><a href="ch9.html#cb85-45" tabindex="-1"></a><span class="do">## (`stat_smooth()`).</span></span>
+<span id="cb85-46"><a href="ch9.html#cb85-46" tabindex="-1"></a><span class="do">## Warning: Removed 1765 rows containing non-finite outside the scale range</span></span>
+<span id="cb85-47"><a href="ch9.html#cb85-47" tabindex="-1"></a><span class="do">## (`stat_smooth()`).</span></span>
+<span id="cb85-48"><a href="ch9.html#cb85-48" tabindex="-1"></a><span class="do">## Warning: Removed 103 rows containing non-finite outside the scale range</span></span>
+<span id="cb85-49"><a href="ch9.html#cb85-49" tabindex="-1"></a><span class="do">## (`stat_smooth()`).</span></span>
+<span id="cb85-50"><a href="ch9.html#cb85-50" tabindex="-1"></a><span class="do">## Warning: Removed 1765 rows containing non-finite outside the scale range</span></span>
+<span id="cb85-51"><a href="ch9.html#cb85-51" tabindex="-1"></a><span class="do">## (`stat_smooth()`).</span></span>
+<span id="cb85-52"><a href="ch9.html#cb85-52" tabindex="-1"></a><span class="do">## Warning: Removed 103 rows containing non-finite outside the scale range</span></span>
+<span id="cb85-53"><a href="ch9.html#cb85-53" tabindex="-1"></a><span class="do">## (`stat_smooth()`).</span></span>
+<span id="cb85-54"><a href="ch9.html#cb85-54" tabindex="-1"></a><span class="do">## Warning: Removed 1765 rows containing non-finite outside the scale range</span></span>
+<span id="cb85-55"><a href="ch9.html#cb85-55" tabindex="-1"></a><span class="do">## (`stat_smooth()`).</span></span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-85-1.png" width="672" /></p>
+<p>参考までに, 上のようなRDDプロットで変数が1つのみの場合, <code>rdrobust::rdplot()</code>を使うと簡単に描画できる.
+また, 変数が2種類の場合上に依存しているパッケージ<code>rdmulti</code>を用いることができそうだ.</p>
 <!-- ## 練習問題 9-1 [確認] {-}
 
 ## 練習問題 9-2 [確認] {-}
@@ -300,6 +369,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 ## 練習問題 9-5 [実証] {-} -->
 
+</div>
 </div>
             </section>
 
