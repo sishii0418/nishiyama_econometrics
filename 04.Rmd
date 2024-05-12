@@ -25,7 +25,7 @@ if(.Platform$OS.type == "unix") {
 必要なライブラリを読み込む.
 ```{r collapse=T}
 library(tidyverse)
-library(openxlsx)
+library(readxl)
 library(estimatr)
 ```
 ## 実証例4.1 労働生産性と実質賃金の関係 {-}
@@ -57,11 +57,12 @@ ch04_wage %>%
 
 ## 練習問題 4-2 [実証] {-}
 (1) データを読み込み, 回帰分析を実行する.
-Excelファイルの読み込みには`openxlsx::read.xlsx()`を用いる.
+Excelファイルの読み込みには`readxl::read_excel()`を用いる.
+このパッケージは`tidyverse`に付帯しているが, 別途読み込む必要がある.
 列名が日本語だと扱いづらいため, これを変更しておく.
 $gdp2013\_ln = \beta_0 + \beta_1 pop2013\_ln$というモデルを立てると, $\hat{\beta_0} = 7.623, \hat{\beta_1} = 1.075$と求められる.
 ```{r collapse=T}
-data42 <- read.xlsx("data/04_第4章/data for chap 4 exercise 2.xlsx")
+data42 <- read_excel("data/04_第4章/data for chap 4 exercise 2.xlsx")
 colnames(data42) <- c("pref", "pop2013", "gdp2013", "pop2013_ln", "gdp2013_ln")
 
 model42 <- lm(gdp2013_ln ~ pop2013_ln, data = data42)
@@ -113,7 +114,7 @@ var_pop2013_ln
 (1) データを読み込み, 回帰分析を実行することで$\beta_1$を一致推定できるか調べる.
 実際に計算すると, Cov$(u_i, X_i) = 0$が成り立っていることが確認できる.
 ```{r collapse=T}
-data410 <- read.xlsx("data/04_第4章/data for chap 4 exercise 10.xlsx") %>% data.frame()
+data410 <- read_excel("data/04_第4章/data for chap 4 exercise 10.xlsx") %>% data.frame()
 model410 <- lm(Y ~ X, data = data410)
 cov(model410$residuals, data410$X)
 ```

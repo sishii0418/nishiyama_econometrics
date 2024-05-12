@@ -22,6 +22,449 @@ if(.Platform$OS.type == "unix") {
 }
 ```
 
+必要なライブラリを読み込む.
+
+```{r collapse=T}
+library(tidyverse)
+library(readxl)
+library(patchwork)
+library(estatapi)
+library(tidyquant)
+library(estimatr)
+library(latex2exp)
+library(kableExtra)
+library(lmtest)
+library(sandwich)
+```
+
+## 図10-1 名目GDP {#figure10-1 .unnumbered}
+```{r collapse=T, message=FALSE}
+Fig_1_nominalGDP_annual <- read_excel("./data/10_第10章/Fig_1_nominalGDP_annual.xlsx")
+Fig_1_nominalGDP_annual %>%
+    ggplot(aes(x = ...1, y = 名目暦年)) +
+    geom_line() +
+    labs(x = "年", y = "名目GDP (10億円)")
+```
+
+## 図10-2 GDPデフレーター {-}
+```{r collapse=T, message=FALSE}
+Fig_2_GDPdeflator_annual <- read_excel("./data/10_第10章/Fig_2_GDPdeflator_annual.xlsx")
+Fig_2_GDPdeflator_annual %>%
+    ggplot(aes(x = ...1, y = 暦年デフレーター)) +
+    geom_line() +
+    labs(x = "年")
+```
+
+## 図10-3 名目系列と実質系列 {-}
+
+[図9-5](#figure9-5)で行ったように, 一旦データフレームをlong型に変換する.
+軸の桁表示については(このブログ記事)[https://knknkn.hatenablog.com/entry/2020/04/11/160500]を参考にした.
+
+```{r collapse=T, cache=TRUE}
+Fig_1_nominalGDP_annual %>%
+    pivot_longer(cols = c("名目暦年", "実質暦年")) %>%
+    ggplot(aes(x = ...1, y = value, color = name)) +
+    geom_line() +
+    scale_color_hue(name = element_blank()) +
+    labs(x = "年", y = "GDP (10億円)") +
+    theme(legend.position = c(0, 1), legend.justification = c(0, 1)) + # 凡例を左上に表示
+    scale_y_continuous(labels = scales::label_number()) # y軸の数字をe+n表示にしない
+```
+
+## 図10-4 原系列と対数系列 {-}
+
+別途内閣府のサイトからデータをダウンロードする.
+
+```{r collapse=T, eval = FALSE}
+curl <- "https://www.esri.cao.go.jp/jp/sna/data/data_list/kakuhou/files/h10/tables/55fcm1r.xls"
+cdestfile <- "downloads/55fcm1r.xls"
+download.file(curl, cdestfile)
+```
+
+ダウンロードした`xls`ファイルを`read_excel`関数で読み込み, 必要な行列を抽出する.
+また, 行列変換してから再度データフレームにし, 変数を整理する.
+
+なお, 本文中にあるような左右で単位が異なる両軸プロットは`ggplot2`では推奨されておらず, 非常に描画しづらい.
+代わりに`patchwork`パッケージを用いて2つのプロットを並べて表示する.
+
+```{r collapse=T, message=FALSE}
+fig10_4_data <- read_excel("downloads/55fcm1r.xls", sheet = "実数")
+fig10_4_data <- t(fig10_4_data[c(6, 35), -1]) %>%
+    data.frame() %>%
+    mutate(year = as.integer(X1)) %>%
+    mutate(国内総支出 = as.numeric(X2)) %>%
+    dplyr::select(year, 国内総支出)
+p1 <- fig10_4_data %>%
+    ggplot(aes(x = year, y = 国内総支出)) +
+    geom_line() +
+    labs(x = "年", y = "国内総支出 (10億円)")
+p2 <- fig10_4_data %>%
+    ggplot(aes(x = year, y = 国内総支出)) +
+    geom_line() +
+    labs(x = "年", y = "対数国内総支出 (10億円)") +
+    coord_trans(y = "log")
+p1 + p2
+```
+
+## 図10-5 GDPギャップ (年次データ) {-}
+
+別途内閣府のサイトからデータをダウンロードする.
+
+```{r collapse=T, eval = FALSE}
+curl <- "https://www5.cao.go.jp/keizai3/getsurei/2342gap.xlsx"
+cdestfile <- "downloads/2342gap.xlsx"
+download.file(curl, cdestfile)
+```
+
+ダウンロードしたExcelファイルを確認して, `sheet`, `rows`, `cols`を指定してデータを読み込む.
+
+```{r collapse=T, message=FALSE}
+fig10_5_data <- read_excel("downloads/2342gap.xlsx", sheet = "暦年")
+fig10_5_data[-(1:5), 1:2] %>%
+    rename(year = `2023年10－12月期四半期別ＧＤＰ速報（２次速報値）`, GDP.Gap = 暦年) %>%
+    mutate(year = as.integer(year)) %>%
+    mutate(GDP.Gap = as.numeric(GDP.Gap)) %>%
+    ggplot(aes(x = year, y = GDP.Gap)) +
+    geom_line() +
+    labs(x = "年", y = element_blank())
+```
+
+## 図10-6 実質GDP成長率 {-}
+
+[図10-1](#figure10-1)で用いたデータを再利用し, 定義通りに成長率と対数階差成長率を求める.
+
+```{r collapse=T, message=FALSE}
+Fig_1_nominalGDP_annual <- read_excel("./data/10_第10章/Fig_1_nominalGDP_annual.xlsx")
+Fig_1_nominalGDP_annual %>%
+    mutate(成長率 = 100 * (実質暦年 - lag(実質暦年))/lag(実質暦年)) %>%
+    mutate(対数階差成長率 = 100 * (log(実質暦年) - log(lag(実質暦年)))) %>%
+    pivot_longer(cols = c("成長率", "対数階差成長率")) %>%
+    mutate(name = factor(name, levels = c("成長率", "対数階差成長率"))) %>%
+    ggplot(aes(x = ...1, y = value, color = name, linetype = name)) +
+    geom_line() +
+    scale_linetype_manual(values = c("dotted", "solid")) +
+    labs(x = "年", y = element_blank())
+```
+
+## 図10-7 実質GDP (公表季調値) {-}
+
+こちらもやはりデータがサポートファイルに含まれていない.
+その代わりに, e-Statにあるデータを使うこととする.
+事前にe-Statのウェブサイトに登録して, アプリケーションIDを取得し, `e-stat_appId.txt`に保存しておく.
+
+```{r collapse=T, message=FALSE}
+appId <- scan("e-stat_appId.txt", what = "character")
+```
+
+e-Statから国内総生産の実質原系列と実質季節調整系列の2つをダウンロードする.
+両者ともに年と四半期を示す`time_code`が用いられているので, これを使って2つを結合し, また表示の都合上日付形式に直す (関数`convert_time_code`).
+また, 実質季節調整系列は4で割って年換算に直す.
+
+```{r collapse=T, cache = TRUE}
+# 実質原系列
+real <- estat_getStatsData(appId = appId, statsDataId = "0003109766")
+real <- real %>%
+    filter(国内総生産_実質原系列 == "国内総生産(支出側)")
+# 実質季節調整系列
+real_seasonal <- estat_getStatsData(appId = appId, statsDataId = "0003109750")
+real_seasonal <- real_seasonal %>%
+    filter(国内総生産_実質季節調整系列 == "国内総生産(支出側)")
+
+# ダウンロードしたデータの`time_code`列を`datetime`型に変換する. 便宜上各四半期初日の値を代入する.
+convert_time_code <- function(x) {
+    year <- substr(x, 1, 4)
+    month_day <- case_when(
+        substr(x, 7, 10) == "0103" ~ "0101",
+        substr(x, 7, 10) == "0406" ~ "0401",
+        substr(x, 7, 10) == "0709" ~ "0701",
+        TRUE ~ "1001"
+    )
+    return(ymd(paste(year, month_day, sep = "")))
+}
+
+inner_join(real, real_seasonal, by = "time_code") %>%
+    mutate(date = convert_time_code(time_code)) %>%
+    mutate(value.y = value.y / 4) %>% # 季節調整系列を年換算
+    pivot_longer(cols = c("value.x", "value.y")) %>%
+    ggplot(aes(x = date, y = as.numeric(value), color = name)) +
+    geom_line() +
+    scale_color_hue(name = element_blank(), labels = c("現系列", "季調値")) +
+    labs(x = "年", y = "実質GDP (10億円)") +
+    theme(legend.position = c(0, 1), legend.justification = c(0, 1)) # 凡例を左上に表示
+```
+
+## 図10-8 季調済みGDPデフレーターのインフレ率 {-}
+
+別途内閣府のサイトと, e-Statからデータをダウンロードする.
+内閣府のサイトからは1980年Q1から1995年Q1のデータを, e-Statからは1994年Q1以降のデータを取得する.
+
+```{r collapse=T, eval = FALSE}
+# 内閣府のサイトから1980年以降のデータをダウンロード
+curl <- "https://www.esri.cao.go.jp/jp/sna/data/data_list/h27_retroactive/tables/def-qk_2780.csv"
+cdestfile <- "downloads/def-qk_2780.csv"
+download.file(curl, cdestfile)
+```
+
+
+```{r collapse=T}
+# ダウンロードしたデータを読み込み
+fig10_8_pre <- read.csv("downloads/def-qk_2780.csv", fileEncoding = "CP932")
+fig10_8_pre <- fig10_8_pre[7:62, c(1, 2)] %>%
+    rename(`時間軸（四半期）` = 四半期デフレーター季節調整系列) %>%
+    rename(value = X) %>%
+    mutate(value = as.numeric(value))
+
+# e-Statから1994年以降のデータをダウンロードして読み込み
+fig10_8_after <- estat_getStatsData(appId = appId, statsDataId = "0003109787")
+fig10_8_after <- fig10_8_after %>%
+    filter(`国内総生産_四半期デフレーター 季節調整系列` == "国内総生産(支出側)") %>%
+    dplyr::select(`時間軸（四半期）`, value)
+
+# 対応する時間軸を作成
+year <- seq(ymd(19800101), ymd(20231001), by = "quarter")
+
+fig10_8_data <- bind_rows(fig10_8_pre, fig10_8_after) %>%
+                cbind(year) %>%
+                data.frame()
+
+fig10_8_data <- fig10_8_data %>%
+    mutate(inflation = 400 * (value - lag(value))/lag(value))
+
+fig10_8_data %>%
+    ggplot(aes(x = year, y = inflation)) +
+    geom_line() +
+    labs(x = "年", y = "インフレ率 (%)")
+```
+
+## 図10-9 消費者物価指数の (対数季節階差) インフレ率 {-}
+
+本文中の図では1980年1月から始まっているが, ここではデータがある1971年1月から始める.
+対数季節階差の値もエクセルファイルにあるが, 確認のためRで計算し直す.
+
+```{r collapse=T, message=FALSE}
+Fig_9_CPEinflation_monthly <- read_excel("./data/10_第10章/Fig_9_CPEinflation_monthly.xlsx")
+Fig_9_CPEinflation_monthly <- Fig_9_CPEinflation_monthly %>%
+    mutate(year = ym(`類・品目`)) %>%
+    mutate(CPI = as.numeric(生鮮食品を除く総合)) %>%
+    mutate(対数季節階差 = 100 * log(CPI/lag(CPI, n = 12)))
+Fig_9_CPEinflation_monthly %>%
+    filter(year >= ym(197101)) %>%
+    ggplot(aes(x = year, y = 対数季節階差)) +
+    geom_line() +
+    labs(x = "年", y = "インフレ率 (%)")
+```
+
+## 図10-10 完全失業率 (移動平均) {-}
+
+本文中の図では2000年から始まっているが, ここではデータがある1973年から始める.
+移動平均は (エクセルファイルにも計算されているが) Rで`ggplot`で描画するときに, `tidyquant::geom_ma()`を使うことができる.
+
+```{r collapse=T, message=FALSE}
+Fig_10_unemploymentrate_monthly <- read_excel("./data/10_第10章/Fig_10_unemploymentrate_monthly.xlsx")
+Fig_10_unemploymentrate_monthly <- Fig_10_unemploymentrate_monthly %>%
+    mutate(year = ym(...1)) %>%
+    mutate(完全失業率 = as.numeric(原系列))
+Fig_10_unemploymentrate_monthly %>%
+    filter(year >= ym(197207)) %>%
+    ggplot(aes(x = year, y = 完全失業率)) +
+    geom_line() +
+    labs(x = "年", y = "完全失業率 (%)") +
+    geom_ma(n = 12)
+```
+
+## 図10-11 実験系列 {#figure10-11 .unnumbered}
+
+Excelファイルにデータが収録されているが, ここではRで乱数を同様に生成して描画する.
+
+```{r collapse=T, message=FALSE}
+# 再現性のために任意のシード値を設定
+set.seed(634)
+# 150個の正規分布乱数を生成 (系列相関なし)
+fig10_11_a <- rnorm(150)
+
+# 上で生成したデータをもとに正の系列相関を持つデータを生成
+fig10_11_b <- fig10_11_a[1]
+for(i in 2:150) {
+    fig10_11_b[i] <- fig10_11_b[i-1] + 0.5 * fig10_11_a[i]
+}
+
+data.frame(1:150, fig10_11_a, fig10_11_b) %>%
+    pivot_longer(cols = c("fig10_11_a", "fig10_11_b")) %>%
+    ggplot(aes(x = X1.150, y = value, color = name)) +
+    geom_line() +
+    scale_color_hue(name = element_blank(), labels = c("(a) 系列相関なし", "(b) 正の系列相関")) +
+    labs(x = element_blank(), y = element_blank()) +
+    theme(legend.position = c(0, 1), legend.justification = c(0, 1)) # 凡例を左上に表示
+```
+
+## 図10-12 GDPギャップ (四半期データ) {-}
+
+Excelファイルには内閣府と日本銀行のデータが入っているが, 本文通り内閣府のデータを描画する.
+
+```{r collapse=T, message=FALSE}
+Fig_12_GDPgap_quarterly <- read_excel("./data/10_第10章/Fig_12_GDPgap_quarterly.xlsx")
+Fig_12_GDPgap_quarterly <- Fig_12_GDPgap_quarterly %>%
+    mutate(year = yq(...3)) %>%
+    mutate(GDP.Gap = as.numeric(内閣府))
+Fig_12_GDPgap_quarterly %>%
+    ggplot(aes(x = year, y = GDP.Gap)) +
+    geom_line() +
+    labs(x = "年", y = "GDPギャップ")
+```
+
+## (10.12) 式 {#exp10.12 .unnumbered}
+
+```{r collapse=T, message=FALSE}
+data_exp10.12 <- inner_join(fig10_8_data, Fig_12_GDPgap_quarterly) %>%
+    dplyr::select(year, inflation, 内閣府) %>%
+    filter(ym(198001) < year & year < ym(201701))
+model10.12 <- lm_robust(inflation ~ 内閣府, data = data_exp10.12, se_type = "stata")
+summary(model10.12)
+```
+
+## (10.13) 式 {-}
+
+```{r collapse=T, message=FALSE}
+data_exp10.13 <- inner_join(Fig_9_CPEinflation_monthly, Fig_10_unemploymentrate_monthly, by = "year") %>%
+    filter(year >= ym(198001))
+lm_robust(対数季節階差 ~ 完全失業率, data = data_exp10.13, se_type = "stata") %>% summary()
+```
+
+## 図10-14 GDPギャップのコレログラム {-}
+
+標準のRでは`acf`関数を使うと自己相関を求め, さらにコレログラムの描画もできる.
+`ggplot2`で描画するには, `acf(plot = FALSE)`として`acf`関数ではグラフを描画せず, 計算結果をそのまま`ggplot2`に渡せばよい.
+
+```{r collapse=T, message=FALSE}
+fig10_14_data <- Fig_12_GDPgap_quarterly %>%
+    filter(ym(198001) < year & year < ym(201701)) %>%
+    dplyr::select(GDP.Gap) %>%
+    acf(plot = FALSE)
+ci <- 0.95
+N <- fig10_14_data$n.used
+data.frame(acf = fig10_14_data$acf[-1], lag = fig10_14_data$lag[-1]) %>%
+    ggplot(aes(x = lag, y = acf)) +
+    geom_bar(stat = "identity", position = "identity") +
+    geom_hline(yintercept = qnorm((1+ci)/2)/sqrt(N), linetype = "dashed") +
+    geom_hline(yintercept = -qnorm((1+ci)/2)/sqrt(N), linetype = "dashed") +
+    labs(x = element_blank(), y = element_blank()) +
+    annotate("text", x = 20, y = qnorm((1+ci)/2)/sqrt(N) + 0.02, label = TeX("$2 \\times $SE")) +
+    annotate("text", x = 20, y = -qnorm((1+ci)/2)/sqrt(N) - 0.02, label = TeX("$-2 \\times $SE")) +
+    annotate("text", x = 5, y = 0.6, label = "自己相関")
+```
+
+## 実証例10.1 GDPギャップの系列相関 {-}
+
+リュン=ボックスの修正Q検定は`Box.test(type = "Ljung-Box")`で行うことができる.
+
+Kableでは行ごとに桁丸め処理を行うことが難しいため, ここではKableに渡す表の値を先に文字列形式にした.
+一方似たような表作成パッケージであるgtでは行ごとの処理が可能ではあるが, 数式の表示が難しいという難点がある.
+
+```{r collapse=T, message=FALSE}
+data_ex10.1 <- Fig_12_GDPgap_quarterly %>%
+    filter(ym(198001) < year & year < ym(201701)) %>%
+    dplyr::select(GDP.Gap)
+rho <- acf(data_ex10.1, plot = FALSE)$acf[-1]
+ms = c(1, 2, 3, 4, 8, 12, 16, 20)
+table <- data.frame()
+for(i in ms){
+    test = Box.test(data_ex10.1, lag = i, type = "Ljung-Box")
+    # kableでは行ごとに桁丸めができないためここで丸めて文字列として保存する
+    table <- rbind(table, data.frame(m = as.character(i),
+                                     rho_m = as.character(round(rho[i], 2)),
+                                     Q_LB = as.character(round(test$statistic, 1)),
+                                     臨界値 = as.character(round(qchisq(0.95, df = i), 2)),
+                                     P値 = as.character(format(test$p.value, nsmall = 2))))
+}
+table <- t(table)
+rownames(table) <- c("$m$", "$\\hat{\\rho}_m$", "$Q_{LB}$", "臨界値", "$P$値")
+
+table %>%
+    kable(col.names = NULL, row.names = TRUE, escape = FALSE)
+```
+
+## 実証例10.2 ホワイトノイズの系列相関 {-}
+
+[図10-11](#figure10-11)で生成したデータを用いる.
+
+```{r collapse=T, message=FALSE}
+rho <- acf(fig10_11_a, plot = FALSE)$acf[-1]
+ms = c(1, 2, 3, 4, 8, 12, 16, 20)
+table <- data.frame()
+for(i in ms){
+    test = Box.test(fig10_11_a, lag = i, type = "Ljung-Box")
+    # kableでは行ごとに桁丸めができないためここで丸めて文字列として保存する
+    table <- rbind(table, data.frame(m = as.character(i),
+                                     rho_m = as.character(round(rho[i], 2)),
+                                     Q_LB = as.character(round(test$statistic, 1)),
+                                     臨界値 = as.character(round(qchisq(0.95, df = i), 2)),
+                                     P値 = as.character(round(test$p.value, 2))))
+}
+table <- t(table)
+rownames(table) <- c("$m$", "$\\hat{\\rho}_m$", "$Q_{LB}$", "臨界値", "$P$値")
+
+table %>%
+    kable(col.names = NULL, row.names = TRUE, escape = FALSE)
+```
+
+## 図10-15 実験系列 (ホワイトノイズ) のコレログラム {-}
+
+```{r collapse=T, message=FALSE}
+fig10_15_data <- fig10_11_a %>%
+    acf(plot = FALSE)
+ci <- 0.95
+N <- fig10_15_data$n.used
+data.frame(acf = fig10_15_data$acf[-1], lag = fig10_15_data$lag[-1]) %>%
+    ggplot(aes(x = lag, y = acf)) +
+    geom_bar(stat = "identity", position = "identity") +
+    geom_hline(yintercept = qnorm((1+ci)/2)/sqrt(N), linetype = "dashed") +
+    geom_hline(yintercept = -qnorm((1+ci)/2)/sqrt(N), linetype = "dashed") +
+    labs(x = element_blank(), y = element_blank()) +
+    annotate("text", x = 20, y = qnorm((1+ci)/2)/sqrt(N) + 0.02, label = TeX("$2 \\times $SE")) +
+    annotate("text", x = 20, y = -qnorm((1+ci)/2)/sqrt(N) - 0.02, label = TeX("$-2 \\times $SE")) +
+    annotate("text", x = 5, y = 0.1, label = "自己相関")
+```
+
+## 実証例10.3 フィリップス曲線の誤差項の系列相関 {-}
+
+[(10.12)式](#exp10.12)のモデルの誤差項を調べる.
+インフレ率は内閣府から自身でダウンロードしたデータを用いているため値が異なる.
+
+```{r collapse=T, message=FALSE}
+resid_10.3 <- data_exp10.12$inflation - model10.12$fitted.values
+
+rho <- acf(resid_10.3, plot = FALSE)$acf[-1]
+ms = c(1, 2, 3, 4, 8, 12, 16, 20)
+table <- data.frame()
+for(i in ms){
+    test = Box.test(resid_10.3, lag = i, type = "Ljung-Box")
+    # kableでは行ごとに桁丸めができないためここで丸めて文字列として保存する
+    table <- rbind(table, data.frame(m = as.character(i),
+                                     rho_m = as.character(round(rho[i], 2)),
+                                     Q_LB = as.character(round(test$statistic, 1)),
+                                     臨界値 = as.character(round(qchisq(0.95, df = i), 2)),
+                                     P値 = as.character(round(test$p.value, 2))))
+}
+table <- t(table)
+rownames(table) <- c("$m$", "$\\hat{\\rho}_m$", "$Q_{LB}$", "臨界値", "$P$値")
+
+table %>%
+    kable(col.names = NULL, row.names = TRUE, escape = FALSE)
+```
+
+## 実証例10.4 フィリップス曲線のHAC標準誤差 {-}
+
+HAC標準誤差は[(10.12) 式](#exp10.12)で求めたモデルを一旦`lm()`で計算し直して, それを`lmtest::coeftest()`に渡すことで求められる.
+下の通り, この方法でもStataと同じホワイト標準誤差 (HC1) を求めることができる.
+
+```{r collapse=T, message=FALSE}
+model10.12_lm <- lm(inflation ~ 内閣府, data = data_exp10.12)
+# HAC標準誤差
+coeftest(model10.12_lm, vcov = NeweyWest)
+# ホワイト標準誤差
+coeftest(model10.12_lm, vcov = vcovHC(model10.12_lm, type="HC1"))
+```
+
 <!-- ## 練習問題 10-1 [確認] {-}
 
 ## 練習問題 10-2 [確認] {-}

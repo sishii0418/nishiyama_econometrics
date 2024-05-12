@@ -27,15 +27,16 @@ if(.Platform$OS.type == "unix") {
 ```{r collapse=T}
 library(tidyverse)
 library(haven)
+library(estimatr)
 ```
 
-## 図9-5 電子投票制度の導入が有効票率に与えた影響 {-}
+## 図9-5 電子投票制度の導入が有効票率に与えた影響 {#figure9-5 .unnumbered}
 
 まずデータを読み込む.
 次に1998年選挙で電子投票となった投票所であることを示すダミー変数`treat`と, 登録有権者数を4000人ごとのビンに分けた変数`bin_voters96`を作成し, そのビンごとに各選挙の有効票率の平均値を計算する.
 次に`ggplot2`でレジェンドが表示されるようにデータフレームをlong型に変換し, 散布図と回帰直線を描画する.
 
-```{r collapse=T, cache = TRUE, message = FALSE}
+```{r collapse=T, cache = TRUE, warning = FALSE}
 munic <- read_dta("data/09_第9章/Fujiwara2015/munic.dta")
 
 munic <- munic%>%

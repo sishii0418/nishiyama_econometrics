@@ -20,7 +20,6 @@ github-repo: rstudio/bookdown-demo
 必要なRパッケージをインストール:
 ```{r collapse=T, eval=F}
 install.packages("tidyverse")
-install.packages("openxlsx")
 install.packages("haven")
 install.packages("wooldridge")
 install.packages("fixest")
@@ -33,6 +32,8 @@ install.packages("marginaleffects")
 install.packages("pscl")
 install.packages("nnet")
 install.packages("sampleSelection")
+install.packages("estatapi")
+install.packages("tidyquant")
 ```
 
 ## 方針 {.unnumbered}
