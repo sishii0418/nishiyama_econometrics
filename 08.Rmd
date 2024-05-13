@@ -204,7 +204,7 @@ modelsummary(models_83,
 
 ## 実証例8.4 PIAACを用いた女性の労働時間決定の分析 {-}
 トビットモデルは`AER::tobit()`を用いて推定できる. 被説明変数の下限・上限はそれぞれ`left`, `right`パラメータで指定する.
-擬似$R^2$は, `AER::tobit()`で推定したモデルには`pscl::pR2()`が使えないため, 手動で計算する ((参考)[https://mailman.stat.ethz.ch/pipermail/r-help/2008-August/171197.html]).
+擬似$R^2$は, `AER::tobit()`で推定したモデルには`pscl::pR2()`が使えないため, 手動で計算する ([参考](https://mailman.stat.ethz.ch/pipermail/r-help/2008-August/171197.html)).
 
 ```{r collapse=T, message=FALSE, results='asis', cache = TRUE}
 # 女性に限定

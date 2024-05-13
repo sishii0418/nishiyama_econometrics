@@ -23,7 +23,7 @@
 <meta name="author" content="石井 俊輔" />
 
 
-<meta name="date" content="2024-05-12" />
+<meta name="date" content="2024-05-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -261,15 +261,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#図10-9-消費者物価指数の-対数季節階差-インフレ率"><i class="fa fa-check"></i>図10-9 消費者物価指数の (対数季節階差) インフレ率</a></li>
 <li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#図10-10-完全失業率-移動平均"><i class="fa fa-check"></i>図10-10 完全失業率 (移動平均)</a></li>
 <li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#figure10-11"><i class="fa fa-check"></i>図10-11 実験系列</a></li>
-<li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#図10-12-gdpギャップ-四半期データ"><i class="fa fa-check"></i>図10-12 GDPギャップ (四半期データ)</a></li>
+<li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#figure10-12"><i class="fa fa-check"></i>図10-12 GDPギャップ (四半期データ)</a></li>
 <li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#exp10.12"><i class="fa fa-check"></i>(10.12) 式</a></li>
 <li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#式"><i class="fa fa-check"></i>(10.13) 式</a></li>
 <li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#図10-14-gdpギャップのコレログラム"><i class="fa fa-check"></i>図10-14 GDPギャップのコレログラム</a></li>
-<li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#実証例10.1-gdpギャップの系列相関"><i class="fa fa-check"></i>実証例10.1 GDPギャップの系列相関</a></li>
+<li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#ex10.1"><i class="fa fa-check"></i>実証例10.1 GDPギャップの系列相関</a></li>
 <li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#実証例10.2-ホワイトノイズの系列相関"><i class="fa fa-check"></i>実証例10.2 ホワイトノイズの系列相関</a></li>
 <li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#図10-15-実験系列-ホワイトノイズ-のコレログラム"><i class="fa fa-check"></i>図10-15 実験系列 (ホワイトノイズ) のコレログラム</a></li>
 <li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#実証例10.3-フィリップス曲線の誤差項の系列相関"><i class="fa fa-check"></i>実証例10.3 フィリップス曲線の誤差項の系列相関</a></li>
 <li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#実証例10.4-フィリップス曲線のhac標準誤差"><i class="fa fa-check"></i>実証例10.4 フィリップス曲線のHAC標準誤差</a></li>
+<li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#実証例10.5-gdpギャップのarモデルのラグ選択"><i class="fa fa-check"></i>実証例10.5 GDPギャップのARモデルのラグ選択</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="ch11.html"><a href="ch11.html"><i class="fa fa-check"></i>第11章 トレンドと構造変化</a></li>
 <li class="chapter" data-level="" data-path="ch12.html"><a href="ch12.html"><i class="fa fa-check"></i>第12章 VARモデル</a></li>
@@ -621,8 +622,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb102-24"><a href="ch10.html#cb102-24" tabindex="-1"></a><span class="do">## generated.</span></span></code></pre></div>
 <p><img src="_main_files/figure-html/unnamed-chunk-102-1.png" width="672" /></p>
 </div>
-<div id="図10-12-gdpギャップ-四半期データ" class="section level2 unnumbered hasAnchor">
-<h2>図10-12 GDPギャップ (四半期データ)<a href="ch10.html#図10-12-gdpギャップ-四半期データ" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="figure10-12" class="section level2 unnumbered hasAnchor">
+<h2>図10-12 GDPギャップ (四半期データ)<a href="ch10.html#figure10-12" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Excelファイルには内閣府と日本銀行のデータが入っているが, 本文通り内閣府のデータを描画する.</p>
 <div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb103-1"><a href="ch10.html#cb103-1" tabindex="-1"></a>Fig_12_GDPgap_quarterly <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">&quot;./data/10_第10章/Fig_12_GDPgap_quarterly.xlsx&quot;</span>)</span>
 <span id="cb103-2"><a href="ch10.html#cb103-2" tabindex="-1"></a>Fig_12_GDPgap_quarterly <span class="ot">&lt;-</span> Fig_12_GDPgap_quarterly <span class="sc">%&gt;%</span></span>
@@ -702,32 +703,52 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb106-20"><a href="ch10.html#cb106-20" tabindex="-1"></a><span class="do">## &#39;expression&#39;</span></span></code></pre></div>
 <p><img src="_main_files/figure-html/unnamed-chunk-106-1.png" width="672" /></p>
 </div>
-<div id="実証例10.1-gdpギャップの系列相関" class="section level2 unnumbered hasAnchor">
-<h2>実証例10.1 GDPギャップの系列相関<a href="ch10.html#実証例10.1-gdpギャップの系列相関" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="ex10.1" class="section level2 unnumbered hasAnchor">
+<h2>実証例10.1 GDPギャップの系列相関<a href="ch10.html#ex10.1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>リュン=ボックスの修正Q検定は<code>Box.test(type = "Ljung-Box")</code>で行うことができる.</p>
 <p>Kableでは行ごとに桁丸め処理を行うことが難しいため, ここではKableに渡す表の値を先に文字列形式にした.
-一方似たような表作成パッケージであるgtでは行ごとの処理が可能ではあるが, 数式の表示が難しいという難点がある.</p>
+一方似たような表作成パッケージであるgtでは行ごとの処理が可能ではあるが, 数式の表示が難しいという難点がある.
+同様の表を複数作成するため, 関数としておく.</p>
 <div class="sourceCode" id="cb107"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb107-1"><a href="ch10.html#cb107-1" tabindex="-1"></a>data_ex10<span class="fl">.1</span> <span class="ot">&lt;-</span> Fig_12_GDPgap_quarterly <span class="sc">%&gt;%</span></span>
 <span id="cb107-2"><a href="ch10.html#cb107-2" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="fu">ym</span>(<span class="dv">198001</span>) <span class="sc">&lt;</span> year <span class="sc">&amp;</span> year <span class="sc">&lt;</span> <span class="fu">ym</span>(<span class="dv">201701</span>)) <span class="sc">%&gt;%</span></span>
 <span id="cb107-3"><a href="ch10.html#cb107-3" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">select</span>(GDP.Gap)</span>
-<span id="cb107-4"><a href="ch10.html#cb107-4" tabindex="-1"></a>rho <span class="ot">&lt;-</span> <span class="fu">acf</span>(data_ex10<span class="fl">.1</span>, <span class="at">plot =</span> <span class="cn">FALSE</span>)<span class="sc">$</span>acf[<span class="sc">-</span><span class="dv">1</span>]</span>
-<span id="cb107-5"><a href="ch10.html#cb107-5" tabindex="-1"></a>ms <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">8</span>, <span class="dv">12</span>, <span class="dv">16</span>, <span class="dv">20</span>)</span>
-<span id="cb107-6"><a href="ch10.html#cb107-6" tabindex="-1"></a>table <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
-<span id="cb107-7"><a href="ch10.html#cb107-7" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> ms){</span>
-<span id="cb107-8"><a href="ch10.html#cb107-8" tabindex="-1"></a>    test <span class="ot">=</span> <span class="fu">Box.test</span>(data_ex10<span class="fl">.1</span>, <span class="at">lag =</span> i, <span class="at">type =</span> <span class="st">&quot;Ljung-Box&quot;</span>)</span>
-<span id="cb107-9"><a href="ch10.html#cb107-9" tabindex="-1"></a>    <span class="co"># kableでは行ごとに桁丸めができないためここで丸めて文字列として保存する</span></span>
-<span id="cb107-10"><a href="ch10.html#cb107-10" tabindex="-1"></a>    table <span class="ot">&lt;-</span> <span class="fu">rbind</span>(table, <span class="fu">data.frame</span>(<span class="at">m =</span> <span class="fu">as.character</span>(i),</span>
-<span id="cb107-11"><a href="ch10.html#cb107-11" tabindex="-1"></a>                                     <span class="at">rho_m =</span> <span class="fu">as.character</span>(<span class="fu">round</span>(rho[i], <span class="dv">2</span>)),</span>
-<span id="cb107-12"><a href="ch10.html#cb107-12" tabindex="-1"></a>                                     <span class="at">Q_LB =</span> <span class="fu">as.character</span>(<span class="fu">round</span>(test<span class="sc">$</span>statistic, <span class="dv">1</span>)),</span>
-<span id="cb107-13"><a href="ch10.html#cb107-13" tabindex="-1"></a>                                     臨界値 <span class="ot">=</span> <span class="fu">as.character</span>(<span class="fu">round</span>(<span class="fu">qchisq</span>(<span class="fl">0.95</span>, <span class="at">df =</span> i), <span class="dv">2</span>)),</span>
-<span id="cb107-14"><a href="ch10.html#cb107-14" tabindex="-1"></a>                                     P値 <span class="ot">=</span> <span class="fu">as.character</span>(<span class="fu">format</span>(test<span class="sc">$</span>p.value, <span class="at">nsmall =</span> <span class="dv">2</span>))))</span>
-<span id="cb107-15"><a href="ch10.html#cb107-15" tabindex="-1"></a>}</span>
-<span id="cb107-16"><a href="ch10.html#cb107-16" tabindex="-1"></a>table <span class="ot">&lt;-</span> <span class="fu">t</span>(table)</span>
-<span id="cb107-17"><a href="ch10.html#cb107-17" tabindex="-1"></a><span class="fu">rownames</span>(table) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;$m$&quot;</span>, <span class="st">&quot;$</span><span class="sc">\\</span><span class="st">hat{</span><span class="sc">\\</span><span class="st">rho}_m$&quot;</span>, <span class="st">&quot;$Q_{LB}$&quot;</span>, <span class="st">&quot;臨界値&quot;</span>, <span class="st">&quot;$P$値&quot;</span>)</span>
-<span id="cb107-18"><a href="ch10.html#cb107-18" tabindex="-1"></a></span>
-<span id="cb107-19"><a href="ch10.html#cb107-19" tabindex="-1"></a>table <span class="sc">%&gt;%</span></span>
-<span id="cb107-20"><a href="ch10.html#cb107-20" tabindex="-1"></a>    <span class="fu">kable</span>(<span class="at">col.names =</span> <span class="cn">NULL</span>, <span class="at">row.names =</span> <span class="cn">TRUE</span>, <span class="at">escape =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
-<table>
+<span id="cb107-4"><a href="ch10.html#cb107-4" tabindex="-1"></a></span>
+<span id="cb107-5"><a href="ch10.html#cb107-5" tabindex="-1"></a>serial_cor_table <span class="ot">&lt;-</span> <span class="cf">function</span>(data) {</span>
+<span id="cb107-6"><a href="ch10.html#cb107-6" tabindex="-1"></a>    rho <span class="ot">&lt;-</span> <span class="fu">acf</span>(data, <span class="at">plot =</span> <span class="cn">FALSE</span>)<span class="sc">$</span>acf[<span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb107-7"><a href="ch10.html#cb107-7" tabindex="-1"></a>    ms <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">8</span>, <span class="dv">12</span>, <span class="dv">16</span>, <span class="dv">20</span>)</span>
+<span id="cb107-8"><a href="ch10.html#cb107-8" tabindex="-1"></a>    table <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
+<span id="cb107-9"><a href="ch10.html#cb107-9" tabindex="-1"></a>    round_format <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">digits =</span> <span class="dv">2</span>) {</span>
+<span id="cb107-10"><a href="ch10.html#cb107-10" tabindex="-1"></a>        <span class="fu">return</span>(<span class="fu">format</span>(<span class="fu">round</span>(x, digits), <span class="at">nsmall =</span> digits))</span>
+<span id="cb107-11"><a href="ch10.html#cb107-11" tabindex="-1"></a>    }</span>
+<span id="cb107-12"><a href="ch10.html#cb107-12" tabindex="-1"></a>    <span class="cf">for</span>(i <span class="cf">in</span> ms){</span>
+<span id="cb107-13"><a href="ch10.html#cb107-13" tabindex="-1"></a>        test <span class="ot">=</span> <span class="fu">Box.test</span>(data, <span class="at">lag =</span> i, <span class="at">type =</span> <span class="st">&quot;Ljung-Box&quot;</span>)</span>
+<span id="cb107-14"><a href="ch10.html#cb107-14" tabindex="-1"></a>        <span class="co"># kableでは行ごとに桁丸めができないためここで丸めて文字列として保存する</span></span>
+<span id="cb107-15"><a href="ch10.html#cb107-15" tabindex="-1"></a>        table <span class="ot">&lt;-</span> <span class="fu">rbind</span>(table, <span class="fu">data.frame</span>(<span class="at">m =</span> <span class="fu">as.character</span>(i),</span>
+<span id="cb107-16"><a href="ch10.html#cb107-16" tabindex="-1"></a>                                         <span class="at">rho_m =</span> <span class="fu">round_format</span>(rho[i], <span class="dv">2</span>),</span>
+<span id="cb107-17"><a href="ch10.html#cb107-17" tabindex="-1"></a>                                         <span class="at">Q_LB =</span> <span class="fu">round_format</span>(test<span class="sc">$</span>statistic, <span class="dv">1</span>),</span>
+<span id="cb107-18"><a href="ch10.html#cb107-18" tabindex="-1"></a>                                         臨界値 <span class="ot">=</span> <span class="fu">round_format</span>(<span class="fu">qchisq</span>(<span class="fl">0.95</span>, <span class="at">df =</span> i)),</span>
+<span id="cb107-19"><a href="ch10.html#cb107-19" tabindex="-1"></a>                                         P値 <span class="ot">=</span> <span class="fu">round_format</span>(test<span class="sc">$</span>p.value)))</span>
+<span id="cb107-20"><a href="ch10.html#cb107-20" tabindex="-1"></a>    }</span>
+<span id="cb107-21"><a href="ch10.html#cb107-21" tabindex="-1"></a>    table <span class="ot">&lt;-</span> <span class="fu">t</span>(table)</span>
+<span id="cb107-22"><a href="ch10.html#cb107-22" tabindex="-1"></a>    <span class="fu">rownames</span>(table) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;$m$&quot;</span>, <span class="st">&quot;$</span><span class="sc">\\</span><span class="st">hat{</span><span class="sc">\\</span><span class="st">rho}_m$&quot;</span>, <span class="st">&quot;$Q_{LB}$&quot;</span>, <span class="st">&quot;臨界値&quot;</span>, <span class="st">&quot;$P$値&quot;</span>)</span>
+<span id="cb107-23"><a href="ch10.html#cb107-23" tabindex="-1"></a></span>
+<span id="cb107-24"><a href="ch10.html#cb107-24" tabindex="-1"></a>    table <span class="sc">%&gt;%</span></span>
+<span id="cb107-25"><a href="ch10.html#cb107-25" tabindex="-1"></a>        <span class="fu">kable</span>(<span class="at">col.names =</span> <span class="cn">NULL</span>, <span class="at">row.names =</span> <span class="cn">TRUE</span>, <span class="at">escape =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb107-26"><a href="ch10.html#cb107-26" tabindex="-1"></a>}</span>
+<span id="cb107-27"><a href="ch10.html#cb107-27" tabindex="-1"></a></span>
+<span id="cb107-28"><a href="ch10.html#cb107-28" tabindex="-1"></a><span class="fu">serial_cor_table</span>(data_ex10<span class="fl">.1</span>)</span></code></pre></div>
+<table style="width:100%;">
+<colgroup>
+<col width="23%" />
+<col width="9%" />
+<col width="9%" />
+<col width="9%" />
+<col width="9%" />
+<col width="9%" />
+<col width="9%" />
+<col width="9%" />
+<col width="9%" />
+</colgroup>
 <tbody>
 <tr class="odd">
 <td align="left"><span class="math inline">\(m\)</span></td>
@@ -755,7 +776,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td align="left"><span class="math inline">\(Q_{LB}\)</span></td>
 <td align="left">104.7</td>
 <td align="left">172.5</td>
-<td align="left">212</td>
+<td align="left">212.0</td>
 <td align="left">231.7</td>
 <td align="left">245.8</td>
 <td align="left">250.5</td>
@@ -770,7 +791,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td align="left">9.49</td>
 <td align="left">15.51</td>
 <td align="left">21.03</td>
-<td align="left">26.3</td>
+<td align="left">26.30</td>
 <td align="left">31.41</td>
 </tr>
 <tr class="odd">
@@ -789,24 +810,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="実証例10.2-ホワイトノイズの系列相関" class="section level2 unnumbered hasAnchor">
 <h2>実証例10.2 ホワイトノイズの系列相関<a href="ch10.html#実証例10.2-ホワイトノイズの系列相関" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p><a href="ch10.html#figure10-11">図10-11</a>で生成したデータを用いる.</p>
-<div class="sourceCode" id="cb108"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb108-1"><a href="ch10.html#cb108-1" tabindex="-1"></a>rho <span class="ot">&lt;-</span> <span class="fu">acf</span>(fig10_11_a, <span class="at">plot =</span> <span class="cn">FALSE</span>)<span class="sc">$</span>acf[<span class="sc">-</span><span class="dv">1</span>]</span>
-<span id="cb108-2"><a href="ch10.html#cb108-2" tabindex="-1"></a>ms <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">8</span>, <span class="dv">12</span>, <span class="dv">16</span>, <span class="dv">20</span>)</span>
-<span id="cb108-3"><a href="ch10.html#cb108-3" tabindex="-1"></a>table <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
-<span id="cb108-4"><a href="ch10.html#cb108-4" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> ms){</span>
-<span id="cb108-5"><a href="ch10.html#cb108-5" tabindex="-1"></a>    test <span class="ot">=</span> <span class="fu">Box.test</span>(fig10_11_a, <span class="at">lag =</span> i, <span class="at">type =</span> <span class="st">&quot;Ljung-Box&quot;</span>)</span>
-<span id="cb108-6"><a href="ch10.html#cb108-6" tabindex="-1"></a>    <span class="co"># kableでは行ごとに桁丸めができないためここで丸めて文字列として保存する</span></span>
-<span id="cb108-7"><a href="ch10.html#cb108-7" tabindex="-1"></a>    table <span class="ot">&lt;-</span> <span class="fu">rbind</span>(table, <span class="fu">data.frame</span>(<span class="at">m =</span> <span class="fu">as.character</span>(i),</span>
-<span id="cb108-8"><a href="ch10.html#cb108-8" tabindex="-1"></a>                                     <span class="at">rho_m =</span> <span class="fu">as.character</span>(<span class="fu">round</span>(rho[i], <span class="dv">2</span>)),</span>
-<span id="cb108-9"><a href="ch10.html#cb108-9" tabindex="-1"></a>                                     <span class="at">Q_LB =</span> <span class="fu">as.character</span>(<span class="fu">round</span>(test<span class="sc">$</span>statistic, <span class="dv">1</span>)),</span>
-<span id="cb108-10"><a href="ch10.html#cb108-10" tabindex="-1"></a>                                     臨界値 <span class="ot">=</span> <span class="fu">as.character</span>(<span class="fu">round</span>(<span class="fu">qchisq</span>(<span class="fl">0.95</span>, <span class="at">df =</span> i), <span class="dv">2</span>)),</span>
-<span id="cb108-11"><a href="ch10.html#cb108-11" tabindex="-1"></a>                                     P値 <span class="ot">=</span> <span class="fu">as.character</span>(<span class="fu">round</span>(test<span class="sc">$</span>p.value, <span class="dv">2</span>))))</span>
-<span id="cb108-12"><a href="ch10.html#cb108-12" tabindex="-1"></a>}</span>
-<span id="cb108-13"><a href="ch10.html#cb108-13" tabindex="-1"></a>table <span class="ot">&lt;-</span> <span class="fu">t</span>(table)</span>
-<span id="cb108-14"><a href="ch10.html#cb108-14" tabindex="-1"></a><span class="fu">rownames</span>(table) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;$m$&quot;</span>, <span class="st">&quot;$</span><span class="sc">\\</span><span class="st">hat{</span><span class="sc">\\</span><span class="st">rho}_m$&quot;</span>, <span class="st">&quot;$Q_{LB}$&quot;</span>, <span class="st">&quot;臨界値&quot;</span>, <span class="st">&quot;$P$値&quot;</span>)</span>
-<span id="cb108-15"><a href="ch10.html#cb108-15" tabindex="-1"></a></span>
-<span id="cb108-16"><a href="ch10.html#cb108-16" tabindex="-1"></a>table <span class="sc">%&gt;%</span></span>
-<span id="cb108-17"><a href="ch10.html#cb108-17" tabindex="-1"></a>    <span class="fu">kable</span>(<span class="at">col.names =</span> <span class="cn">NULL</span>, <span class="at">row.names =</span> <span class="cn">TRUE</span>, <span class="at">escape =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<p><a href="ch10.html#figure10-11">図10-11</a>で生成したデータを用いる.
+表のフォーマットは<a href="ch10.html#ex10.1">実証例10.1</a>と同様であるため, 上で作成した関数にデータを渡すだけでよい.</p>
+<div class="sourceCode" id="cb108"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb108-1"><a href="ch10.html#cb108-1" tabindex="-1"></a><span class="fu">serial_cor_table</span>(fig10_11_a)</span></code></pre></div>
 <table>
 <tbody>
 <tr class="odd">
@@ -833,7 +839,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tr>
 <tr class="odd">
 <td align="left"><span class="math inline">\(Q_{LB}\)</span></td>
-<td align="left">1</td>
+<td align="left">1.0</td>
 <td align="left">1.6</td>
 <td align="left">2.5</td>
 <td align="left">3.1</td>
@@ -850,7 +856,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td align="left">9.49</td>
 <td align="left">15.51</td>
 <td align="left">21.03</td>
-<td align="left">26.3</td>
+<td align="left">26.30</td>
 <td align="left">31.41</td>
 </tr>
 <tr class="odd">
@@ -894,24 +900,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><a href="ch10.html#exp10.12">(10.12)式</a>のモデルの誤差項を調べる.
 インフレ率は内閣府から自身でダウンロードしたデータを用いているため値が異なる.</p>
 <div class="sourceCode" id="cb110"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb110-1"><a href="ch10.html#cb110-1" tabindex="-1"></a>resid_10<span class="fl">.3</span> <span class="ot">&lt;-</span> data_exp10<span class="fl">.12</span><span class="sc">$</span>inflation <span class="sc">-</span> model10<span class="fl">.12</span><span class="sc">$</span>fitted.values</span>
-<span id="cb110-2"><a href="ch10.html#cb110-2" tabindex="-1"></a></span>
-<span id="cb110-3"><a href="ch10.html#cb110-3" tabindex="-1"></a>rho <span class="ot">&lt;-</span> <span class="fu">acf</span>(resid_10<span class="fl">.3</span>, <span class="at">plot =</span> <span class="cn">FALSE</span>)<span class="sc">$</span>acf[<span class="sc">-</span><span class="dv">1</span>]</span>
-<span id="cb110-4"><a href="ch10.html#cb110-4" tabindex="-1"></a>ms <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">8</span>, <span class="dv">12</span>, <span class="dv">16</span>, <span class="dv">20</span>)</span>
-<span id="cb110-5"><a href="ch10.html#cb110-5" tabindex="-1"></a>table <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
-<span id="cb110-6"><a href="ch10.html#cb110-6" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> ms){</span>
-<span id="cb110-7"><a href="ch10.html#cb110-7" tabindex="-1"></a>    test <span class="ot">=</span> <span class="fu">Box.test</span>(resid_10<span class="fl">.3</span>, <span class="at">lag =</span> i, <span class="at">type =</span> <span class="st">&quot;Ljung-Box&quot;</span>)</span>
-<span id="cb110-8"><a href="ch10.html#cb110-8" tabindex="-1"></a>    <span class="co"># kableでは行ごとに桁丸めができないためここで丸めて文字列として保存する</span></span>
-<span id="cb110-9"><a href="ch10.html#cb110-9" tabindex="-1"></a>    table <span class="ot">&lt;-</span> <span class="fu">rbind</span>(table, <span class="fu">data.frame</span>(<span class="at">m =</span> <span class="fu">as.character</span>(i),</span>
-<span id="cb110-10"><a href="ch10.html#cb110-10" tabindex="-1"></a>                                     <span class="at">rho_m =</span> <span class="fu">as.character</span>(<span class="fu">round</span>(rho[i], <span class="dv">2</span>)),</span>
-<span id="cb110-11"><a href="ch10.html#cb110-11" tabindex="-1"></a>                                     <span class="at">Q_LB =</span> <span class="fu">as.character</span>(<span class="fu">round</span>(test<span class="sc">$</span>statistic, <span class="dv">1</span>)),</span>
-<span id="cb110-12"><a href="ch10.html#cb110-12" tabindex="-1"></a>                                     臨界値 <span class="ot">=</span> <span class="fu">as.character</span>(<span class="fu">round</span>(<span class="fu">qchisq</span>(<span class="fl">0.95</span>, <span class="at">df =</span> i), <span class="dv">2</span>)),</span>
-<span id="cb110-13"><a href="ch10.html#cb110-13" tabindex="-1"></a>                                     P値 <span class="ot">=</span> <span class="fu">as.character</span>(<span class="fu">round</span>(test<span class="sc">$</span>p.value, <span class="dv">2</span>))))</span>
-<span id="cb110-14"><a href="ch10.html#cb110-14" tabindex="-1"></a>}</span>
-<span id="cb110-15"><a href="ch10.html#cb110-15" tabindex="-1"></a>table <span class="ot">&lt;-</span> <span class="fu">t</span>(table)</span>
-<span id="cb110-16"><a href="ch10.html#cb110-16" tabindex="-1"></a><span class="fu">rownames</span>(table) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;$m$&quot;</span>, <span class="st">&quot;$</span><span class="sc">\\</span><span class="st">hat{</span><span class="sc">\\</span><span class="st">rho}_m$&quot;</span>, <span class="st">&quot;$Q_{LB}$&quot;</span>, <span class="st">&quot;臨界値&quot;</span>, <span class="st">&quot;$P$値&quot;</span>)</span>
-<span id="cb110-17"><a href="ch10.html#cb110-17" tabindex="-1"></a></span>
-<span id="cb110-18"><a href="ch10.html#cb110-18" tabindex="-1"></a>table <span class="sc">%&gt;%</span></span>
-<span id="cb110-19"><a href="ch10.html#cb110-19" tabindex="-1"></a>    <span class="fu">kable</span>(<span class="at">col.names =</span> <span class="cn">NULL</span>, <span class="at">row.names =</span> <span class="cn">TRUE</span>, <span class="at">escape =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<span id="cb110-2"><a href="ch10.html#cb110-2" tabindex="-1"></a><span class="fu">serial_cor_table</span>(resid_10<span class="fl">.3</span>)</span></code></pre></div>
 <table>
 <tbody>
 <tr class="odd">
@@ -955,19 +944,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td align="left">9.49</td>
 <td align="left">15.51</td>
 <td align="left">21.03</td>
-<td align="left">26.3</td>
+<td align="left">26.30</td>
 <td align="left">31.41</td>
 </tr>
 <tr class="odd">
 <td align="left"><span class="math inline">\(P\)</span>値</td>
-<td align="left">0</td>
-<td align="left">0</td>
-<td align="left">0</td>
-<td align="left">0</td>
-<td align="left">0</td>
-<td align="left">0</td>
-<td align="left">0</td>
-<td align="left">0</td>
+<td align="left">0.00</td>
+<td align="left">0.00</td>
+<td align="left">0.00</td>
+<td align="left">0.00</td>
+<td align="left">0.00</td>
+<td align="left">0.00</td>
+<td align="left">0.00</td>
+<td align="left">0.00</td>
 </tr>
 </tbody>
 </table>
@@ -997,6 +986,120 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb111-19"><a href="ch10.html#cb111-19" tabindex="-1"></a><span class="do">## 内閣府      0.402766   0.099475  4.0489 8.345e-05 ***</span></span>
 <span id="cb111-20"><a href="ch10.html#cb111-20" tabindex="-1"></a><span class="do">## ---</span></span>
 <span id="cb111-21"><a href="ch10.html#cb111-21" tabindex="-1"></a><span class="do">## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</span></span></code></pre></div>
+</div>
+<div id="実証例10.5-gdpギャップのarモデルのラグ選択" class="section level2 unnumbered hasAnchor">
+<h2>実証例10.5 GDPギャップのARモデルのラグ選択<a href="ch10.html#実証例10.5-gdpギャップのarモデルのラグ選択" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>サポートサイトにあるEViewsの分析で用いているGDPギャップの出典が不明のため, <a href="ch10.html#figure10-12">図10-12</a>の作成に用いた内閣府のデータを用いる.</p>
+<p>RでARモデルを推定するには, <code>ar()</code>を用いれば適切なラグ次数<span class="math inline">\(p\)</span>が自動で選択される.
+ここでは<span class="math inline">\(p \in \{0, 1, 2, 3, 4\}\)</span>についてAR(<span class="math inline">\(p\)</span>)モデルを比較検討したいので, <code>arima(order = c(p, 0, 0))</code>を用いる.
+また引数に<code>include.mean = FALSE</code>を指定することで定数項を含めないようにする.</p>
+<p>p.500にあるAICとBICの定義は本文中で説明されている通り簡易なものであり, 下では手動で計算した.</p>
+<div class="sourceCode" id="cb112"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb112-1"><a href="ch10.html#cb112-1" tabindex="-1"></a>ex10<span class="fl">.5</span>_data <span class="ot">&lt;-</span> Fig_12_GDPgap_quarterly <span class="sc">%&gt;%</span></span>
+<span id="cb112-2"><a href="ch10.html#cb112-2" tabindex="-1"></a>    <span class="fu">filter</span>(year <span class="sc">&lt;</span> <span class="fu">ym</span>(<span class="dv">201701</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb112-3"><a href="ch10.html#cb112-3" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">select</span>(内閣府)</span>
+<span id="cb112-4"><a href="ch10.html#cb112-4" tabindex="-1"></a></span>
+<span id="cb112-5"><a href="ch10.html#cb112-5" tabindex="-1"></a>ex10<span class="fl">.5</span>_models <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="st">&quot;AR(0)&quot;</span> <span class="ot">=</span> <span class="fu">arima</span>(ex10<span class="fl">.5</span>_data, <span class="at">order =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="at">include.mean =</span> <span class="cn">FALSE</span>, <span class="at">method =</span> <span class="st">&quot;ML&quot;</span>),</span>
+<span id="cb112-6"><a href="ch10.html#cb112-6" tabindex="-1"></a>                      <span class="st">&quot;AR(1)&quot;</span> <span class="ot">=</span> <span class="fu">arima</span>(ex10<span class="fl">.5</span>_data, <span class="at">order =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="at">include.mean =</span> <span class="cn">FALSE</span>, <span class="at">method =</span> <span class="st">&quot;ML&quot;</span>),</span>
+<span id="cb112-7"><a href="ch10.html#cb112-7" tabindex="-1"></a>                      <span class="st">&quot;AR(2)&quot;</span> <span class="ot">=</span> <span class="fu">arima</span>(ex10<span class="fl">.5</span>_data, <span class="at">order =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="at">include.mean =</span> <span class="cn">FALSE</span>, <span class="at">method =</span> <span class="st">&quot;ML&quot;</span>),</span>
+<span id="cb112-8"><a href="ch10.html#cb112-8" tabindex="-1"></a>                      <span class="st">&quot;AR(3)&quot;</span> <span class="ot">=</span> <span class="fu">arima</span>(ex10<span class="fl">.5</span>_data, <span class="at">order =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="at">include.mean =</span> <span class="cn">FALSE</span>, <span class="at">method =</span> <span class="st">&quot;ML&quot;</span>),</span>
+<span id="cb112-9"><a href="ch10.html#cb112-9" tabindex="-1"></a>                      <span class="st">&quot;AR(4)&quot;</span> <span class="ot">=</span> <span class="fu">arima</span>(ex10<span class="fl">.5</span>_data, <span class="at">order =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="at">include.mean =</span> <span class="cn">FALSE</span>, <span class="at">method =</span> <span class="st">&quot;ML&quot;</span>))</span>
+<span id="cb112-10"><a href="ch10.html#cb112-10" tabindex="-1"></a></span>
+<span id="cb112-11"><a href="ch10.html#cb112-11" tabindex="-1"></a>ex10<span class="fl">.5</span>_table1 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
+<span id="cb112-12"><a href="ch10.html#cb112-12" tabindex="-1"></a>round_format <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">digits =</span> <span class="dv">3</span>) {</span>
+<span id="cb112-13"><a href="ch10.html#cb112-13" tabindex="-1"></a>    <span class="fu">return</span>(<span class="fu">format</span>(<span class="fu">round</span>(x, digits), <span class="at">nsmall =</span> digits))</span>
+<span id="cb112-14"><a href="ch10.html#cb112-14" tabindex="-1"></a>}</span>
+<span id="cb112-15"><a href="ch10.html#cb112-15" tabindex="-1"></a><span class="cf">for</span>(each <span class="cf">in</span> ex10<span class="fl">.5</span>_models) {</span>
+<span id="cb112-16"><a href="ch10.html#cb112-16" tabindex="-1"></a>    p <span class="ot">&lt;-</span> each<span class="sc">$</span>arma[<span class="dv">1</span>]</span>
+<span id="cb112-17"><a href="ch10.html#cb112-17" tabindex="-1"></a>    T <span class="ot">&lt;-</span> <span class="dv">148</span> <span class="sc">-</span> p</span>
+<span id="cb112-18"><a href="ch10.html#cb112-18" tabindex="-1"></a>    RSS_p <span class="ot">&lt;-</span> <span class="fu">sum</span>(each<span class="sc">$</span>residuals<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb112-19"><a href="ch10.html#cb112-19" tabindex="-1"></a>    ln_RSS_p_div_T <span class="ot">&lt;-</span> <span class="fu">log</span>(RSS_p <span class="sc">/</span> T)</span>
+<span id="cb112-20"><a href="ch10.html#cb112-20" tabindex="-1"></a>    AIC_penalty <span class="ot">&lt;-</span> (p <span class="sc">+</span> <span class="dv">1</span>) <span class="sc">*</span> <span class="dv">2</span> <span class="sc">/</span> T</span>
+<span id="cb112-21"><a href="ch10.html#cb112-21" tabindex="-1"></a>    BIC_penalty <span class="ot">&lt;-</span> (p <span class="sc">+</span> <span class="dv">1</span>) <span class="sc">*</span> <span class="fu">log</span>(T) <span class="sc">/</span> T</span>
+<span id="cb112-22"><a href="ch10.html#cb112-22" tabindex="-1"></a>    ex10<span class="fl">.5</span>_table1 <span class="ot">&lt;-</span> <span class="fu">rbind</span>(ex10<span class="fl">.5</span>_table1, <span class="fu">data.frame</span>(<span class="at">ps  =</span> <span class="fu">as.character</span>(p),</span>
+<span id="cb112-23"><a href="ch10.html#cb112-23" tabindex="-1"></a>                                                     <span class="at">AIC =</span> <span class="fu">round_format</span>(ln_RSS_p_div_T <span class="sc">+</span> AIC_penalty),</span>
+<span id="cb112-24"><a href="ch10.html#cb112-24" tabindex="-1"></a>                                                     <span class="at">BIC =</span> <span class="fu">round_format</span>(ln_RSS_p_div_T <span class="sc">+</span> BIC_penalty),</span>
+<span id="cb112-25"><a href="ch10.html#cb112-25" tabindex="-1"></a>                                                     <span class="at">RSS_p =</span> <span class="fu">round_format</span>(RSS_p, <span class="dv">1</span>),</span>
+<span id="cb112-26"><a href="ch10.html#cb112-26" tabindex="-1"></a>                                                     <span class="at">ln_RSS_p_div_T =</span> <span class="fu">round_format</span>(ln_RSS_p_div_T),</span>
+<span id="cb112-27"><a href="ch10.html#cb112-27" tabindex="-1"></a>                                                     <span class="at">AIC_penalty =</span> <span class="fu">round_format</span>(AIC_penalty),</span>
+<span id="cb112-28"><a href="ch10.html#cb112-28" tabindex="-1"></a>                                                     <span class="at">BIC_penalty =</span> <span class="fu">round_format</span>(BIC_penalty)))</span>
+<span id="cb112-29"><a href="ch10.html#cb112-29" tabindex="-1"></a>}</span>
+<span id="cb112-30"><a href="ch10.html#cb112-30" tabindex="-1"></a>ex10<span class="fl">.5</span>_table1 <span class="ot">&lt;-</span> <span class="fu">t</span>(ex10<span class="fl">.5</span>_table1)</span>
+<span id="cb112-31"><a href="ch10.html#cb112-31" tabindex="-1"></a><span class="fu">rownames</span>(ex10<span class="fl">.5</span>_table1) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;$p$&quot;</span>, <span class="st">&quot;AIC&quot;</span>, <span class="st">&quot;BIC&quot;</span>, <span class="st">&quot;RSS($p$)&quot;</span>, <span class="st">&quot;ln[RSS($p$)/$T$]&quot;</span>, <span class="st">&quot;AICの罰則項&quot;</span>, <span class="st">&quot;BICの罰則項&quot;</span>)</span>
+<span id="cb112-32"><a href="ch10.html#cb112-32" tabindex="-1"></a>ex10<span class="fl">.5</span>_table1 <span class="sc">%&gt;%</span></span>
+<span id="cb112-33"><a href="ch10.html#cb112-33" tabindex="-1"></a>    <span class="fu">kable</span>(<span class="at">col.names =</span> <span class="cn">NULL</span>, <span class="at">row.names =</span> <span class="cn">TRUE</span>, <span class="at">escape =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<table>
+<tbody>
+<tr class="odd">
+<td align="left"><span class="math inline">\(p\)</span></td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">2</td>
+<td align="left">3</td>
+<td align="left">4</td>
+</tr>
+<tr class="even">
+<td align="left">AIC</td>
+<td align="left">1.130</td>
+<td align="left">-0.224</td>
+<td align="left">-0.208</td>
+<td align="left">-0.191</td>
+<td align="left">-0.173</td>
+</tr>
+<tr class="odd">
+<td align="left">BIC</td>
+<td align="left">1.150</td>
+<td align="left">-0.183</td>
+<td align="left">-0.147</td>
+<td align="left">-0.109</td>
+<td align="left">-0.070</td>
+</tr>
+<tr class="even">
+<td align="left">RSS(<span class="math inline">\(p\)</span>)</td>
+<td align="left">452.1</td>
+<td align="left">114.4</td>
+<td align="left">113.8</td>
+<td align="left">113.4</td>
+<td align="left">113.0</td>
+</tr>
+<tr class="odd">
+<td align="left">ln[RSS(<span class="math inline">\(p\)</span>)/<span class="math inline">\(T\)</span>]</td>
+<td align="left">1.117</td>
+<td align="left">-0.251</td>
+<td align="left">-0.250</td>
+<td align="left">-0.246</td>
+<td align="left">-0.242</td>
+</tr>
+<tr class="even">
+<td align="left">AICの罰則項</td>
+<td align="left">0.014</td>
+<td align="left">0.027</td>
+<td align="left">0.041</td>
+<td align="left">0.055</td>
+<td align="left">0.069</td>
+</tr>
+<tr class="odd">
+<td align="left">BICの罰則項</td>
+<td align="left">0.034</td>
+<td align="left">0.068</td>
+<td align="left">0.102</td>
+<td align="left">0.137</td>
+<td align="left">0.173</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb113-1"><a href="ch10.html#cb113-1" tabindex="-1"></a></span>
+<span id="cb113-2"><a href="ch10.html#cb113-2" tabindex="-1"></a><span class="co"># 定数項ありのAR(1)モデルを再推定</span></span>
+<span id="cb113-3"><a href="ch10.html#cb113-3" tabindex="-1"></a><span class="fu">arima</span>(<span class="at">x =</span> ex10<span class="fl">.5</span>_data, <span class="at">order =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="at">method =</span> <span class="st">&quot;ML&quot;</span>)</span>
+<span id="cb113-4"><a href="ch10.html#cb113-4" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb113-5"><a href="ch10.html#cb113-5" tabindex="-1"></a><span class="do">## Call:</span></span>
+<span id="cb113-6"><a href="ch10.html#cb113-6" tabindex="-1"></a><span class="do">## arima(x = ex10.5_data, order = c(1, 0, 0), method = &quot;ML&quot;)</span></span>
+<span id="cb113-7"><a href="ch10.html#cb113-7" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb113-8"><a href="ch10.html#cb113-8" tabindex="-1"></a><span class="do">## Coefficients:</span></span>
+<span id="cb113-9"><a href="ch10.html#cb113-9" tabindex="-1"></a><span class="do">##          ar1  intercept</span></span>
+<span id="cb113-10"><a href="ch10.html#cb113-10" tabindex="-1"></a><span class="do">##       0.8291    -0.7196</span></span>
+<span id="cb113-11"><a href="ch10.html#cb113-11" tabindex="-1"></a><span class="do">## s.e.  0.0445     0.4065</span></span>
+<span id="cb113-12"><a href="ch10.html#cb113-12" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb113-13"><a href="ch10.html#cb113-13" tabindex="-1"></a><span class="do">## sigma^2 estimated as 0.7605:  log likelihood = -190.33,  aic = 386.66</span></span></code></pre></div>
 <!-- ## 練習問題 10-1 [確認] {-}
 
 ## 練習問題 10-2 [確認] {-}

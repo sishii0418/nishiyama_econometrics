@@ -297,7 +297,7 @@ data.frame(1:150, fig10_11_a, fig10_11_b) %>%
     theme(legend.position = c(0, 1), legend.justification = c(0, 1)) # 凡例を左上に表示
 ```
 
-## 図10-12 GDPギャップ (四半期データ) {-}
+## 図10-12 GDPギャップ (四半期データ) {#figure10-12 .unnumbered}
 
 Excelファイルには内閣府と日本銀行のデータが入っているが, 本文通り内閣府のデータを描画する.
 
@@ -353,58 +353,52 @@ data.frame(acf = fig10_14_data$acf[-1], lag = fig10_14_data$lag[-1]) %>%
     annotate("text", x = 5, y = 0.6, label = "自己相関")
 ```
 
-## 実証例10.1 GDPギャップの系列相関 {-}
+## 実証例10.1 GDPギャップの系列相関 {#ex10.1 .unnumbered}
 
 リュン=ボックスの修正Q検定は`Box.test(type = "Ljung-Box")`で行うことができる.
 
 Kableでは行ごとに桁丸め処理を行うことが難しいため, ここではKableに渡す表の値を先に文字列形式にした.
 一方似たような表作成パッケージであるgtでは行ごとの処理が可能ではあるが, 数式の表示が難しいという難点がある.
+同様の表を複数作成するため, 関数としておく.
 
 ```{r collapse=T, message=FALSE}
 data_ex10.1 <- Fig_12_GDPgap_quarterly %>%
     filter(ym(198001) < year & year < ym(201701)) %>%
     dplyr::select(GDP.Gap)
-rho <- acf(data_ex10.1, plot = FALSE)$acf[-1]
-ms = c(1, 2, 3, 4, 8, 12, 16, 20)
-table <- data.frame()
-for(i in ms){
-    test = Box.test(data_ex10.1, lag = i, type = "Ljung-Box")
-    # kableでは行ごとに桁丸めができないためここで丸めて文字列として保存する
-    table <- rbind(table, data.frame(m = as.character(i),
-                                     rho_m = as.character(round(rho[i], 2)),
-                                     Q_LB = as.character(round(test$statistic, 1)),
-                                     臨界値 = as.character(round(qchisq(0.95, df = i), 2)),
-                                     P値 = as.character(format(test$p.value, nsmall = 2))))
-}
-table <- t(table)
-rownames(table) <- c("$m$", "$\\hat{\\rho}_m$", "$Q_{LB}$", "臨界値", "$P$値")
 
-table %>%
-    kable(col.names = NULL, row.names = TRUE, escape = FALSE)
+serial_cor_table <- function(data) {
+    rho <- acf(data, plot = FALSE)$acf[-1]
+    ms = c(1, 2, 3, 4, 8, 12, 16, 20)
+    table <- data.frame()
+    round_format <- function(x, digits = 2) {
+        return(format(round(x, digits), nsmall = digits))
+    }
+    for(i in ms){
+        test = Box.test(data, lag = i, type = "Ljung-Box")
+        # kableでは行ごとに桁丸めができないためここで丸めて文字列として保存する
+        table <- rbind(table, data.frame(m = as.character(i),
+                                         rho_m = round_format(rho[i], 2),
+                                         Q_LB = round_format(test$statistic, 1),
+                                         臨界値 = round_format(qchisq(0.95, df = i)),
+                                         P値 = round_format(test$p.value)))
+    }
+    table <- t(table)
+    rownames(table) <- c("$m$", "$\\hat{\\rho}_m$", "$Q_{LB}$", "臨界値", "$P$値")
+
+    table %>%
+        kable(col.names = NULL, row.names = TRUE, escape = FALSE)
+}
+
+serial_cor_table(data_ex10.1)
 ```
 
 ## 実証例10.2 ホワイトノイズの系列相関 {-}
 
 [図10-11](#figure10-11)で生成したデータを用いる.
+表のフォーマットは[実証例10.1](#ex10.1)と同様であるため, 上で作成した関数にデータを渡すだけでよい.
 
 ```{r collapse=T, message=FALSE}
-rho <- acf(fig10_11_a, plot = FALSE)$acf[-1]
-ms = c(1, 2, 3, 4, 8, 12, 16, 20)
-table <- data.frame()
-for(i in ms){
-    test = Box.test(fig10_11_a, lag = i, type = "Ljung-Box")
-    # kableでは行ごとに桁丸めができないためここで丸めて文字列として保存する
-    table <- rbind(table, data.frame(m = as.character(i),
-                                     rho_m = as.character(round(rho[i], 2)),
-                                     Q_LB = as.character(round(test$statistic, 1)),
-                                     臨界値 = as.character(round(qchisq(0.95, df = i), 2)),
-                                     P値 = as.character(round(test$p.value, 2))))
-}
-table <- t(table)
-rownames(table) <- c("$m$", "$\\hat{\\rho}_m$", "$Q_{LB}$", "臨界値", "$P$値")
-
-table %>%
-    kable(col.names = NULL, row.names = TRUE, escape = FALSE)
+serial_cor_table(fig10_11_a)
 ```
 
 ## 図10-15 実験系列 (ホワイトノイズ) のコレログラム {-}
@@ -432,24 +426,7 @@ data.frame(acf = fig10_15_data$acf[-1], lag = fig10_15_data$lag[-1]) %>%
 
 ```{r collapse=T, message=FALSE}
 resid_10.3 <- data_exp10.12$inflation - model10.12$fitted.values
-
-rho <- acf(resid_10.3, plot = FALSE)$acf[-1]
-ms = c(1, 2, 3, 4, 8, 12, 16, 20)
-table <- data.frame()
-for(i in ms){
-    test = Box.test(resid_10.3, lag = i, type = "Ljung-Box")
-    # kableでは行ごとに桁丸めができないためここで丸めて文字列として保存する
-    table <- rbind(table, data.frame(m = as.character(i),
-                                     rho_m = as.character(round(rho[i], 2)),
-                                     Q_LB = as.character(round(test$statistic, 1)),
-                                     臨界値 = as.character(round(qchisq(0.95, df = i), 2)),
-                                     P値 = as.character(round(test$p.value, 2))))
-}
-table <- t(table)
-rownames(table) <- c("$m$", "$\\hat{\\rho}_m$", "$Q_{LB}$", "臨界値", "$P$値")
-
-table %>%
-    kable(col.names = NULL, row.names = TRUE, escape = FALSE)
+serial_cor_table(resid_10.3)
 ```
 
 ## 実証例10.4 フィリップス曲線のHAC標準誤差 {-}
@@ -463,6 +440,55 @@ model10.12_lm <- lm(inflation ~ 内閣府, data = data_exp10.12)
 coeftest(model10.12_lm, vcov = NeweyWest)
 # ホワイト標準誤差
 coeftest(model10.12_lm, vcov = vcovHC(model10.12_lm, type="HC1"))
+```
+
+## 実証例10.5 GDPギャップのARモデルのラグ選択 {-}
+
+サポートサイトにあるEViewsの分析で用いているGDPギャップの出典が不明のため, [図10-12](#figure10-12)の作成に用いた内閣府のデータを用いる.
+
+RでARモデルを推定するには, `ar()`を用いれば適切なラグ次数$p$が自動で選択される.
+ここでは$p \in \{0, 1, 2, 3, 4\}$についてAR($p$)モデルを比較検討したいので, `arima(order = c(p, 0, 0))`を用いる.
+また引数に`include.mean = FALSE`を指定することで定数項を含めないようにする.
+
+p.500にあるAICとBICの定義は本文中で説明されている通り簡易なものであり, 下では手動で計算した.
+
+```{r collapse=T, message=FALSE}
+ex10.5_data <- Fig_12_GDPgap_quarterly %>%
+    filter(year < ym(201701)) %>%
+    dplyr::select(内閣府)
+
+ex10.5_models <- list("AR(0)" = arima(ex10.5_data, order = c(0, 0, 0), include.mean = FALSE, method = "ML"),
+                      "AR(1)" = arima(ex10.5_data, order = c(1, 0, 0), include.mean = FALSE, method = "ML"),
+                      "AR(2)" = arima(ex10.5_data, order = c(2, 0, 0), include.mean = FALSE, method = "ML"),
+                      "AR(3)" = arima(ex10.5_data, order = c(3, 0, 0), include.mean = FALSE, method = "ML"),
+                      "AR(4)" = arima(ex10.5_data, order = c(4, 0, 0), include.mean = FALSE, method = "ML"))
+
+ex10.5_table1 <- data.frame()
+round_format <- function(x, digits = 3) {
+    return(format(round(x, digits), nsmall = digits))
+}
+for(each in ex10.5_models) {
+    p <- each$arma[1]
+    T <- 148 - p
+    RSS_p <- sum(each$residuals^2)
+    ln_RSS_p_div_T <- log(RSS_p / T)
+    AIC_penalty <- (p + 1) * 2 / T
+    BIC_penalty <- (p + 1) * log(T) / T
+    ex10.5_table1 <- rbind(ex10.5_table1, data.frame(ps  = as.character(p),
+                                                     AIC = round_format(ln_RSS_p_div_T + AIC_penalty),
+                                                     BIC = round_format(ln_RSS_p_div_T + BIC_penalty),
+                                                     RSS_p = round_format(RSS_p, 1),
+                                                     ln_RSS_p_div_T = round_format(ln_RSS_p_div_T),
+                                                     AIC_penalty = round_format(AIC_penalty),
+                                                     BIC_penalty = round_format(BIC_penalty)))
+}
+ex10.5_table1 <- t(ex10.5_table1)
+rownames(ex10.5_table1) <- c("$p$", "AIC", "BIC", "RSS($p$)", "ln[RSS($p$)/$T$]", "AICの罰則項", "BICの罰則項")
+ex10.5_table1 %>%
+    kable(col.names = NULL, row.names = TRUE, escape = FALSE)
+
+# 定数項ありのAR(1)モデルを再推定
+arima(x = ex10.5_data, order = c(1, 0, 0), method = "ML")
 ```
 
 <!-- ## 練習問題 10-1 [確認] {-}
