@@ -34,6 +34,7 @@ install.packages("nnet")
 install.packages("sampleSelection")
 install.packages("estatapi")
 install.packages("tidyquant")
+install.packages("dynlm")
 ```
 
 ## 方針 {.unnumbered}

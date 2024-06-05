@@ -35,6 +35,7 @@ library(latex2exp)
 library(kableExtra)
 library(lmtest)
 library(sandwich)
+library(dynlm)
 ```
 
 ## 図10-1 名目GDP {#figure10-1 .unnumbered}
@@ -366,21 +367,21 @@ data_ex10.1 <- Fig_12_GDPgap_quarterly %>%
     filter(ym(198001) < year & year < ym(201701)) %>%
     dplyr::select(GDP.Gap)
 
-serial_cor_table <- function(data) {
+serial_cor_table <- function(data, digits = c(2, 1, 2, 2)) {
     rho <- acf(data, plot = FALSE)$acf[-1]
     ms = c(1, 2, 3, 4, 8, 12, 16, 20)
     table <- data.frame()
-    round_format <- function(x, digits = 2) {
-        return(format(round(x, digits), nsmall = digits))
+    round_format <- function(x, digit = 2) {
+        return(format(round(x, digit), nsmall = digit))
     }
     for(i in ms){
         test = Box.test(data, lag = i, type = "Ljung-Box")
         # kableでは行ごとに桁丸めができないためここで丸めて文字列として保存する
         table <- rbind(table, data.frame(m = as.character(i),
-                                         rho_m = round_format(rho[i], 2),
-                                         Q_LB = round_format(test$statistic, 1),
-                                         臨界値 = round_format(qchisq(0.95, df = i)),
-                                         P値 = round_format(test$p.value)))
+                                         rho_m = round_format(rho[i], digit = digits[1]),
+                                         Q_LB = round_format(test$statistic, digit = digits[2]),
+                                         臨界値 = round_format(qchisq(0.95, df = i), digit = digits[3]),
+                                         P値 = round_format(test$p.value, digit = digits[4])))
     }
     table <- t(table)
     rownames(table) <- c("$m$", "$\\hat{\\rho}_m$", "$Q_{LB}$", "臨界値", "$P$値")
@@ -426,10 +427,10 @@ data.frame(acf = fig10_15_data$acf[-1], lag = fig10_15_data$lag[-1]) %>%
 
 ```{r collapse=T, message=FALSE}
 resid_10.3 <- data_exp10.12$inflation - model10.12$fitted.values
-serial_cor_table(resid_10.3)
+serial_cor_table(resid_10.3, digits = c(3, 2, 2, 2))
 ```
 
-## 実証例10.4 フィリップス曲線のHAC標準誤差 {-}
+## 実証例10.4 フィリップス曲線のHAC標準誤差 {#ex10.4 .unnumbered}
 
 HAC標準誤差は[(10.12) 式](#exp10.12)で求めたモデルを一旦`lm()`で計算し直して, それを`lmtest::coeftest()`に渡すことで求められる.
 下の通り, この方法でもStataと同じホワイト標準誤差 (HC1) を求めることができる.
@@ -489,6 +490,31 @@ ex10.5_table1 %>%
 
 # 定数項ありのAR(1)モデルを再推定
 arima(x = ex10.5_data, order = c(1, 0, 0), method = "ML")
+```
+
+## 実証例10.6 ラグ付きインフレ率を含むフィリップス曲線の推定と誤差項の系列相関の検定 {-}
+
+データは[(10.12)式](#exp10.12)用に作成したものを再利用する.
+ADLモデルはRでは`dynlm::dynlm()`を用いることで推定できるが, このとき関数に渡すデータは先に`ts`オブジェクトにしておく.
+自由度修正ホワイト標準誤差は[実証例10.4](#ex10.4)のように, 推定したモデルを`coeftest`に渡せばよい.
+
+```{r collapse=T, message=FALSE}
+data_ex10.6 <- data_exp10.12 %>%
+    dplyr::select(inflation, 内閣府) %>%
+    ts(start = c(1980, 2),
+       end = c(2016, 4),
+       frequency = 4)
+
+model_106 <- dynlm(inflation ~ L(inflation) + L(inflation, 2) +L(inflation, 3) + L(inflation, 4) + 内閣府, data = data_ex10.6)
+summary(model_106)
+# 自由度修正ホワイト標準誤差を求める
+coeftest(model_106, vcov = vcovHC(model_106, type="HC1"))
+
+bgtest(model_106, order = 1, type = "Chisq")
+bgtest(model_106, order = 2, type = "Chisq")
+bgtest(model_106, order = 20, type = "Chisq")
+
+serial_cor_table(data_ex10.6[, "inflation"])
 ```
 
 <!-- ## 練習問題 10-1 [確認] {-}
