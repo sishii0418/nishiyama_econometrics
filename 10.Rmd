@@ -390,7 +390,7 @@ serial_cor_table <- function(data, digits = c(2, 1, 2, 2)) {
     rownames(table) <- c("$m$", "$\\hat{\\rho}_m$", "$Q_{LB}$", "臨界値", "$P$値")
 
     table %>%
-        kable(col.names = NULL, row.names = TRUE, escape = FALSE)
+        kable(col.names = NULL, row.names = TRUE, escape = FALSE, align = "c")
 }
 
 serial_cor_table(data_ex10.1)
@@ -489,7 +489,7 @@ for(each in ex10.5_models) {
 ex10.5_table1 <- t(ex10.5_table1)
 rownames(ex10.5_table1) <- c("$p$", "AIC", "BIC", "RSS($p$)", "ln[RSS($p$)/$T$]", "AICの罰則項", "BICの罰則項")
 ex10.5_table1 %>%
-    kable(col.names = NULL, row.names = TRUE, escape = FALSE)
+    kable(col.names = NULL, row.names = TRUE, escape = FALSE, align = "c")
 
 # 定数項ありのAR(1)モデルを再推定
 arima(x = ex10.5_data, order = c(1, 0, 0), method = "ML")
@@ -527,7 +527,7 @@ for(i in ms){
     # kableでは行ごとに桁丸めができないためここで丸めて文字列として保存する
     table <- rbind(table, data.frame(m = as.character(i),
                                      rho_m = round_format(rho[i], digit = 2),
-                                     Q_LB = round_format(bp_test$statistic, digit = 1),
+                                     Q_LB = round_format(bp_test$statistic, digit = 2),
                                      臨界値 = round_format(qchisq(0.95, df = i - 4), digit = 2),
                                      P値 = round_format(bp_test$p.value, digit = 2),
                                      TMRsq = round_format(bg_test$statistic, digit = 2),
@@ -535,11 +535,11 @@ for(i in ms){
                                      P値 = round_format(bg_test$p.value, digit = 2)))
 }
 table <- t(table)
-table[c(4, 5), 1:4] <- ""
+table[c(4, 5), 1:4] <- "-"
 rownames(table) <- c("$m$", "$\\hat{\\rho}_m$", "$Q_{LB}$", "臨界値", "$P$値", "$(T - m) \\times R^2$", "臨界値", "$P$値")
 
 table %>%
-    kable(col.names = NULL, row.names = TRUE, escape = FALSE)
+    kable(col.names = NULL, row.names = TRUE, escape = FALSE, align = "c")
 ```
 
 <!-- ## 練習問題 10-1 [確認] {-}

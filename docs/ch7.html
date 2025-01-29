@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>第7章 操作変数法 | 西山ほか (2019)『計量経済学』有斐閣の練習問題解答とRでの再現</title>
   <meta name="description" content="第7章 操作変数法 | 西山ほか (2019)『計量経済学』有斐閣の練習問題解答とRでの再現." />
-  <meta name="generator" content="bookdown 0.39 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.42 and GitBook 2.6.7" />
 
   <meta property="og:title" content="第7章 操作変数法 | 西山ほか (2019)『計量経済学』有斐閣の練習問題解答とRでの再現" />
   <meta property="og:type" content="book" />
@@ -23,7 +23,7 @@
 <meta name="author" content="石井 俊輔" />
 
 
-<meta name="date" content="2024-05-20" />
+<meta name="date" content="2025-01-29" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -80,7 +80,7 @@ MathJax.Hub.Config({
 
 <style type="text/css">
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -630,160 +630,158 @@ HansenのJ検定は, <code>iv_robust()</code>で<code>diagnostics = TRUE</code>�
 <span id="cb71-13"><a href="ch7.html#cb71-13" tabindex="-1"></a><span class="do">## </span></span>
 <span id="cb71-14"><a href="ch7.html#cb71-14" tabindex="-1"></a><span class="do">## Coefficients:</span></span>
 <span id="cb71-15"><a href="ch7.html#cb71-15" tabindex="-1"></a><span class="do">##                Estimate Std. Error t value Pr(&gt;|t|)</span></span>
-<span id="cb71-16"><a href="ch7.html#cb71-16" tabindex="-1"></a><span class="do">## (Intercept)   1.707e-14  2.935e+01       0        1</span></span>
-<span id="cb71-17"><a href="ch7.html#cb71-17" tabindex="-1"></a><span class="do">## kmwittenberg  1.002e-17  2.697e-03       0        1</span></span>
-<span id="cb71-18"><a href="ch7.html#cb71-18" tabindex="-1"></a><span class="do">## f_young      -3.287e-16  1.723e-01       0        1</span></span>
-<span id="cb71-19"><a href="ch7.html#cb71-19" tabindex="-1"></a><span class="do">## f_jew         7.627e-16  3.047e-01       0        1</span></span>
-<span id="cb71-20"><a href="ch7.html#cb71-20" tabindex="-1"></a><span class="do">## f_fem         5.550e-16  3.294e-01       0        1</span></span>
-<span id="cb71-21"><a href="ch7.html#cb71-21" tabindex="-1"></a><span class="do">## f_ortsgeb     1.189e-16  3.294e-02       0        1</span></span>
-<span id="cb71-22"><a href="ch7.html#cb71-22" tabindex="-1"></a><span class="do">## f_pruss      -2.331e-16  1.967e-01       0        1</span></span>
-<span id="cb71-23"><a href="ch7.html#cb71-23" tabindex="-1"></a><span class="do">## hhsize       -3.882e-15  1.417e+00       0        1</span></span>
-<span id="cb71-24"><a href="ch7.html#cb71-24" tabindex="-1"></a><span class="do">## lnpop         3.680e-15  9.525e-01       0        1</span></span>
-<span id="cb71-25"><a href="ch7.html#cb71-25" tabindex="-1"></a><span class="do">## gpop         -9.540e-17  9.918e-02       0        1</span></span>
-<span id="cb71-26"><a href="ch7.html#cb71-26" tabindex="-1"></a><span class="do">## f_blind       1.618e-14  1.252e+01       0        1</span></span>
-<span id="cb71-27"><a href="ch7.html#cb71-27" tabindex="-1"></a><span class="do">## f_deaf       -2.585e-15  8.272e+00       0        1</span></span>
-<span id="cb71-28"><a href="ch7.html#cb71-28" tabindex="-1"></a><span class="do">## f_dumb       -1.585e-15  2.069e+00       0        1</span></span>
-<span id="cb71-29"><a href="ch7.html#cb71-29" tabindex="-1"></a><span class="do">## f_miss        1.564e-16  3.479e-01       0        1</span></span>
+<span id="cb71-16"><a href="ch7.html#cb71-16" tabindex="-1"></a><span class="do">## (Intercept)   3.329e-12  2.935e+01       0        1</span></span>
+<span id="cb71-17"><a href="ch7.html#cb71-17" tabindex="-1"></a><span class="do">## kmwittenberg  1.454e-16  2.697e-03       0        1</span></span>
+<span id="cb71-18"><a href="ch7.html#cb71-18" tabindex="-1"></a><span class="do">## f_young       4.452e-15  1.723e-01       0        1</span></span>
+<span id="cb71-19"><a href="ch7.html#cb71-19" tabindex="-1"></a><span class="do">## f_jew         6.018e-15  3.047e-01       0        1</span></span>
+<span id="cb71-20"><a href="ch7.html#cb71-20" tabindex="-1"></a><span class="do">## f_fem        -2.790e-14  3.294e-01       0        1</span></span>
+<span id="cb71-21"><a href="ch7.html#cb71-21" tabindex="-1"></a><span class="do">## f_ortsgeb    -1.756e-16  3.294e-02       0        1</span></span>
+<span id="cb71-22"><a href="ch7.html#cb71-22" tabindex="-1"></a><span class="do">## f_pruss      -1.257e-14  1.967e-01       0        1</span></span>
+<span id="cb71-23"><a href="ch7.html#cb71-23" tabindex="-1"></a><span class="do">## hhsize       -9.685e-14  1.417e+00       0        1</span></span>
+<span id="cb71-24"><a href="ch7.html#cb71-24" tabindex="-1"></a><span class="do">## lnpop        -2.678e-14  9.525e-01       0        1</span></span>
+<span id="cb71-25"><a href="ch7.html#cb71-25" tabindex="-1"></a><span class="do">## gpop         -4.846e-15  9.918e-02       0        1</span></span>
+<span id="cb71-26"><a href="ch7.html#cb71-26" tabindex="-1"></a><span class="do">## f_blind       1.364e-15  1.252e+01       0        1</span></span>
+<span id="cb71-27"><a href="ch7.html#cb71-27" tabindex="-1"></a><span class="do">## f_deaf        9.140e-14  8.272e+00       0        1</span></span>
+<span id="cb71-28"><a href="ch7.html#cb71-28" tabindex="-1"></a><span class="do">## f_dumb       -2.833e-14  2.069e+00       0        1</span></span>
+<span id="cb71-29"><a href="ch7.html#cb71-29" tabindex="-1"></a><span class="do">## f_miss        3.208e-15  3.479e-01       0        1</span></span>
 <span id="cb71-30"><a href="ch7.html#cb71-30" tabindex="-1"></a><span class="do">## </span></span>
 <span id="cb71-31"><a href="ch7.html#cb71-31" tabindex="-1"></a><span class="do">## Residual standard error: 7.176 on 438 degrees of freedom</span></span>
-<span id="cb71-32"><a href="ch7.html#cb71-32" tabindex="-1"></a><span class="do">## Multiple R-squared:  2.564e-31,  Adjusted R-squared:  -0.02968 </span></span>
-<span id="cb71-33"><a href="ch7.html#cb71-33" tabindex="-1"></a><span class="do">## F-statistic: 8.638e-30 on 13 and 438 DF,  p-value: 1</span></span>
+<span id="cb71-32"><a href="ch7.html#cb71-32" tabindex="-1"></a><span class="do">## Multiple R-squared:  3.428e-29,  Adjusted R-squared:  -0.02968 </span></span>
+<span id="cb71-33"><a href="ch7.html#cb71-33" tabindex="-1"></a><span class="do">## F-statistic: 1.155e-27 on 13 and 438 DF,  p-value: 1</span></span>
 <span id="cb71-34"><a href="ch7.html#cb71-34" tabindex="-1"></a>hypothesis <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;kmwittenberg&quot;</span>, <span class="st">&quot;lnpop&quot;</span>, <span class="st">&quot;gpop&quot;</span>, <span class="st">&quot;f_young&quot;</span>, <span class="st">&quot;f_jew&quot;</span>, <span class="st">&quot;f_fem&quot;</span>, <span class="st">&quot;f_ortsgeb&quot;</span>, <span class="st">&quot;f_pruss&quot;</span>, <span class="st">&quot;hhsize&quot;</span>, <span class="st">&quot;f_blind&quot;</span>, <span class="st">&quot;f_deaf&quot;</span>, <span class="st">&quot;f_dumb&quot;</span>, <span class="st">&quot;f_miss&quot;</span>)</span>
 <span id="cb71-35"><a href="ch7.html#cb71-35" tabindex="-1"></a><span class="fu">linearHypothesis</span>(model_75_1, hypothesis, <span class="fu">rep</span>(<span class="dv">0</span>, <span class="fu">length</span>(hypothesis)), <span class="st">&quot;Chisq&quot;</span>)</span>
-<span id="cb71-36"><a href="ch7.html#cb71-36" tabindex="-1"></a><span class="do">## Linear hypothesis test</span></span>
-<span id="cb71-37"><a href="ch7.html#cb71-37" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb71-38"><a href="ch7.html#cb71-38" tabindex="-1"></a><span class="do">## Hypothesis:</span></span>
-<span id="cb71-39"><a href="ch7.html#cb71-39" tabindex="-1"></a><span class="do">## kmwittenberg = 0</span></span>
-<span id="cb71-40"><a href="ch7.html#cb71-40" tabindex="-1"></a><span class="do">## lnpop = 0</span></span>
-<span id="cb71-41"><a href="ch7.html#cb71-41" tabindex="-1"></a><span class="do">## gpop = 0</span></span>
-<span id="cb71-42"><a href="ch7.html#cb71-42" tabindex="-1"></a><span class="do">## f_young = 0</span></span>
-<span id="cb71-43"><a href="ch7.html#cb71-43" tabindex="-1"></a><span class="do">## f_jew = 0</span></span>
-<span id="cb71-44"><a href="ch7.html#cb71-44" tabindex="-1"></a><span class="do">## f_fem = 0</span></span>
-<span id="cb71-45"><a href="ch7.html#cb71-45" tabindex="-1"></a><span class="do">## f_ortsgeb = 0</span></span>
-<span id="cb71-46"><a href="ch7.html#cb71-46" tabindex="-1"></a><span class="do">## f_pruss = 0</span></span>
-<span id="cb71-47"><a href="ch7.html#cb71-47" tabindex="-1"></a><span class="do">## hhsize = 0</span></span>
-<span id="cb71-48"><a href="ch7.html#cb71-48" tabindex="-1"></a><span class="do">## f_blind = 0</span></span>
-<span id="cb71-49"><a href="ch7.html#cb71-49" tabindex="-1"></a><span class="do">## f_deaf = 0</span></span>
-<span id="cb71-50"><a href="ch7.html#cb71-50" tabindex="-1"></a><span class="do">## f_dumb = 0</span></span>
-<span id="cb71-51"><a href="ch7.html#cb71-51" tabindex="-1"></a><span class="do">## f_miss = 0</span></span>
-<span id="cb71-52"><a href="ch7.html#cb71-52" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb71-53"><a href="ch7.html#cb71-53" tabindex="-1"></a><span class="do">## Model 1: restricted model</span></span>
-<span id="cb71-54"><a href="ch7.html#cb71-54" tabindex="-1"></a><span class="do">## Model 2: model_73_1$residuals ~ kmwittenberg + f_young + f_jew + f_fem + </span></span>
-<span id="cb71-55"><a href="ch7.html#cb71-55" tabindex="-1"></a><span class="do">##     f_ortsgeb + f_pruss + hhsize + lnpop + gpop + f_blind + f_deaf + </span></span>
-<span id="cb71-56"><a href="ch7.html#cb71-56" tabindex="-1"></a><span class="do">##     f_dumb + f_miss</span></span>
-<span id="cb71-57"><a href="ch7.html#cb71-57" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb71-58"><a href="ch7.html#cb71-58" tabindex="-1"></a><span class="do">##   Res.Df   RSS Df Sum of Sq Chisq Pr(&gt;Chisq)</span></span>
-<span id="cb71-59"><a href="ch7.html#cb71-59" tabindex="-1"></a><span class="do">## 1    451 22556                              </span></span>
-<span id="cb71-60"><a href="ch7.html#cb71-60" tabindex="-1"></a><span class="do">## 2    438 22556 13         0     0          1</span></span>
-<span id="cb71-61"><a href="ch7.html#cb71-61" tabindex="-1"></a></span>
-<span id="cb71-62"><a href="ch7.html#cb71-62" tabindex="-1"></a>model_73_2 <span class="ot">&lt;-</span> <span class="fu">ivreg</span>(f_rw <span class="sc">~</span> f_prot <span class="sc">+</span> f_young <span class="sc">+</span> f_jew <span class="sc">+</span> f_fem <span class="sc">+</span> f_ortsgeb <span class="sc">+</span> f_pruss <span class="sc">+</span> hhsize <span class="sc">+</span> lnpop <span class="sc">+</span> gpop <span class="sc">+</span> f_blind <span class="sc">+</span> f_deaf <span class="sc">+</span> f_dumb <span class="sc">+</span> f_miss <span class="sc">|</span> kmwittenberg <span class="sc">*</span> (lnpop <span class="sc">+</span> gpop) <span class="sc">+</span> f_young <span class="sc">+</span> f_jew <span class="sc">+</span> f_fem <span class="sc">+</span> f_ortsgeb <span class="sc">+</span> f_pruss <span class="sc">+</span> hhsize <span class="sc">+</span> f_blind <span class="sc">+</span> f_deaf <span class="sc">+</span> f_dumb <span class="sc">+</span> f_miss, <span class="at">data =</span> ipehd_qje2009_master)</span>
-<span id="cb71-63"><a href="ch7.html#cb71-63" tabindex="-1"></a>model_75_2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(model_73_2<span class="sc">$</span>residuals <span class="sc">~</span> kmwittenberg <span class="sc">*</span> (lnpop <span class="sc">+</span> gpop) <span class="sc">+</span> f_young <span class="sc">+</span> f_jew <span class="sc">+</span> f_fem <span class="sc">+</span> f_ortsgeb <span class="sc">+</span> f_pruss <span class="sc">+</span> hhsize <span class="sc">+</span> f_blind <span class="sc">+</span> f_deaf <span class="sc">+</span> f_dumb <span class="sc">+</span> f_miss, <span class="at">data =</span> ipehd_qje2009_master)</span>
-<span id="cb71-64"><a href="ch7.html#cb71-64" tabindex="-1"></a><span class="fu">summary</span>(model_75_2)</span>
-<span id="cb71-65"><a href="ch7.html#cb71-65" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb71-66"><a href="ch7.html#cb71-66" tabindex="-1"></a><span class="do">## Call:</span></span>
-<span id="cb71-67"><a href="ch7.html#cb71-67" tabindex="-1"></a><span class="do">## lm(formula = model_73_2$residuals ~ kmwittenberg * (lnpop + gpop) + </span></span>
-<span id="cb71-68"><a href="ch7.html#cb71-68" tabindex="-1"></a><span class="do">##     f_young + f_jew + f_fem + f_ortsgeb + f_pruss + hhsize + </span></span>
-<span id="cb71-69"><a href="ch7.html#cb71-69" tabindex="-1"></a><span class="do">##     f_blind + f_deaf + f_dumb + f_miss, data = ipehd_qje2009_master)</span></span>
-<span id="cb71-70"><a href="ch7.html#cb71-70" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb71-71"><a href="ch7.html#cb71-71" tabindex="-1"></a><span class="do">## Residuals:</span></span>
-<span id="cb71-72"><a href="ch7.html#cb71-72" tabindex="-1"></a><span class="do">##      Min       1Q   Median       3Q      Max </span></span>
-<span id="cb71-73"><a href="ch7.html#cb71-73" tabindex="-1"></a><span class="do">## -21.3447  -4.3890  -0.1007   4.6353  19.7419 </span></span>
-<span id="cb71-74"><a href="ch7.html#cb71-74" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb71-75"><a href="ch7.html#cb71-75" tabindex="-1"></a><span class="do">## Coefficients:</span></span>
-<span id="cb71-76"><a href="ch7.html#cb71-76" tabindex="-1"></a><span class="do">##                      Estimate Std. Error t value Pr(&gt;|t|)</span></span>
-<span id="cb71-77"><a href="ch7.html#cb71-77" tabindex="-1"></a><span class="do">## (Intercept)        -1.193e+01  3.738e+01  -0.319    0.750</span></span>
-<span id="cb71-78"><a href="ch7.html#cb71-78" tabindex="-1"></a><span class="do">## kmwittenberg        3.506e-02  7.091e-02   0.494    0.621</span></span>
-<span id="cb71-79"><a href="ch7.html#cb71-79" tabindex="-1"></a><span class="do">## lnpop               1.034e+00  2.285e+00   0.452    0.651</span></span>
-<span id="cb71-80"><a href="ch7.html#cb71-80" tabindex="-1"></a><span class="do">## gpop               -5.554e-02  2.489e-01  -0.223    0.824</span></span>
-<span id="cb71-81"><a href="ch7.html#cb71-81" tabindex="-1"></a><span class="do">## f_young             6.741e-04  1.778e-01   0.004    0.997</span></span>
-<span id="cb71-82"><a href="ch7.html#cb71-82" tabindex="-1"></a><span class="do">## f_jew              -5.388e-03  3.044e-01  -0.018    0.986</span></span>
-<span id="cb71-83"><a href="ch7.html#cb71-83" tabindex="-1"></a><span class="do">## f_fem               1.195e-02  3.287e-01   0.036    0.971</span></span>
-<span id="cb71-84"><a href="ch7.html#cb71-84" tabindex="-1"></a><span class="do">## f_ortsgeb          -5.907e-04  3.285e-02  -0.018    0.986</span></span>
-<span id="cb71-85"><a href="ch7.html#cb71-85" tabindex="-1"></a><span class="do">## f_pruss            -1.984e-03  1.960e-01  -0.010    0.992</span></span>
-<span id="cb71-86"><a href="ch7.html#cb71-86" tabindex="-1"></a><span class="do">## hhsize              8.812e-02  1.419e+00   0.062    0.951</span></span>
-<span id="cb71-87"><a href="ch7.html#cb71-87" tabindex="-1"></a><span class="do">## f_blind             8.972e-01  1.253e+01   0.072    0.943</span></span>
-<span id="cb71-88"><a href="ch7.html#cb71-88" tabindex="-1"></a><span class="do">## f_deaf              4.100e-01  8.318e+00   0.049    0.961</span></span>
-<span id="cb71-89"><a href="ch7.html#cb71-89" tabindex="-1"></a><span class="do">## f_dumb             -2.080e-02  2.062e+00  -0.010    0.992</span></span>
-<span id="cb71-90"><a href="ch7.html#cb71-90" tabindex="-1"></a><span class="do">## f_miss             -1.432e-02  3.480e-01  -0.041    0.967</span></span>
-<span id="cb71-91"><a href="ch7.html#cb71-91" tabindex="-1"></a><span class="do">## kmwittenberg:lnpop -3.290e-03  6.587e-03  -0.499    0.618</span></span>
-<span id="cb71-92"><a href="ch7.html#cb71-92" tabindex="-1"></a><span class="do">## kmwittenberg:gpop   1.663e-04  6.549e-04   0.254    0.800</span></span>
-<span id="cb71-93"><a href="ch7.html#cb71-93" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb71-94"><a href="ch7.html#cb71-94" tabindex="-1"></a><span class="do">## Residual standard error: 7.152 on 436 degrees of freedom</span></span>
-<span id="cb71-95"><a href="ch7.html#cb71-95" tabindex="-1"></a><span class="do">## Multiple R-squared:  0.0006048,  Adjusted R-squared:  -0.03378 </span></span>
-<span id="cb71-96"><a href="ch7.html#cb71-96" tabindex="-1"></a><span class="do">## F-statistic: 0.01759 on 15 and 436 DF,  p-value: 1</span></span>
-<span id="cb71-97"><a href="ch7.html#cb71-97" tabindex="-1"></a>hypothesis <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;kmwittenberg&quot;</span>, <span class="st">&quot;lnpop&quot;</span>, <span class="st">&quot;gpop&quot;</span>, <span class="st">&quot;kmwittenberg:lnpop&quot;</span>, <span class="st">&quot;kmwittenberg:gpop&quot;</span>, <span class="st">&quot;f_young&quot;</span>, <span class="st">&quot;f_jew&quot;</span>, <span class="st">&quot;f_fem&quot;</span>, <span class="st">&quot;f_ortsgeb&quot;</span>, <span class="st">&quot;f_pruss&quot;</span>, <span class="st">&quot;hhsize&quot;</span>, <span class="st">&quot;f_blind&quot;</span>, <span class="st">&quot;f_deaf&quot;</span>, <span class="st">&quot;f_dumb&quot;</span>, <span class="st">&quot;f_miss&quot;</span>)</span>
-<span id="cb71-98"><a href="ch7.html#cb71-98" tabindex="-1"></a><span class="fu">linearHypothesis</span>(model_75_2, hypothesis, <span class="fu">rep</span>(<span class="dv">0</span>, <span class="fu">length</span>(hypothesis)), <span class="st">&quot;Chisq&quot;</span>)</span>
-<span id="cb71-99"><a href="ch7.html#cb71-99" tabindex="-1"></a><span class="do">## Linear hypothesis test</span></span>
-<span id="cb71-100"><a href="ch7.html#cb71-100" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb71-101"><a href="ch7.html#cb71-101" tabindex="-1"></a><span class="do">## Hypothesis:</span></span>
-<span id="cb71-102"><a href="ch7.html#cb71-102" tabindex="-1"></a><span class="do">## kmwittenberg = 0</span></span>
-<span id="cb71-103"><a href="ch7.html#cb71-103" tabindex="-1"></a><span class="do">## lnpop = 0</span></span>
-<span id="cb71-104"><a href="ch7.html#cb71-104" tabindex="-1"></a><span class="do">## gpop = 0</span></span>
-<span id="cb71-105"><a href="ch7.html#cb71-105" tabindex="-1"></a><span class="do">## kmwittenberg:lnpop = 0</span></span>
-<span id="cb71-106"><a href="ch7.html#cb71-106" tabindex="-1"></a><span class="do">## kmwittenberg:gpop = 0</span></span>
-<span id="cb71-107"><a href="ch7.html#cb71-107" tabindex="-1"></a><span class="do">## f_young = 0</span></span>
-<span id="cb71-108"><a href="ch7.html#cb71-108" tabindex="-1"></a><span class="do">## f_jew = 0</span></span>
-<span id="cb71-109"><a href="ch7.html#cb71-109" tabindex="-1"></a><span class="do">## f_fem = 0</span></span>
-<span id="cb71-110"><a href="ch7.html#cb71-110" tabindex="-1"></a><span class="do">## f_ortsgeb = 0</span></span>
-<span id="cb71-111"><a href="ch7.html#cb71-111" tabindex="-1"></a><span class="do">## f_pruss = 0</span></span>
-<span id="cb71-112"><a href="ch7.html#cb71-112" tabindex="-1"></a><span class="do">## hhsize = 0</span></span>
-<span id="cb71-113"><a href="ch7.html#cb71-113" tabindex="-1"></a><span class="do">## f_blind = 0</span></span>
-<span id="cb71-114"><a href="ch7.html#cb71-114" tabindex="-1"></a><span class="do">## f_deaf = 0</span></span>
-<span id="cb71-115"><a href="ch7.html#cb71-115" tabindex="-1"></a><span class="do">## f_dumb = 0</span></span>
-<span id="cb71-116"><a href="ch7.html#cb71-116" tabindex="-1"></a><span class="do">## f_miss = 0</span></span>
-<span id="cb71-117"><a href="ch7.html#cb71-117" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb71-118"><a href="ch7.html#cb71-118" tabindex="-1"></a><span class="do">## Model 1: restricted model</span></span>
-<span id="cb71-119"><a href="ch7.html#cb71-119" tabindex="-1"></a><span class="do">## Model 2: model_73_2$residuals ~ kmwittenberg * (lnpop + gpop) + f_young + </span></span>
-<span id="cb71-120"><a href="ch7.html#cb71-120" tabindex="-1"></a><span class="do">##     f_jew + f_fem + f_ortsgeb + f_pruss + hhsize + f_blind + </span></span>
-<span id="cb71-121"><a href="ch7.html#cb71-121" tabindex="-1"></a><span class="do">##     f_deaf + f_dumb + f_miss</span></span>
-<span id="cb71-122"><a href="ch7.html#cb71-122" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb71-123"><a href="ch7.html#cb71-123" tabindex="-1"></a><span class="do">##   Res.Df   RSS Df Sum of Sq  Chisq Pr(&gt;Chisq)</span></span>
-<span id="cb71-124"><a href="ch7.html#cb71-124" tabindex="-1"></a><span class="do">## 1    451 22314                               </span></span>
-<span id="cb71-125"><a href="ch7.html#cb71-125" tabindex="-1"></a><span class="do">## 2    436 22300 15    13.495 0.2638          1</span></span>
-<span id="cb71-126"><a href="ch7.html#cb71-126" tabindex="-1"></a><span class="fu">qchisq</span>(<span class="fl">0.9</span>, <span class="dv">2</span>)</span>
-<span id="cb71-127"><a href="ch7.html#cb71-127" tabindex="-1"></a><span class="do">## [1] 4.60517</span></span>
-<span id="cb71-128"><a href="ch7.html#cb71-128" tabindex="-1"></a></span>
-<span id="cb71-129"><a href="ch7.html#cb71-129" tabindex="-1"></a><span class="co"># HansenのJ検定</span></span>
-<span id="cb71-130"><a href="ch7.html#cb71-130" tabindex="-1"></a><span class="fu">iv_robust</span>(f_rw <span class="sc">~</span> f_prot <span class="sc">+</span> f_young <span class="sc">+</span> f_jew <span class="sc">+</span> f_fem <span class="sc">+</span> f_ortsgeb <span class="sc">+</span> f_pruss <span class="sc">+</span> hhsize <span class="sc">+</span> lnpop <span class="sc">+</span> gpop <span class="sc">+</span> f_blind <span class="sc">+</span> f_deaf <span class="sc">+</span> f_dumb <span class="sc">+</span> f_miss <span class="sc">|</span> kmwittenberg <span class="sc">*</span> (lnpop <span class="sc">+</span> gpop) <span class="sc">+</span> f_young <span class="sc">+</span> f_jew <span class="sc">+</span> f_fem <span class="sc">+</span> f_ortsgeb <span class="sc">+</span> f_pruss <span class="sc">+</span> hhsize <span class="sc">+</span> f_blind <span class="sc">+</span> f_deaf <span class="sc">+</span> f_dumb <span class="sc">+</span> f_miss, <span class="at">se_type =</span> <span class="st">&quot;stata&quot;</span>, <span class="at">data =</span> ipehd_qje2009_master, <span class="at">diagnostics =</span> T) <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span>
-<span id="cb71-131"><a href="ch7.html#cb71-131" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb71-132"><a href="ch7.html#cb71-132" tabindex="-1"></a><span class="do">## Call:</span></span>
-<span id="cb71-133"><a href="ch7.html#cb71-133" tabindex="-1"></a><span class="do">## iv_robust(formula = f_rw ~ f_prot + f_young + f_jew + f_fem + </span></span>
-<span id="cb71-134"><a href="ch7.html#cb71-134" tabindex="-1"></a><span class="do">##     f_ortsgeb + f_pruss + hhsize + lnpop + gpop + f_blind + f_deaf + </span></span>
-<span id="cb71-135"><a href="ch7.html#cb71-135" tabindex="-1"></a><span class="do">##     f_dumb + f_miss | kmwittenberg * (lnpop + gpop) + f_young + </span></span>
-<span id="cb71-136"><a href="ch7.html#cb71-136" tabindex="-1"></a><span class="do">##     f_jew + f_fem + f_ortsgeb + f_pruss + hhsize + f_blind + </span></span>
-<span id="cb71-137"><a href="ch7.html#cb71-137" tabindex="-1"></a><span class="do">##     f_deaf + f_dumb + f_miss, data = ipehd_qje2009_master, se_type = &quot;stata&quot;, </span></span>
+<span id="cb71-36"><a href="ch7.html#cb71-36" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb71-37"><a href="ch7.html#cb71-37" tabindex="-1"></a><span class="do">## Linear hypothesis test:</span></span>
+<span id="cb71-38"><a href="ch7.html#cb71-38" tabindex="-1"></a><span class="do">## kmwittenberg = 0</span></span>
+<span id="cb71-39"><a href="ch7.html#cb71-39" tabindex="-1"></a><span class="do">## lnpop = 0</span></span>
+<span id="cb71-40"><a href="ch7.html#cb71-40" tabindex="-1"></a><span class="do">## gpop = 0</span></span>
+<span id="cb71-41"><a href="ch7.html#cb71-41" tabindex="-1"></a><span class="do">## f_young = 0</span></span>
+<span id="cb71-42"><a href="ch7.html#cb71-42" tabindex="-1"></a><span class="do">## f_jew = 0</span></span>
+<span id="cb71-43"><a href="ch7.html#cb71-43" tabindex="-1"></a><span class="do">## f_fem = 0</span></span>
+<span id="cb71-44"><a href="ch7.html#cb71-44" tabindex="-1"></a><span class="do">## f_ortsgeb = 0</span></span>
+<span id="cb71-45"><a href="ch7.html#cb71-45" tabindex="-1"></a><span class="do">## f_pruss = 0</span></span>
+<span id="cb71-46"><a href="ch7.html#cb71-46" tabindex="-1"></a><span class="do">## hhsize = 0</span></span>
+<span id="cb71-47"><a href="ch7.html#cb71-47" tabindex="-1"></a><span class="do">## f_blind = 0</span></span>
+<span id="cb71-48"><a href="ch7.html#cb71-48" tabindex="-1"></a><span class="do">## f_deaf = 0</span></span>
+<span id="cb71-49"><a href="ch7.html#cb71-49" tabindex="-1"></a><span class="do">## f_dumb = 0</span></span>
+<span id="cb71-50"><a href="ch7.html#cb71-50" tabindex="-1"></a><span class="do">## f_miss = 0</span></span>
+<span id="cb71-51"><a href="ch7.html#cb71-51" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb71-52"><a href="ch7.html#cb71-52" tabindex="-1"></a><span class="do">## Model 1: restricted model</span></span>
+<span id="cb71-53"><a href="ch7.html#cb71-53" tabindex="-1"></a><span class="do">## Model 2: model_73_1$residuals ~ kmwittenberg + f_young + f_jew + f_fem + </span></span>
+<span id="cb71-54"><a href="ch7.html#cb71-54" tabindex="-1"></a><span class="do">##     f_ortsgeb + f_pruss + hhsize + lnpop + gpop + f_blind + f_deaf + </span></span>
+<span id="cb71-55"><a href="ch7.html#cb71-55" tabindex="-1"></a><span class="do">##     f_dumb + f_miss</span></span>
+<span id="cb71-56"><a href="ch7.html#cb71-56" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb71-57"><a href="ch7.html#cb71-57" tabindex="-1"></a><span class="do">##   Res.Df   RSS Df Sum of Sq Chisq Pr(&gt;Chisq)</span></span>
+<span id="cb71-58"><a href="ch7.html#cb71-58" tabindex="-1"></a><span class="do">## 1    451 22556                              </span></span>
+<span id="cb71-59"><a href="ch7.html#cb71-59" tabindex="-1"></a><span class="do">## 2    438 22556 13         0     0          1</span></span>
+<span id="cb71-60"><a href="ch7.html#cb71-60" tabindex="-1"></a></span>
+<span id="cb71-61"><a href="ch7.html#cb71-61" tabindex="-1"></a>model_73_2 <span class="ot">&lt;-</span> <span class="fu">ivreg</span>(f_rw <span class="sc">~</span> f_prot <span class="sc">+</span> f_young <span class="sc">+</span> f_jew <span class="sc">+</span> f_fem <span class="sc">+</span> f_ortsgeb <span class="sc">+</span> f_pruss <span class="sc">+</span> hhsize <span class="sc">+</span> lnpop <span class="sc">+</span> gpop <span class="sc">+</span> f_blind <span class="sc">+</span> f_deaf <span class="sc">+</span> f_dumb <span class="sc">+</span> f_miss <span class="sc">|</span> kmwittenberg <span class="sc">*</span> (lnpop <span class="sc">+</span> gpop) <span class="sc">+</span> f_young <span class="sc">+</span> f_jew <span class="sc">+</span> f_fem <span class="sc">+</span> f_ortsgeb <span class="sc">+</span> f_pruss <span class="sc">+</span> hhsize <span class="sc">+</span> f_blind <span class="sc">+</span> f_deaf <span class="sc">+</span> f_dumb <span class="sc">+</span> f_miss, <span class="at">data =</span> ipehd_qje2009_master)</span>
+<span id="cb71-62"><a href="ch7.html#cb71-62" tabindex="-1"></a>model_75_2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(model_73_2<span class="sc">$</span>residuals <span class="sc">~</span> kmwittenberg <span class="sc">*</span> (lnpop <span class="sc">+</span> gpop) <span class="sc">+</span> f_young <span class="sc">+</span> f_jew <span class="sc">+</span> f_fem <span class="sc">+</span> f_ortsgeb <span class="sc">+</span> f_pruss <span class="sc">+</span> hhsize <span class="sc">+</span> f_blind <span class="sc">+</span> f_deaf <span class="sc">+</span> f_dumb <span class="sc">+</span> f_miss, <span class="at">data =</span> ipehd_qje2009_master)</span>
+<span id="cb71-63"><a href="ch7.html#cb71-63" tabindex="-1"></a><span class="fu">summary</span>(model_75_2)</span>
+<span id="cb71-64"><a href="ch7.html#cb71-64" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb71-65"><a href="ch7.html#cb71-65" tabindex="-1"></a><span class="do">## Call:</span></span>
+<span id="cb71-66"><a href="ch7.html#cb71-66" tabindex="-1"></a><span class="do">## lm(formula = model_73_2$residuals ~ kmwittenberg * (lnpop + gpop) + </span></span>
+<span id="cb71-67"><a href="ch7.html#cb71-67" tabindex="-1"></a><span class="do">##     f_young + f_jew + f_fem + f_ortsgeb + f_pruss + hhsize + </span></span>
+<span id="cb71-68"><a href="ch7.html#cb71-68" tabindex="-1"></a><span class="do">##     f_blind + f_deaf + f_dumb + f_miss, data = ipehd_qje2009_master)</span></span>
+<span id="cb71-69"><a href="ch7.html#cb71-69" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb71-70"><a href="ch7.html#cb71-70" tabindex="-1"></a><span class="do">## Residuals:</span></span>
+<span id="cb71-71"><a href="ch7.html#cb71-71" tabindex="-1"></a><span class="do">##      Min       1Q   Median       3Q      Max </span></span>
+<span id="cb71-72"><a href="ch7.html#cb71-72" tabindex="-1"></a><span class="do">## -21.3447  -4.3890  -0.1007   4.6353  19.7419 </span></span>
+<span id="cb71-73"><a href="ch7.html#cb71-73" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb71-74"><a href="ch7.html#cb71-74" tabindex="-1"></a><span class="do">## Coefficients:</span></span>
+<span id="cb71-75"><a href="ch7.html#cb71-75" tabindex="-1"></a><span class="do">##                      Estimate Std. Error t value Pr(&gt;|t|)</span></span>
+<span id="cb71-76"><a href="ch7.html#cb71-76" tabindex="-1"></a><span class="do">## (Intercept)        -1.193e+01  3.738e+01  -0.319    0.750</span></span>
+<span id="cb71-77"><a href="ch7.html#cb71-77" tabindex="-1"></a><span class="do">## kmwittenberg        3.506e-02  7.091e-02   0.494    0.621</span></span>
+<span id="cb71-78"><a href="ch7.html#cb71-78" tabindex="-1"></a><span class="do">## lnpop               1.034e+00  2.285e+00   0.452    0.651</span></span>
+<span id="cb71-79"><a href="ch7.html#cb71-79" tabindex="-1"></a><span class="do">## gpop               -5.554e-02  2.489e-01  -0.223    0.824</span></span>
+<span id="cb71-80"><a href="ch7.html#cb71-80" tabindex="-1"></a><span class="do">## f_young             6.741e-04  1.778e-01   0.004    0.997</span></span>
+<span id="cb71-81"><a href="ch7.html#cb71-81" tabindex="-1"></a><span class="do">## f_jew              -5.388e-03  3.044e-01  -0.018    0.986</span></span>
+<span id="cb71-82"><a href="ch7.html#cb71-82" tabindex="-1"></a><span class="do">## f_fem               1.195e-02  3.287e-01   0.036    0.971</span></span>
+<span id="cb71-83"><a href="ch7.html#cb71-83" tabindex="-1"></a><span class="do">## f_ortsgeb          -5.907e-04  3.285e-02  -0.018    0.986</span></span>
+<span id="cb71-84"><a href="ch7.html#cb71-84" tabindex="-1"></a><span class="do">## f_pruss            -1.984e-03  1.960e-01  -0.010    0.992</span></span>
+<span id="cb71-85"><a href="ch7.html#cb71-85" tabindex="-1"></a><span class="do">## hhsize              8.812e-02  1.419e+00   0.062    0.951</span></span>
+<span id="cb71-86"><a href="ch7.html#cb71-86" tabindex="-1"></a><span class="do">## f_blind             8.972e-01  1.253e+01   0.072    0.943</span></span>
+<span id="cb71-87"><a href="ch7.html#cb71-87" tabindex="-1"></a><span class="do">## f_deaf              4.100e-01  8.318e+00   0.049    0.961</span></span>
+<span id="cb71-88"><a href="ch7.html#cb71-88" tabindex="-1"></a><span class="do">## f_dumb             -2.080e-02  2.062e+00  -0.010    0.992</span></span>
+<span id="cb71-89"><a href="ch7.html#cb71-89" tabindex="-1"></a><span class="do">## f_miss             -1.432e-02  3.480e-01  -0.041    0.967</span></span>
+<span id="cb71-90"><a href="ch7.html#cb71-90" tabindex="-1"></a><span class="do">## kmwittenberg:lnpop -3.290e-03  6.587e-03  -0.499    0.618</span></span>
+<span id="cb71-91"><a href="ch7.html#cb71-91" tabindex="-1"></a><span class="do">## kmwittenberg:gpop   1.663e-04  6.549e-04   0.254    0.800</span></span>
+<span id="cb71-92"><a href="ch7.html#cb71-92" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb71-93"><a href="ch7.html#cb71-93" tabindex="-1"></a><span class="do">## Residual standard error: 7.152 on 436 degrees of freedom</span></span>
+<span id="cb71-94"><a href="ch7.html#cb71-94" tabindex="-1"></a><span class="do">## Multiple R-squared:  0.0006048,  Adjusted R-squared:  -0.03378 </span></span>
+<span id="cb71-95"><a href="ch7.html#cb71-95" tabindex="-1"></a><span class="do">## F-statistic: 0.01759 on 15 and 436 DF,  p-value: 1</span></span>
+<span id="cb71-96"><a href="ch7.html#cb71-96" tabindex="-1"></a>hypothesis <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;kmwittenberg&quot;</span>, <span class="st">&quot;lnpop&quot;</span>, <span class="st">&quot;gpop&quot;</span>, <span class="st">&quot;kmwittenberg:lnpop&quot;</span>, <span class="st">&quot;kmwittenberg:gpop&quot;</span>, <span class="st">&quot;f_young&quot;</span>, <span class="st">&quot;f_jew&quot;</span>, <span class="st">&quot;f_fem&quot;</span>, <span class="st">&quot;f_ortsgeb&quot;</span>, <span class="st">&quot;f_pruss&quot;</span>, <span class="st">&quot;hhsize&quot;</span>, <span class="st">&quot;f_blind&quot;</span>, <span class="st">&quot;f_deaf&quot;</span>, <span class="st">&quot;f_dumb&quot;</span>, <span class="st">&quot;f_miss&quot;</span>)</span>
+<span id="cb71-97"><a href="ch7.html#cb71-97" tabindex="-1"></a><span class="fu">linearHypothesis</span>(model_75_2, hypothesis, <span class="fu">rep</span>(<span class="dv">0</span>, <span class="fu">length</span>(hypothesis)), <span class="st">&quot;Chisq&quot;</span>)</span>
+<span id="cb71-98"><a href="ch7.html#cb71-98" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb71-99"><a href="ch7.html#cb71-99" tabindex="-1"></a><span class="do">## Linear hypothesis test:</span></span>
+<span id="cb71-100"><a href="ch7.html#cb71-100" tabindex="-1"></a><span class="do">## kmwittenberg = 0</span></span>
+<span id="cb71-101"><a href="ch7.html#cb71-101" tabindex="-1"></a><span class="do">## lnpop = 0</span></span>
+<span id="cb71-102"><a href="ch7.html#cb71-102" tabindex="-1"></a><span class="do">## gpop = 0</span></span>
+<span id="cb71-103"><a href="ch7.html#cb71-103" tabindex="-1"></a><span class="do">## kmwittenberg:lnpop = 0</span></span>
+<span id="cb71-104"><a href="ch7.html#cb71-104" tabindex="-1"></a><span class="do">## kmwittenberg:gpop = 0</span></span>
+<span id="cb71-105"><a href="ch7.html#cb71-105" tabindex="-1"></a><span class="do">## f_young = 0</span></span>
+<span id="cb71-106"><a href="ch7.html#cb71-106" tabindex="-1"></a><span class="do">## f_jew = 0</span></span>
+<span id="cb71-107"><a href="ch7.html#cb71-107" tabindex="-1"></a><span class="do">## f_fem = 0</span></span>
+<span id="cb71-108"><a href="ch7.html#cb71-108" tabindex="-1"></a><span class="do">## f_ortsgeb = 0</span></span>
+<span id="cb71-109"><a href="ch7.html#cb71-109" tabindex="-1"></a><span class="do">## f_pruss = 0</span></span>
+<span id="cb71-110"><a href="ch7.html#cb71-110" tabindex="-1"></a><span class="do">## hhsize = 0</span></span>
+<span id="cb71-111"><a href="ch7.html#cb71-111" tabindex="-1"></a><span class="do">## f_blind = 0</span></span>
+<span id="cb71-112"><a href="ch7.html#cb71-112" tabindex="-1"></a><span class="do">## f_deaf = 0</span></span>
+<span id="cb71-113"><a href="ch7.html#cb71-113" tabindex="-1"></a><span class="do">## f_dumb = 0</span></span>
+<span id="cb71-114"><a href="ch7.html#cb71-114" tabindex="-1"></a><span class="do">## f_miss = 0</span></span>
+<span id="cb71-115"><a href="ch7.html#cb71-115" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb71-116"><a href="ch7.html#cb71-116" tabindex="-1"></a><span class="do">## Model 1: restricted model</span></span>
+<span id="cb71-117"><a href="ch7.html#cb71-117" tabindex="-1"></a><span class="do">## Model 2: model_73_2$residuals ~ kmwittenberg * (lnpop + gpop) + f_young + </span></span>
+<span id="cb71-118"><a href="ch7.html#cb71-118" tabindex="-1"></a><span class="do">##     f_jew + f_fem + f_ortsgeb + f_pruss + hhsize + f_blind + </span></span>
+<span id="cb71-119"><a href="ch7.html#cb71-119" tabindex="-1"></a><span class="do">##     f_deaf + f_dumb + f_miss</span></span>
+<span id="cb71-120"><a href="ch7.html#cb71-120" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb71-121"><a href="ch7.html#cb71-121" tabindex="-1"></a><span class="do">##   Res.Df   RSS Df Sum of Sq  Chisq Pr(&gt;Chisq)</span></span>
+<span id="cb71-122"><a href="ch7.html#cb71-122" tabindex="-1"></a><span class="do">## 1    451 22314                               </span></span>
+<span id="cb71-123"><a href="ch7.html#cb71-123" tabindex="-1"></a><span class="do">## 2    436 22300 15    13.495 0.2638          1</span></span>
+<span id="cb71-124"><a href="ch7.html#cb71-124" tabindex="-1"></a><span class="fu">qchisq</span>(<span class="fl">0.9</span>, <span class="dv">2</span>)</span>
+<span id="cb71-125"><a href="ch7.html#cb71-125" tabindex="-1"></a><span class="do">## [1] 4.60517</span></span>
+<span id="cb71-126"><a href="ch7.html#cb71-126" tabindex="-1"></a></span>
+<span id="cb71-127"><a href="ch7.html#cb71-127" tabindex="-1"></a><span class="co"># HansenのJ検定</span></span>
+<span id="cb71-128"><a href="ch7.html#cb71-128" tabindex="-1"></a><span class="fu">iv_robust</span>(f_rw <span class="sc">~</span> f_prot <span class="sc">+</span> f_young <span class="sc">+</span> f_jew <span class="sc">+</span> f_fem <span class="sc">+</span> f_ortsgeb <span class="sc">+</span> f_pruss <span class="sc">+</span> hhsize <span class="sc">+</span> lnpop <span class="sc">+</span> gpop <span class="sc">+</span> f_blind <span class="sc">+</span> f_deaf <span class="sc">+</span> f_dumb <span class="sc">+</span> f_miss <span class="sc">|</span> kmwittenberg <span class="sc">*</span> (lnpop <span class="sc">+</span> gpop) <span class="sc">+</span> f_young <span class="sc">+</span> f_jew <span class="sc">+</span> f_fem <span class="sc">+</span> f_ortsgeb <span class="sc">+</span> f_pruss <span class="sc">+</span> hhsize <span class="sc">+</span> f_blind <span class="sc">+</span> f_deaf <span class="sc">+</span> f_dumb <span class="sc">+</span> f_miss, <span class="at">se_type =</span> <span class="st">&quot;stata&quot;</span>, <span class="at">data =</span> ipehd_qje2009_master, <span class="at">diagnostics =</span> T) <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span>
+<span id="cb71-129"><a href="ch7.html#cb71-129" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb71-130"><a href="ch7.html#cb71-130" tabindex="-1"></a><span class="do">## Call:</span></span>
+<span id="cb71-131"><a href="ch7.html#cb71-131" tabindex="-1"></a><span class="do">## iv_robust(formula = f_rw ~ f_prot + f_young + f_jew + f_fem + </span></span>
+<span id="cb71-132"><a href="ch7.html#cb71-132" tabindex="-1"></a><span class="do">##     f_ortsgeb + f_pruss + hhsize + lnpop + gpop + f_blind + f_deaf + </span></span>
+<span id="cb71-133"><a href="ch7.html#cb71-133" tabindex="-1"></a><span class="do">##     f_dumb + f_miss | kmwittenberg * (lnpop + gpop) + f_young + </span></span>
+<span id="cb71-134"><a href="ch7.html#cb71-134" tabindex="-1"></a><span class="do">##     f_jew + f_fem + f_ortsgeb + f_pruss + hhsize + f_blind + </span></span>
+<span id="cb71-135"><a href="ch7.html#cb71-135" tabindex="-1"></a><span class="do">##     f_deaf + f_dumb + f_miss, data = ipehd_qje2009_master, se_type = &quot;stata&quot;, </span></span>
+<span id="cb71-136"><a href="ch7.html#cb71-136" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb71-137"><a href="ch7.html#cb71-137" tabindex="-1"></a><span class="do">## Standard error type:  HC1 </span></span>
 <span id="cb71-138"><a href="ch7.html#cb71-138" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb71-139"><a href="ch7.html#cb71-139" tabindex="-1"></a><span class="do">## Standard error type:  HC1 </span></span>
-<span id="cb71-140"><a href="ch7.html#cb71-140" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb71-141"><a href="ch7.html#cb71-141" tabindex="-1"></a><span class="do">## Coefficients:</span></span>
-<span id="cb71-142"><a href="ch7.html#cb71-142" tabindex="-1"></a><span class="do">##             Estimate Std. Error t value  Pr(&gt;|t|) CI Lower  CI Upper  DF</span></span>
-<span id="cb71-143"><a href="ch7.html#cb71-143" tabindex="-1"></a><span class="do">## (Intercept) 179.1507   29.13265   6.149 1.753e-09 121.8935 236.40788 438</span></span>
-<span id="cb71-144"><a href="ch7.html#cb71-144" tabindex="-1"></a><span class="do">## f_prot        0.1853    0.02572   7.205 2.553e-12   0.1348   0.23591 438</span></span>
-<span id="cb71-145"><a href="ch7.html#cb71-145" tabindex="-1"></a><span class="do">## f_young      -1.9518    0.16695 -11.691 1.145e-27  -2.2799  -1.62366 438</span></span>
-<span id="cb71-146"><a href="ch7.html#cb71-146" tabindex="-1"></a><span class="do">## f_jew        -0.4553    0.34569  -1.317 1.885e-01  -1.1348   0.22406 438</span></span>
-<span id="cb71-147"><a href="ch7.html#cb71-147" tabindex="-1"></a><span class="do">## f_fem        -1.0800    0.33013  -3.271 1.155e-03  -1.7288  -0.43113 438</span></span>
-<span id="cb71-148"><a href="ch7.html#cb71-148" tabindex="-1"></a><span class="do">## f_ortsgeb     0.6023    0.04980  12.093 2.996e-29   0.5044   0.70016 438</span></span>
-<span id="cb71-149"><a href="ch7.html#cb71-149" tabindex="-1"></a><span class="do">## f_pruss      -0.1858    0.14074  -1.320 1.876e-01  -0.4624   0.09085 438</span></span>
-<span id="cb71-150"><a href="ch7.html#cb71-150" tabindex="-1"></a><span class="do">## hhsize        0.7897    1.60849   0.491 6.237e-01  -2.3716   3.95102 438</span></span>
-<span id="cb71-151"><a href="ch7.html#cb71-151" tabindex="-1"></a><span class="do">## lnpop        -1.3133    0.95155  -1.380 1.682e-01  -3.1835   0.55683 438</span></span>
-<span id="cb71-152"><a href="ch7.html#cb71-152" tabindex="-1"></a><span class="do">## gpop          0.4020    0.10650   3.775 1.823e-04   0.1927   0.61133 438</span></span>
-<span id="cb71-153"><a href="ch7.html#cb71-153" tabindex="-1"></a><span class="do">## f_blind     -28.4769   14.69031  -1.938 5.321e-02 -57.3492   0.39532 438</span></span>
-<span id="cb71-154"><a href="ch7.html#cb71-154" tabindex="-1"></a><span class="do">## f_deaf      -52.1996   10.37314  -5.032 7.092e-07 -72.5869 -31.81228 438</span></span>
-<span id="cb71-155"><a href="ch7.html#cb71-155" tabindex="-1"></a><span class="do">## f_dumb        7.5271    1.68652   4.463 1.029e-05   4.2124  10.84175 438</span></span>
-<span id="cb71-156"><a href="ch7.html#cb71-156" tabindex="-1"></a><span class="do">## f_miss       -0.4979    0.37693  -1.321 1.872e-01  -1.2388   0.24288 438</span></span>
-<span id="cb71-157"><a href="ch7.html#cb71-157" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb71-158"><a href="ch7.html#cb71-158" tabindex="-1"></a><span class="do">## Multiple R-squared:  0.692 , Adjusted R-squared:  0.6828 </span></span>
-<span id="cb71-159"><a href="ch7.html#cb71-159" tabindex="-1"></a><span class="do">## F-statistic: 66.54 on 13 and 438 DF,  p-value: &lt; 2.2e-16</span></span>
-<span id="cb71-160"><a href="ch7.html#cb71-160" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb71-161"><a href="ch7.html#cb71-161" tabindex="-1"></a><span class="do">## Diagnostics:</span></span>
-<span id="cb71-162"><a href="ch7.html#cb71-162" tabindex="-1"></a><span class="do">##                  numdf dendf  value  p.value    </span></span>
-<span id="cb71-163"><a href="ch7.html#cb71-163" tabindex="-1"></a><span class="do">## Weak instruments     3   436 29.794  &lt; 2e-16 ***</span></span>
-<span id="cb71-164"><a href="ch7.html#cb71-164" tabindex="-1"></a><span class="do">## Wu-Hausman           1   437 14.325 0.000175 ***</span></span>
-<span id="cb71-165"><a href="ch7.html#cb71-165" tabindex="-1"></a><span class="do">## Overidentifying      2    NA  0.382 0.826014    </span></span>
-<span id="cb71-166"><a href="ch7.html#cb71-166" tabindex="-1"></a><span class="do">## ---</span></span>
-<span id="cb71-167"><a href="ch7.html#cb71-167" tabindex="-1"></a><span class="do">## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</span></span>
-<span id="cb71-168"><a href="ch7.html#cb71-168" tabindex="-1"></a><span class="co"># 異なる値になる?</span></span>
-<span id="cb71-169"><a href="ch7.html#cb71-169" tabindex="-1"></a><span class="co">#summary(model_73_2, diagnostics = TRUE)</span></span></code></pre></div>
+<span id="cb71-139"><a href="ch7.html#cb71-139" tabindex="-1"></a><span class="do">## Coefficients:</span></span>
+<span id="cb71-140"><a href="ch7.html#cb71-140" tabindex="-1"></a><span class="do">##             Estimate Std. Error t value  Pr(&gt;|t|) CI Lower  CI Upper  DF</span></span>
+<span id="cb71-141"><a href="ch7.html#cb71-141" tabindex="-1"></a><span class="do">## (Intercept) 179.1507   29.13265   6.149 1.753e-09 121.8935 236.40788 438</span></span>
+<span id="cb71-142"><a href="ch7.html#cb71-142" tabindex="-1"></a><span class="do">## f_prot        0.1853    0.02572   7.205 2.553e-12   0.1348   0.23591 438</span></span>
+<span id="cb71-143"><a href="ch7.html#cb71-143" tabindex="-1"></a><span class="do">## f_young      -1.9518    0.16695 -11.691 1.145e-27  -2.2799  -1.62366 438</span></span>
+<span id="cb71-144"><a href="ch7.html#cb71-144" tabindex="-1"></a><span class="do">## f_jew        -0.4553    0.34569  -1.317 1.885e-01  -1.1348   0.22406 438</span></span>
+<span id="cb71-145"><a href="ch7.html#cb71-145" tabindex="-1"></a><span class="do">## f_fem        -1.0800    0.33013  -3.271 1.155e-03  -1.7288  -0.43113 438</span></span>
+<span id="cb71-146"><a href="ch7.html#cb71-146" tabindex="-1"></a><span class="do">## f_ortsgeb     0.6023    0.04980  12.093 2.996e-29   0.5044   0.70016 438</span></span>
+<span id="cb71-147"><a href="ch7.html#cb71-147" tabindex="-1"></a><span class="do">## f_pruss      -0.1858    0.14074  -1.320 1.876e-01  -0.4624   0.09085 438</span></span>
+<span id="cb71-148"><a href="ch7.html#cb71-148" tabindex="-1"></a><span class="do">## hhsize        0.7897    1.60849   0.491 6.237e-01  -2.3716   3.95102 438</span></span>
+<span id="cb71-149"><a href="ch7.html#cb71-149" tabindex="-1"></a><span class="do">## lnpop        -1.3133    0.95155  -1.380 1.682e-01  -3.1835   0.55683 438</span></span>
+<span id="cb71-150"><a href="ch7.html#cb71-150" tabindex="-1"></a><span class="do">## gpop          0.4020    0.10650   3.775 1.823e-04   0.1927   0.61133 438</span></span>
+<span id="cb71-151"><a href="ch7.html#cb71-151" tabindex="-1"></a><span class="do">## f_blind     -28.4769   14.69031  -1.938 5.321e-02 -57.3492   0.39532 438</span></span>
+<span id="cb71-152"><a href="ch7.html#cb71-152" tabindex="-1"></a><span class="do">## f_deaf      -52.1996   10.37314  -5.032 7.092e-07 -72.5869 -31.81228 438</span></span>
+<span id="cb71-153"><a href="ch7.html#cb71-153" tabindex="-1"></a><span class="do">## f_dumb        7.5271    1.68652   4.463 1.029e-05   4.2124  10.84175 438</span></span>
+<span id="cb71-154"><a href="ch7.html#cb71-154" tabindex="-1"></a><span class="do">## f_miss       -0.4979    0.37693  -1.321 1.872e-01  -1.2388   0.24288 438</span></span>
+<span id="cb71-155"><a href="ch7.html#cb71-155" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb71-156"><a href="ch7.html#cb71-156" tabindex="-1"></a><span class="do">## Multiple R-squared:  0.692 , Adjusted R-squared:  0.6828 </span></span>
+<span id="cb71-157"><a href="ch7.html#cb71-157" tabindex="-1"></a><span class="do">## F-statistic: 66.54 on 13 and 438 DF,  p-value: &lt; 2.2e-16</span></span>
+<span id="cb71-158"><a href="ch7.html#cb71-158" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb71-159"><a href="ch7.html#cb71-159" tabindex="-1"></a><span class="do">## Diagnostics:</span></span>
+<span id="cb71-160"><a href="ch7.html#cb71-160" tabindex="-1"></a><span class="do">##                  numdf dendf  value  p.value    </span></span>
+<span id="cb71-161"><a href="ch7.html#cb71-161" tabindex="-1"></a><span class="do">## Weak instruments     3   436 29.794  &lt; 2e-16 ***</span></span>
+<span id="cb71-162"><a href="ch7.html#cb71-162" tabindex="-1"></a><span class="do">## Wu-Hausman           1   437 14.325 0.000175 ***</span></span>
+<span id="cb71-163"><a href="ch7.html#cb71-163" tabindex="-1"></a><span class="do">## Overidentifying      2    NA  0.382 0.826014    </span></span>
+<span id="cb71-164"><a href="ch7.html#cb71-164" tabindex="-1"></a><span class="do">## ---</span></span>
+<span id="cb71-165"><a href="ch7.html#cb71-165" tabindex="-1"></a><span class="do">## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</span></span>
+<span id="cb71-166"><a href="ch7.html#cb71-166" tabindex="-1"></a><span class="co"># 異なる値になる?</span></span>
+<span id="cb71-167"><a href="ch7.html#cb71-167" tabindex="-1"></a><span class="co">#summary(model_73_2, diagnostics = TRUE)</span></span></code></pre></div>
 </div>
 <div id="表7-2-記述統計量" class="section level2 unnumbered hasAnchor">
 <h2>表7-2 記述統計量<a href="ch7.html#表7-2-記述統計量" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -801,23 +799,23 @@ HansenのJ検定は, <code>iv_robust()</code>で<code>diagnostics = TRUE</code>�
 <span id="cb72-11"><a href="ch7.html#cb72-11" tabindex="-1"></a>table63[,<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;識字率&quot;</span>, <span class="st">&quot;新教徒率&quot;</span>, <span class="st">&quot;距離&quot;</span>, <span class="st">&quot;子供率&quot;</span>, <span class="st">&quot;ユダヤ率&quot;</span>, <span class="st">&quot;女性率&quot;</span>, <span class="st">&quot;出身者率&quot;</span>, <span class="st">&quot;普人率&quot;</span>, <span class="st">&quot;平均家計人数&quot;</span>, <span class="st">&quot;対数人口&quot;</span>, <span class="st">&quot;人口成長率&quot;</span>, <span class="st">&quot;視覚障害率&quot;</span>, <span class="st">&quot;聴覚障害率&quot;</span>, <span class="st">&quot;知的・精神障害率&quot;</span>, <span class="st">&quot;欠落率&quot;</span>)</span>
 <span id="cb72-12"><a href="ch7.html#cb72-12" tabindex="-1"></a><span class="co"># 表を出力</span></span>
 <span id="cb72-13"><a href="ch7.html#cb72-13" tabindex="-1"></a><span class="fu">gt</span>(table63)</span></code></pre></div>
-<div id="wfylbuwpmx" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#wfylbuwpmx table {
+<div id="ujxiahezls" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#ujxiahezls table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#wfylbuwpmx thead, #wfylbuwpmx tbody, #wfylbuwpmx tfoot, #wfylbuwpmx tr, #wfylbuwpmx td, #wfylbuwpmx th {
+#ujxiahezls thead, #ujxiahezls tbody, #ujxiahezls tfoot, #ujxiahezls tr, #ujxiahezls td, #ujxiahezls th {
   border-style: none;
 }
 
-#wfylbuwpmx p {
+#ujxiahezls p {
   margin: 0;
   padding: 0;
 }
 
-#wfylbuwpmx .gt_table {
+#ujxiahezls .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -843,12 +841,12 @@ HansenのJ検定は, <code>iv_robust()</code>で<code>diagnostics = TRUE</code>�
   border-left-color: #D3D3D3;
 }
 
-#wfylbuwpmx .gt_caption {
+#ujxiahezls .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#wfylbuwpmx .gt_title {
+#ujxiahezls .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -860,7 +858,7 @@ HansenのJ検定は, <code>iv_robust()</code>で<code>diagnostics = TRUE</code>�
   border-bottom-width: 0;
 }
 
-#wfylbuwpmx .gt_subtitle {
+#ujxiahezls .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -872,7 +870,7 @@ HansenのJ検定は, <code>iv_robust()</code>で<code>diagnostics = TRUE</code>�
   border-top-width: 0;
 }
 
-#wfylbuwpmx .gt_heading {
+#ujxiahezls .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -884,13 +882,13 @@ HansenのJ検定は, <code>iv_robust()</code>で<code>diagnostics = TRUE</code>�
   border-right-color: #D3D3D3;
 }
 
-#wfylbuwpmx .gt_bottom_border {
+#ujxiahezls .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#wfylbuwpmx .gt_col_headings {
+#ujxiahezls .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -905,7 +903,7 @@ HansenのJ検定は, <code>iv_robust()</code>で<code>diagnostics = TRUE</code>�
   border-right-color: #D3D3D3;
 }
 
-#wfylbuwpmx .gt_col_heading {
+#ujxiahezls .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -925,7 +923,7 @@ HansenのJ検定は, <code>iv_robust()</code>で<code>diagnostics = TRUE</code>�
   overflow-x: hidden;
 }
 
-#wfylbuwpmx .gt_column_spanner_outer {
+#ujxiahezls .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -937,15 +935,15 @@ HansenのJ検定は, <code>iv_robust()</code>で<code>diagnostics = TRUE</code>�
   padding-right: 4px;
 }
 
-#wfylbuwpmx .gt_column_spanner_outer:first-child {
+#ujxiahezls .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#wfylbuwpmx .gt_column_spanner_outer:last-child {
+#ujxiahezls .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#wfylbuwpmx .gt_column_spanner {
+#ujxiahezls .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -957,11 +955,11 @@ HansenのJ検定は, <code>iv_robust()</code>で<code>diagnostics = TRUE</code>�
   width: 100%;
 }
 
-#wfylbuwpmx .gt_spanner_row {
+#ujxiahezls .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#wfylbuwpmx .gt_group_heading {
+#ujxiahezls .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -987,7 +985,7 @@ HansenのJ検定は, <code>iv_robust()</code>で<code>diagnostics = TRUE</code>�
   text-align: left;
 }
 
-#wfylbuwpmx .gt_empty_group_heading {
+#ujxiahezls .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1002,15 +1000,15 @@ HansenのJ検定は, <code>iv_robust()</code>で<code>diagnostics = TRUE</code>�
   vertical-align: middle;
 }
 
-#wfylbuwpmx .gt_from_md > :first-child {
+#ujxiahezls .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#wfylbuwpmx .gt_from_md > :last-child {
+#ujxiahezls .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#wfylbuwpmx .gt_row {
+#ujxiahezls .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1029,7 +1027,7 @@ HansenのJ検定は, <code>iv_robust()</code>で<code>diagnostics = TRUE</code>�
   overflow-x: hidden;
 }
 
-#wfylbuwpmx .gt_stub {
+#ujxiahezls .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1042,7 +1040,7 @@ HansenのJ検定は, <code>iv_robust()</code>で<code>diagnostics = TRUE</code>�
   padding-right: 5px;
 }
 
-#wfylbuwpmx .gt_stub_row_group {
+#ujxiahezls .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1056,15 +1054,15 @@ HansenのJ検定は, <code>iv_robust()</code>で<code>diagnostics = TRUE</code>�
   vertical-align: top;
 }
 
-#wfylbuwpmx .gt_row_group_first td {
+#ujxiahezls .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#wfylbuwpmx .gt_row_group_first th {
+#ujxiahezls .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#wfylbuwpmx .gt_summary_row {
+#ujxiahezls .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1074,16 +1072,16 @@ HansenのJ検定は, <code>iv_robust()</code>で<code>diagnostics = TRUE</code>�
   padding-right: 5px;
 }
 
-#wfylbuwpmx .gt_first_summary_row {
+#ujxiahezls .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#wfylbuwpmx .gt_first_summary_row.thick {
+#ujxiahezls .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#wfylbuwpmx .gt_last_summary_row {
+#ujxiahezls .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1093,7 +1091,7 @@ HansenのJ検定は, <code>iv_robust()</code>で<code>diagnostics = TRUE</code>�
   border-bottom-color: #D3D3D3;
 }
 
-#wfylbuwpmx .gt_grand_summary_row {
+#ujxiahezls .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1103,7 +1101,7 @@ HansenのJ検定は, <code>iv_robust()</code>で<code>diagnostics = TRUE</code>�
   padding-right: 5px;
 }
 
-#wfylbuwpmx .gt_first_grand_summary_row {
+#ujxiahezls .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1113,7 +1111,7 @@ HansenのJ検定は, <code>iv_robust()</code>で<code>diagnostics = TRUE</code>�
   border-top-color: #D3D3D3;
 }
 
-#wfylbuwpmx .gt_last_grand_summary_row_top {
+#ujxiahezls .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1123,11 +1121,11 @@ HansenのJ検定は, <code>iv_robust()</code>で<code>diagnostics = TRUE</code>�
   border-bottom-color: #D3D3D3;
 }
 
-#wfylbuwpmx .gt_striped {
+#ujxiahezls .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#wfylbuwpmx .gt_table_body {
+#ujxiahezls .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1136,7 +1134,7 @@ HansenのJ検定は, <code>iv_robust()</code>で<code>diagnostics = TRUE</code>�
   border-bottom-color: #D3D3D3;
 }
 
-#wfylbuwpmx .gt_footnotes {
+#ujxiahezls .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1150,7 +1148,7 @@ HansenのJ検定は, <code>iv_robust()</code>で<code>diagnostics = TRUE</code>�
   border-right-color: #D3D3D3;
 }
 
-#wfylbuwpmx .gt_footnote {
+#ujxiahezls .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1159,7 +1157,7 @@ HansenのJ検定は, <code>iv_robust()</code>で<code>diagnostics = TRUE</code>�
   padding-right: 5px;
 }
 
-#wfylbuwpmx .gt_sourcenotes {
+#ujxiahezls .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1173,7 +1171,7 @@ HansenのJ検定は, <code>iv_robust()</code>で<code>diagnostics = TRUE</code>�
   border-right-color: #D3D3D3;
 }
 
-#wfylbuwpmx .gt_sourcenote {
+#ujxiahezls .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1181,75 +1179,84 @@ HansenのJ検定は, <code>iv_robust()</code>で<code>diagnostics = TRUE</code>�
   padding-right: 5px;
 }
 
-#wfylbuwpmx .gt_left {
+#ujxiahezls .gt_left {
   text-align: left;
 }
 
-#wfylbuwpmx .gt_center {
+#ujxiahezls .gt_center {
   text-align: center;
 }
 
-#wfylbuwpmx .gt_right {
+#ujxiahezls .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#wfylbuwpmx .gt_font_normal {
+#ujxiahezls .gt_font_normal {
   font-weight: normal;
 }
 
-#wfylbuwpmx .gt_font_bold {
+#ujxiahezls .gt_font_bold {
   font-weight: bold;
 }
 
-#wfylbuwpmx .gt_font_italic {
+#ujxiahezls .gt_font_italic {
   font-style: italic;
 }
 
-#wfylbuwpmx .gt_super {
+#ujxiahezls .gt_super {
   font-size: 65%;
 }
 
-#wfylbuwpmx .gt_footnote_marks {
+#ujxiahezls .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#wfylbuwpmx .gt_asterisk {
+#ujxiahezls .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#wfylbuwpmx .gt_indent_1 {
+#ujxiahezls .gt_indent_1 {
   text-indent: 5px;
 }
 
-#wfylbuwpmx .gt_indent_2 {
+#ujxiahezls .gt_indent_2 {
   text-indent: 10px;
 }
 
-#wfylbuwpmx .gt_indent_3 {
+#ujxiahezls .gt_indent_3 {
   text-indent: 15px;
 }
 
-#wfylbuwpmx .gt_indent_4 {
+#ujxiahezls .gt_indent_4 {
   text-indent: 20px;
 }
 
-#wfylbuwpmx .gt_indent_5 {
+#ujxiahezls .gt_indent_5 {
   text-indent: 25px;
+}
+
+#ujxiahezls .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#ujxiahezls div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
 }
 </style>
 <table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
   <thead>
     <tr class="gt_col_headings">
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="変数">変数</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="サンプルサイズ">サンプルサイズ</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="平均">平均</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="標準偏差">標準偏差</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="最小値">最小値</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="最大値">最大値</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="a変数">変数</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="aサンプルサイズ">サンプルサイズ</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="a平均">平均</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="a標準偏差">標準偏差</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="a最小値">最小値</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="a最大値">最大値</th>
     </tr>
   </thead>
   <tbody class="gt_table_body">
@@ -1432,22 +1439,22 @@ HansenのJ検定は, <code>iv_robust()</code>で<code>diagnostics = TRUE</code>�
 <th style="text-align:left;border-bottom: 1.5px solid">
 </th>
 <th style="text-align:center;border-bottom: 1.5px solid">
- (1)
+&amp;nbsp;(1)
 </th>
 <th style="text-align:center;border-bottom: 1.5px solid">
-  (2)
+&amp;nbsp;&amp;nbsp;(2)
 </th>
 <th style="text-align:center;border-bottom: 1.5px solid">
-  (3)
+&amp;nbsp;&amp;nbsp;(3)
 </th>
 <th style="text-align:center;border-bottom: 1.5px solid">
-  (4)
+&amp;nbsp;&amp;nbsp;(4)
 </th>
 <th style="text-align:center;border-bottom: 1.5px solid">
-  (5)
+&amp;nbsp;&amp;nbsp;(5)
 </th>
 <th style="text-align:center;border-bottom: 1.5px solid">
-  (6)
+&amp;nbsp;&amp;nbsp;(6)
 </th>
 </tr>
 </thead>
@@ -2215,7 +2222,7 @@ OLS
 <tfoot>
 <tr>
 <td style="padding: 0; " colspan="100%">
-<sup></sup> * p &lt; 0.05, ** p &lt; 0.01, *** p &lt; 0.001
+<sup></sup> * p &amp;lt; 0.05, ** p &amp;lt; 0.01, *** p &amp;lt; 0.001
 </td>
 </tr>
 </tfoot>

@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>西山ほか (2019)『計量経済学』有斐閣の練習問題解答とRでの再現</title>
   <meta name="description" content="西山ほか (2019)『計量経済学』有斐閣の練習問題解答とRでの再現." />
-  <meta name="generator" content="bookdown 0.39 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.42 and GitBook 2.6.7" />
 
   <meta property="og:title" content="西山ほか (2019)『計量経済学』有斐閣の練習問題解答とRでの再現" />
   <meta property="og:type" content="book" />
@@ -23,7 +23,7 @@
 <meta name="author" content="石井 俊輔" />
 
 
-<meta name="date" content="2024-05-20" />
+<meta name="date" content="2025-01-29" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -80,7 +80,7 @@ MathJax.Hub.Config({
 
 <style type="text/css">
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -298,7 +298,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="header">
 <h1 class="title">西山ほか (2019)『計量経済学』有斐閣の練習問題解答とRでの再現</h1>
 <p class="author"><em>石井 俊輔</em></p>
-<p class="date"><em>2024-05-20</em></p>
+<p class="date"><em>2025-01-29</em></p>
 </div>
 <div id="はじめに" class="section level1 unnumbered hasAnchor">
 <h1>はじめに<a href="index.html#はじめに" class="anchor-section" aria-label="Anchor link to header"></a></h1>
@@ -317,9 +317,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-11"><a href="index.html#cb1-11" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;pscl&quot;</span>)</span>
 <span id="cb1-12"><a href="index.html#cb1-12" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;nnet&quot;</span>)</span>
 <span id="cb1-13"><a href="index.html#cb1-13" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;sampleSelection&quot;</span>)</span>
-<span id="cb1-14"><a href="index.html#cb1-14" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;estatapi&quot;</span>)</span>
-<span id="cb1-15"><a href="index.html#cb1-15" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;tidyquant&quot;</span>)</span>
-<span id="cb1-16"><a href="index.html#cb1-16" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;dynlm&quot;</span>)</span></code></pre></div>
+<span id="cb1-14"><a href="index.html#cb1-14" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;patchwork&quot;</span>)</span>
+<span id="cb1-15"><a href="index.html#cb1-15" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;latex2exp&quot;</span>)</span>
+<span id="cb1-16"><a href="index.html#cb1-16" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;kableExtra&quot;</span>)</span>
+<span id="cb1-17"><a href="index.html#cb1-17" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;estatapi&quot;</span>)</span>
+<span id="cb1-18"><a href="index.html#cb1-18" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;tidyquant&quot;</span>)</span>
+<span id="cb1-19"><a href="index.html#cb1-19" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;dynlm&quot;</span>)</span></code></pre></div>
 <div id="方針" class="section level2 unnumbered hasAnchor">
 <h2>方針<a href="index.html#方針" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <ul>

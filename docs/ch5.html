@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>第5章 重回帰モデルの推定と検定 | 西山ほか (2019)『計量経済学』有斐閣の練習問題解答とRでの再現</title>
   <meta name="description" content="第5章 重回帰モデルの推定と検定 | 西山ほか (2019)『計量経済学』有斐閣の練習問題解答とRでの再現." />
-  <meta name="generator" content="bookdown 0.39 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.42 and GitBook 2.6.7" />
 
   <meta property="og:title" content="第5章 重回帰モデルの推定と検定 | 西山ほか (2019)『計量経済学』有斐閣の練習問題解答とRでの再現" />
   <meta property="og:type" content="book" />
@@ -23,7 +23,7 @@
 <meta name="author" content="石井 俊輔" />
 
 
-<meta name="date" content="2024-05-20" />
+<meta name="date" content="2025-01-29" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -80,7 +80,7 @@ MathJax.Hub.Config({
 
 <style type="text/css">
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -328,27 +328,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb24-8"><a href="ch5.html#cb24-8" tabindex="-1"></a><span class="do">## Revert to `kableExtra` for one session:</span></span>
 <span id="cb24-9"><a href="ch5.html#cb24-9" tabindex="-1"></a><span class="do">## </span></span>
 <span id="cb24-10"><a href="ch5.html#cb24-10" tabindex="-1"></a><span class="do">##   options(modelsummary_factory_default = &#39;kableExtra&#39;)</span></span>
-<span id="cb24-11"><a href="ch5.html#cb24-11" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb24-12"><a href="ch5.html#cb24-12" tabindex="-1"></a><span class="do">## Change the default backend persistently:</span></span>
+<span id="cb24-11"><a href="ch5.html#cb24-11" tabindex="-1"></a><span class="do">##   options(modelsummary_factory_latex = &#39;kableExtra&#39;)</span></span>
+<span id="cb24-12"><a href="ch5.html#cb24-12" tabindex="-1"></a><span class="do">##   options(modelsummary_factory_html = &#39;kableExtra&#39;)</span></span>
 <span id="cb24-13"><a href="ch5.html#cb24-13" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb24-14"><a href="ch5.html#cb24-14" tabindex="-1"></a><span class="do">##   config_modelsummary(factory_default = &#39;gt&#39;)</span></span>
+<span id="cb24-14"><a href="ch5.html#cb24-14" tabindex="-1"></a><span class="do">## Silence this message forever:</span></span>
 <span id="cb24-15"><a href="ch5.html#cb24-15" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb24-16"><a href="ch5.html#cb24-16" tabindex="-1"></a><span class="do">## Silence this message forever:</span></span>
-<span id="cb24-17"><a href="ch5.html#cb24-17" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb24-18"><a href="ch5.html#cb24-18" tabindex="-1"></a><span class="do">##   config_modelsummary(startup_message = FALSE)</span></span>
-<span id="cb24-19"><a href="ch5.html#cb24-19" tabindex="-1"></a><span class="fu">library</span>(gt)</span>
-<span id="cb24-20"><a href="ch5.html#cb24-20" tabindex="-1"></a><span class="fu">library</span>(car)</span>
-<span id="cb24-21"><a href="ch5.html#cb24-21" tabindex="-1"></a><span class="do">## Loading required package: carData</span></span>
-<span id="cb24-22"><a href="ch5.html#cb24-22" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb24-23"><a href="ch5.html#cb24-23" tabindex="-1"></a><span class="do">## Attaching package: &#39;car&#39;</span></span>
-<span id="cb24-24"><a href="ch5.html#cb24-24" tabindex="-1"></a><span class="do">## The following object is masked from &#39;package:dplyr&#39;:</span></span>
-<span id="cb24-25"><a href="ch5.html#cb24-25" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb24-26"><a href="ch5.html#cb24-26" tabindex="-1"></a><span class="do">##     recode</span></span>
-<span id="cb24-27"><a href="ch5.html#cb24-27" tabindex="-1"></a><span class="do">## The following object is masked from &#39;package:purrr&#39;:</span></span>
-<span id="cb24-28"><a href="ch5.html#cb24-28" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb24-29"><a href="ch5.html#cb24-29" tabindex="-1"></a><span class="do">##     some</span></span>
-<span id="cb24-30"><a href="ch5.html#cb24-30" tabindex="-1"></a><span class="fu">library</span>(wooldridge)</span>
-<span id="cb24-31"><a href="ch5.html#cb24-31" tabindex="-1"></a><span class="fu">library</span>(haven)</span></code></pre></div>
+<span id="cb24-16"><a href="ch5.html#cb24-16" tabindex="-1"></a><span class="do">##   config_modelsummary(startup_message = FALSE)</span></span>
+<span id="cb24-17"><a href="ch5.html#cb24-17" tabindex="-1"></a><span class="fu">library</span>(gt)</span>
+<span id="cb24-18"><a href="ch5.html#cb24-18" tabindex="-1"></a><span class="fu">library</span>(car)</span>
+<span id="cb24-19"><a href="ch5.html#cb24-19" tabindex="-1"></a><span class="do">## Loading required package: carData</span></span>
+<span id="cb24-20"><a href="ch5.html#cb24-20" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb24-21"><a href="ch5.html#cb24-21" tabindex="-1"></a><span class="do">## Attaching package: &#39;car&#39;</span></span>
+<span id="cb24-22"><a href="ch5.html#cb24-22" tabindex="-1"></a><span class="do">## The following object is masked from &#39;package:dplyr&#39;:</span></span>
+<span id="cb24-23"><a href="ch5.html#cb24-23" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb24-24"><a href="ch5.html#cb24-24" tabindex="-1"></a><span class="do">##     recode</span></span>
+<span id="cb24-25"><a href="ch5.html#cb24-25" tabindex="-1"></a><span class="do">## The following object is masked from &#39;package:purrr&#39;:</span></span>
+<span id="cb24-26"><a href="ch5.html#cb24-26" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb24-27"><a href="ch5.html#cb24-27" tabindex="-1"></a><span class="do">##     some</span></span>
+<span id="cb24-28"><a href="ch5.html#cb24-28" tabindex="-1"></a><span class="fu">library</span>(wooldridge)</span>
+<span id="cb24-29"><a href="ch5.html#cb24-29" tabindex="-1"></a><span class="fu">library</span>(haven)</span></code></pre></div>
 <div id="単回帰-5.1-5.2" class="section level2 unnumbered hasAnchor">
 <h2>単回帰 (5.1), (5.2)<a href="ch5.html#単回帰-5.1-5.2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>先にデータを読み込み, 変数を作成する.</p>
@@ -666,20 +664,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2>実証例5.9 ポンフェローニ検定<a href="ch5.html#実証例5.9-ポンフェローニ検定" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>式は<a href="ch5.html#ex5.1">実証例5.1</a>を参照せよ. 規範と教育水準の係数が両方とも0であるという帰無仮説を検定する. F検定統計値は<code>car::linearHypothesis()</code>を使うことで求められる.</p>
 <div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="ch5.html#cb35-1" tabindex="-1"></a><span class="fu">linearHypothesis</span>(youdou_55_2, <span class="fu">c</span>(<span class="st">&quot;norm80&quot;</span>,<span class="st">&quot;education80&quot;</span>), <span class="at">test =</span> <span class="st">&quot;F&quot;</span>)</span>
-<span id="cb35-2"><a href="ch5.html#cb35-2" tabindex="-1"></a><span class="do">## Linear hypothesis test</span></span>
-<span id="cb35-3"><a href="ch5.html#cb35-3" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb35-4"><a href="ch5.html#cb35-4" tabindex="-1"></a><span class="do">## Hypothesis:</span></span>
-<span id="cb35-5"><a href="ch5.html#cb35-5" tabindex="-1"></a><span class="do">## norm80 = 0</span></span>
-<span id="cb35-6"><a href="ch5.html#cb35-6" tabindex="-1"></a><span class="do">## education80 = 0</span></span>
-<span id="cb35-7"><a href="ch5.html#cb35-7" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb35-8"><a href="ch5.html#cb35-8" tabindex="-1"></a><span class="do">## Model 1: restricted model</span></span>
-<span id="cb35-9"><a href="ch5.html#cb35-9" tabindex="-1"></a><span class="do">## Model 2: growthrate8099 ~ norm80 + education80 + lny80</span></span>
-<span id="cb35-10"><a href="ch5.html#cb35-10" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb35-11"><a href="ch5.html#cb35-11" tabindex="-1"></a><span class="do">##   Res.Df Df      F   Pr(&gt;F)   </span></span>
-<span id="cb35-12"><a href="ch5.html#cb35-12" tabindex="-1"></a><span class="do">## 1     45                      </span></span>
-<span id="cb35-13"><a href="ch5.html#cb35-13" tabindex="-1"></a><span class="do">## 2     43  2 5.4375 0.007848 **</span></span>
-<span id="cb35-14"><a href="ch5.html#cb35-14" tabindex="-1"></a><span class="do">## ---</span></span>
-<span id="cb35-15"><a href="ch5.html#cb35-15" tabindex="-1"></a><span class="do">## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</span></span></code></pre></div>
+<span id="cb35-2"><a href="ch5.html#cb35-2" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb35-3"><a href="ch5.html#cb35-3" tabindex="-1"></a><span class="do">## Linear hypothesis test:</span></span>
+<span id="cb35-4"><a href="ch5.html#cb35-4" tabindex="-1"></a><span class="do">## norm80 = 0</span></span>
+<span id="cb35-5"><a href="ch5.html#cb35-5" tabindex="-1"></a><span class="do">## education80 = 0</span></span>
+<span id="cb35-6"><a href="ch5.html#cb35-6" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb35-7"><a href="ch5.html#cb35-7" tabindex="-1"></a><span class="do">## Model 1: restricted model</span></span>
+<span id="cb35-8"><a href="ch5.html#cb35-8" tabindex="-1"></a><span class="do">## Model 2: growthrate8099 ~ norm80 + education80 + lny80</span></span>
+<span id="cb35-9"><a href="ch5.html#cb35-9" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb35-10"><a href="ch5.html#cb35-10" tabindex="-1"></a><span class="do">##   Res.Df Df      F   Pr(&gt;F)   </span></span>
+<span id="cb35-11"><a href="ch5.html#cb35-11" tabindex="-1"></a><span class="do">## 1     45                      </span></span>
+<span id="cb35-12"><a href="ch5.html#cb35-12" tabindex="-1"></a><span class="do">## 2     43  2 5.4375 0.007848 **</span></span>
+<span id="cb35-13"><a href="ch5.html#cb35-13" tabindex="-1"></a><span class="do">## ---</span></span>
+<span id="cb35-14"><a href="ch5.html#cb35-14" tabindex="-1"></a><span class="do">## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</span></span></code></pre></div>
 </div>
 <div id="table5-5" class="section level2 unnumbered hasAnchor">
 <h2>表5-5 記述統計量<a href="ch5.html#table5-5" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -697,23 +694,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb36-11"><a href="ch5.html#cb36-11" tabindex="-1"></a>table55[,<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;経済成長率&quot;</span>, <span class="st">&quot;信頼&quot;</span>, <span class="st">&quot;規範&quot;</span>, <span class="st">&quot;教育水準&quot;</span>, <span class="st">&quot;初期時点対数GDP&quot;</span>)</span>
 <span id="cb36-12"><a href="ch5.html#cb36-12" tabindex="-1"></a><span class="co"># 表を出力</span></span>
 <span id="cb36-13"><a href="ch5.html#cb36-13" tabindex="-1"></a><span class="fu">gt</span>(table55)</span></code></pre></div>
-<div id="pbuigkjsny" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#pbuigkjsny table {
+<div id="dsglcvmvpv" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#dsglcvmvpv table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#pbuigkjsny thead, #pbuigkjsny tbody, #pbuigkjsny tfoot, #pbuigkjsny tr, #pbuigkjsny td, #pbuigkjsny th {
+#dsglcvmvpv thead, #dsglcvmvpv tbody, #dsglcvmvpv tfoot, #dsglcvmvpv tr, #dsglcvmvpv td, #dsglcvmvpv th {
   border-style: none;
 }
 
-#pbuigkjsny p {
+#dsglcvmvpv p {
   margin: 0;
   padding: 0;
 }
 
-#pbuigkjsny .gt_table {
+#dsglcvmvpv .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -739,12 +736,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-left-color: #D3D3D3;
 }
 
-#pbuigkjsny .gt_caption {
+#dsglcvmvpv .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#pbuigkjsny .gt_title {
+#dsglcvmvpv .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -756,7 +753,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-width: 0;
 }
 
-#pbuigkjsny .gt_subtitle {
+#dsglcvmvpv .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -768,7 +765,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-top-width: 0;
 }
 
-#pbuigkjsny .gt_heading {
+#dsglcvmvpv .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -780,13 +777,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#pbuigkjsny .gt_bottom_border {
+#dsglcvmvpv .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#pbuigkjsny .gt_col_headings {
+#dsglcvmvpv .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -801,7 +798,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#pbuigkjsny .gt_col_heading {
+#dsglcvmvpv .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -821,7 +818,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   overflow-x: hidden;
 }
 
-#pbuigkjsny .gt_column_spanner_outer {
+#dsglcvmvpv .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -833,15 +830,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 4px;
 }
 
-#pbuigkjsny .gt_column_spanner_outer:first-child {
+#dsglcvmvpv .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#pbuigkjsny .gt_column_spanner_outer:last-child {
+#dsglcvmvpv .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#pbuigkjsny .gt_column_spanner {
+#dsglcvmvpv .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -853,11 +850,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   width: 100%;
 }
 
-#pbuigkjsny .gt_spanner_row {
+#dsglcvmvpv .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#pbuigkjsny .gt_group_heading {
+#dsglcvmvpv .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -883,7 +880,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   text-align: left;
 }
 
-#pbuigkjsny .gt_empty_group_heading {
+#dsglcvmvpv .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -898,15 +895,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   vertical-align: middle;
 }
 
-#pbuigkjsny .gt_from_md > :first-child {
+#dsglcvmvpv .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#pbuigkjsny .gt_from_md > :last-child {
+#dsglcvmvpv .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#pbuigkjsny .gt_row {
+#dsglcvmvpv .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -925,7 +922,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   overflow-x: hidden;
 }
 
-#pbuigkjsny .gt_stub {
+#dsglcvmvpv .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -938,7 +935,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#pbuigkjsny .gt_stub_row_group {
+#dsglcvmvpv .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -952,15 +949,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   vertical-align: top;
 }
 
-#pbuigkjsny .gt_row_group_first td {
+#dsglcvmvpv .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#pbuigkjsny .gt_row_group_first th {
+#dsglcvmvpv .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#pbuigkjsny .gt_summary_row {
+#dsglcvmvpv .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -970,16 +967,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#pbuigkjsny .gt_first_summary_row {
+#dsglcvmvpv .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#pbuigkjsny .gt_first_summary_row.thick {
+#dsglcvmvpv .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#pbuigkjsny .gt_last_summary_row {
+#dsglcvmvpv .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -989,7 +986,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-color: #D3D3D3;
 }
 
-#pbuigkjsny .gt_grand_summary_row {
+#dsglcvmvpv .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -999,7 +996,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#pbuigkjsny .gt_first_grand_summary_row {
+#dsglcvmvpv .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1009,7 +1006,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-top-color: #D3D3D3;
 }
 
-#pbuigkjsny .gt_last_grand_summary_row_top {
+#dsglcvmvpv .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1019,11 +1016,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-color: #D3D3D3;
 }
 
-#pbuigkjsny .gt_striped {
+#dsglcvmvpv .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#pbuigkjsny .gt_table_body {
+#dsglcvmvpv .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1032,7 +1029,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-color: #D3D3D3;
 }
 
-#pbuigkjsny .gt_footnotes {
+#dsglcvmvpv .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1046,7 +1043,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#pbuigkjsny .gt_footnote {
+#dsglcvmvpv .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1055,7 +1052,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#pbuigkjsny .gt_sourcenotes {
+#dsglcvmvpv .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1069,7 +1066,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#pbuigkjsny .gt_sourcenote {
+#dsglcvmvpv .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1077,75 +1074,84 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#pbuigkjsny .gt_left {
+#dsglcvmvpv .gt_left {
   text-align: left;
 }
 
-#pbuigkjsny .gt_center {
+#dsglcvmvpv .gt_center {
   text-align: center;
 }
 
-#pbuigkjsny .gt_right {
+#dsglcvmvpv .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#pbuigkjsny .gt_font_normal {
+#dsglcvmvpv .gt_font_normal {
   font-weight: normal;
 }
 
-#pbuigkjsny .gt_font_bold {
+#dsglcvmvpv .gt_font_bold {
   font-weight: bold;
 }
 
-#pbuigkjsny .gt_font_italic {
+#dsglcvmvpv .gt_font_italic {
   font-style: italic;
 }
 
-#pbuigkjsny .gt_super {
+#dsglcvmvpv .gt_super {
   font-size: 65%;
 }
 
-#pbuigkjsny .gt_footnote_marks {
+#dsglcvmvpv .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#pbuigkjsny .gt_asterisk {
+#dsglcvmvpv .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#pbuigkjsny .gt_indent_1 {
+#dsglcvmvpv .gt_indent_1 {
   text-indent: 5px;
 }
 
-#pbuigkjsny .gt_indent_2 {
+#dsglcvmvpv .gt_indent_2 {
   text-indent: 10px;
 }
 
-#pbuigkjsny .gt_indent_3 {
+#dsglcvmvpv .gt_indent_3 {
   text-indent: 15px;
 }
 
-#pbuigkjsny .gt_indent_4 {
+#dsglcvmvpv .gt_indent_4 {
   text-indent: 20px;
 }
 
-#pbuigkjsny .gt_indent_5 {
+#dsglcvmvpv .gt_indent_5 {
   text-indent: 25px;
+}
+
+#dsglcvmvpv .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#dsglcvmvpv div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
 }
 </style>
 <table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
   <thead>
     <tr class="gt_col_headings">
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="変数">変数</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="サンプルサイズ">サンプルサイズ</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="平均">平均</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="標準偏差">標準偏差</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="最小値">最小値</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="最大値">最大値</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="a変数">変数</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="aサンプルサイズ">サンプルサイズ</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="a平均">平均</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="a標準偏差">標準偏差</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="a最小値">最小値</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="a最大値">最大値</th>
     </tr>
   </thead>
   <tbody class="gt_table_body">
@@ -1239,22 +1245,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <th style="text-align:left;border-bottom: 1.5px solid">
 </th>
 <th style="text-align:center;border-bottom: 1.5px solid">
- (1)
+&amp;nbsp;(1)
 </th>
 <th style="text-align:center;border-bottom: 1.5px solid">
-  (2)
+&amp;nbsp;&amp;nbsp;(2)
 </th>
 <th style="text-align:center;border-bottom: 1.5px solid">
-  (3)
+&amp;nbsp;&amp;nbsp;(3)
 </th>
 <th style="text-align:center;border-bottom: 1.5px solid">
-  (4)
+&amp;nbsp;&amp;nbsp;(4)
 </th>
 <th style="text-align:center;border-bottom: 1.5px solid">
-  (5)
+&amp;nbsp;&amp;nbsp;(5)
 </th>
 <th style="text-align:center;border-bottom: 1.5px solid">
-  (6)
+&amp;nbsp;&amp;nbsp;(6)
 </th>
 </tr>
 </thead>
@@ -1551,7 +1557,7 @@ F検定統計量の値 <span class="math inline">\(H_0: \beta_{信頼}=0, \beta_
 <tfoot>
 <tr>
 <td style="padding: 0; " colspan="100%">
-<sup></sup> * p &lt; 0.05, ** p &lt; 0.01, *** p &lt; 0.001
+<sup></sup> * p &amp;lt; 0.05, ** p &amp;lt; 0.01, *** p &amp;lt; 0.001
 </td>
 </tr>
 </tfoot>
@@ -1611,19 +1617,19 @@ F検定統計量の値 <span class="math inline">\(H_0: \beta_{信頼}=0, \beta_
 <th style="text-align:left;border-bottom: 1.5px solid">
 </th>
 <th style="text-align:center;border-bottom: 1.5px solid">
- (1)
+&amp;nbsp;(1)
 </th>
 <th style="text-align:center;border-bottom: 1.5px solid">
-  (2)
+&amp;nbsp;&amp;nbsp;(2)
 </th>
 <th style="text-align:center;border-bottom: 1.5px solid">
-  (3)
+&amp;nbsp;&amp;nbsp;(3)
 </th>
 <th style="text-align:center;border-bottom: 1.5px solid">
-  (4)
+&amp;nbsp;&amp;nbsp;(4)
 </th>
 <th style="text-align:center;border-bottom: 1.5px solid">
-  (5)
+&amp;nbsp;&amp;nbsp;(5)
 </th>
 </tr>
 </thead>
@@ -2032,93 +2038,88 @@ ACT<span class="math inline">\(^2\)</span>
 <tfoot>
 <tr>
 <td style="padding: 0; " colspan="100%">
-<sup></sup> * p &lt; 0.05, ** p &lt; 0.01, *** p &lt; 0.001
+<sup></sup> * p &amp;lt; 0.05, ** p &amp;lt; 0.01, *** p &amp;lt; 0.001
 </td>
 </tr>
 </tfoot>
 </table>
 <p>F検定統計量の表への記載は省略とし, 下に検定結果を示す.</p>
 <div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="ch5.html#cb39-1" tabindex="-1"></a><span class="fu">linearHypothesis</span>(models_57[<span class="dv">3</span>]<span class="sc">$</span><span class="st">`</span><span class="at">(3)</span><span class="st">`</span>, <span class="at">test =</span> <span class="st">&quot;F&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;atndrte&quot;</span>, <span class="st">&quot;atndrte:priGPA&quot;</span>))</span>
-<span id="cb39-2"><a href="ch5.html#cb39-2" tabindex="-1"></a><span class="do">## Linear hypothesis test</span></span>
-<span id="cb39-3"><a href="ch5.html#cb39-3" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb39-4"><a href="ch5.html#cb39-4" tabindex="-1"></a><span class="do">## Hypothesis:</span></span>
-<span id="cb39-5"><a href="ch5.html#cb39-5" tabindex="-1"></a><span class="do">## atndrte = 0</span></span>
-<span id="cb39-6"><a href="ch5.html#cb39-6" tabindex="-1"></a><span class="do">## atndrte:priGPA = 0</span></span>
-<span id="cb39-7"><a href="ch5.html#cb39-7" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb39-8"><a href="ch5.html#cb39-8" tabindex="-1"></a><span class="do">## Model 1: restricted model</span></span>
-<span id="cb39-9"><a href="ch5.html#cb39-9" tabindex="-1"></a><span class="do">## Model 2: stndfnl ~ atndrte * priGPA + ACT + frosh + soph</span></span>
-<span id="cb39-10"><a href="ch5.html#cb39-10" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb39-11"><a href="ch5.html#cb39-11" tabindex="-1"></a><span class="do">##   Res.Df Df      F    Pr(&gt;F)    </span></span>
-<span id="cb39-12"><a href="ch5.html#cb39-12" tabindex="-1"></a><span class="do">## 1    675                        </span></span>
-<span id="cb39-13"><a href="ch5.html#cb39-13" tabindex="-1"></a><span class="do">## 2    673  2 7.8085 0.0004442 ***</span></span>
-<span id="cb39-14"><a href="ch5.html#cb39-14" tabindex="-1"></a><span class="do">## ---</span></span>
-<span id="cb39-15"><a href="ch5.html#cb39-15" tabindex="-1"></a><span class="do">## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</span></span>
-<span id="cb39-16"><a href="ch5.html#cb39-16" tabindex="-1"></a><span class="fu">linearHypothesis</span>(models_57[<span class="dv">4</span>]<span class="sc">$</span><span class="st">`</span><span class="at">(4)</span><span class="st">`</span>, <span class="at">test =</span> <span class="st">&quot;F&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;I(priGPA^2)&quot;</span>, <span class="st">&quot;I(ACT^2)&quot;</span>))</span>
-<span id="cb39-17"><a href="ch5.html#cb39-17" tabindex="-1"></a><span class="do">## Linear hypothesis test</span></span>
-<span id="cb39-18"><a href="ch5.html#cb39-18" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb39-19"><a href="ch5.html#cb39-19" tabindex="-1"></a><span class="do">## Hypothesis:</span></span>
-<span id="cb39-20"><a href="ch5.html#cb39-20" tabindex="-1"></a><span class="do">## I(priGPA^2) = 0</span></span>
-<span id="cb39-21"><a href="ch5.html#cb39-21" tabindex="-1"></a><span class="do">## I(ACT^2) = 0</span></span>
-<span id="cb39-22"><a href="ch5.html#cb39-22" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb39-23"><a href="ch5.html#cb39-23" tabindex="-1"></a><span class="do">## Model 1: restricted model</span></span>
-<span id="cb39-24"><a href="ch5.html#cb39-24" tabindex="-1"></a><span class="do">## Model 2: stndfnl ~ atndrte + priGPA + I(priGPA^2) + ACT + I(ACT^2) + frosh + </span></span>
-<span id="cb39-25"><a href="ch5.html#cb39-25" tabindex="-1"></a><span class="do">##     soph</span></span>
-<span id="cb39-26"><a href="ch5.html#cb39-26" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb39-27"><a href="ch5.html#cb39-27" tabindex="-1"></a><span class="do">##   Res.Df Df      F    Pr(&gt;F)    </span></span>
-<span id="cb39-28"><a href="ch5.html#cb39-28" tabindex="-1"></a><span class="do">## 1    674                        </span></span>
-<span id="cb39-29"><a href="ch5.html#cb39-29" tabindex="-1"></a><span class="do">## 2    672  2 11.772 9.438e-06 ***</span></span>
-<span id="cb39-30"><a href="ch5.html#cb39-30" tabindex="-1"></a><span class="do">## ---</span></span>
-<span id="cb39-31"><a href="ch5.html#cb39-31" tabindex="-1"></a><span class="do">## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</span></span>
-<span id="cb39-32"><a href="ch5.html#cb39-32" tabindex="-1"></a><span class="fu">linearHypothesis</span>(models_57[<span class="dv">5</span>]<span class="sc">$</span><span class="st">`</span><span class="at">(5)</span><span class="st">`</span>, <span class="at">test =</span> <span class="st">&quot;F&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;atndrte&quot;</span>, <span class="st">&quot;atndrte:priGPA&quot;</span>, <span class="st">&quot;atndrte:I(priGPA^2)&quot;</span>))</span>
-<span id="cb39-33"><a href="ch5.html#cb39-33" tabindex="-1"></a><span class="do">## Linear hypothesis test</span></span>
-<span id="cb39-34"><a href="ch5.html#cb39-34" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb39-35"><a href="ch5.html#cb39-35" tabindex="-1"></a><span class="do">## Hypothesis:</span></span>
-<span id="cb39-36"><a href="ch5.html#cb39-36" tabindex="-1"></a><span class="do">## atndrte = 0</span></span>
-<span id="cb39-37"><a href="ch5.html#cb39-37" tabindex="-1"></a><span class="do">## atndrte:priGPA = 0</span></span>
-<span id="cb39-38"><a href="ch5.html#cb39-38" tabindex="-1"></a><span class="do">## atndrte:I(priGPA^2) = 0</span></span>
-<span id="cb39-39"><a href="ch5.html#cb39-39" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb39-40"><a href="ch5.html#cb39-40" tabindex="-1"></a><span class="do">## Model 1: restricted model</span></span>
-<span id="cb39-41"><a href="ch5.html#cb39-41" tabindex="-1"></a><span class="do">## Model 2: stndfnl ~ atndrte * priGPA + atndrte * I(priGPA^2) + ACT + I(ACT^2) + </span></span>
-<span id="cb39-42"><a href="ch5.html#cb39-42" tabindex="-1"></a><span class="do">##     frosh + soph</span></span>
-<span id="cb39-43"><a href="ch5.html#cb39-43" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb39-44"><a href="ch5.html#cb39-44" tabindex="-1"></a><span class="do">##   Res.Df Df      F    Pr(&gt;F)    </span></span>
-<span id="cb39-45"><a href="ch5.html#cb39-45" tabindex="-1"></a><span class="do">## 1    673                        </span></span>
-<span id="cb39-46"><a href="ch5.html#cb39-46" tabindex="-1"></a><span class="do">## 2    670  3 6.2543 0.0003437 ***</span></span>
-<span id="cb39-47"><a href="ch5.html#cb39-47" tabindex="-1"></a><span class="do">## ---</span></span>
-<span id="cb39-48"><a href="ch5.html#cb39-48" tabindex="-1"></a><span class="do">## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</span></span>
-<span id="cb39-49"><a href="ch5.html#cb39-49" tabindex="-1"></a><span class="fu">linearHypothesis</span>(models_57[<span class="dv">5</span>]<span class="sc">$</span><span class="st">`</span><span class="at">(5)</span><span class="st">`</span>, <span class="at">test =</span> <span class="st">&quot;F&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;I(priGPA^2)&quot;</span>, <span class="st">&quot;atndrte:I(priGPA^2)&quot;</span>, <span class="st">&quot;I(ACT^2)&quot;</span>))</span>
-<span id="cb39-50"><a href="ch5.html#cb39-50" tabindex="-1"></a><span class="do">## Linear hypothesis test</span></span>
-<span id="cb39-51"><a href="ch5.html#cb39-51" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb39-52"><a href="ch5.html#cb39-52" tabindex="-1"></a><span class="do">## Hypothesis:</span></span>
-<span id="cb39-53"><a href="ch5.html#cb39-53" tabindex="-1"></a><span class="do">## I(priGPA^2) = 0</span></span>
-<span id="cb39-54"><a href="ch5.html#cb39-54" tabindex="-1"></a><span class="do">## atndrte:I(priGPA^2) = 0</span></span>
-<span id="cb39-55"><a href="ch5.html#cb39-55" tabindex="-1"></a><span class="do">## I(ACT^2) = 0</span></span>
+<span id="cb39-2"><a href="ch5.html#cb39-2" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb39-3"><a href="ch5.html#cb39-3" tabindex="-1"></a><span class="do">## Linear hypothesis test:</span></span>
+<span id="cb39-4"><a href="ch5.html#cb39-4" tabindex="-1"></a><span class="do">## atndrte = 0</span></span>
+<span id="cb39-5"><a href="ch5.html#cb39-5" tabindex="-1"></a><span class="do">## atndrte:priGPA = 0</span></span>
+<span id="cb39-6"><a href="ch5.html#cb39-6" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb39-7"><a href="ch5.html#cb39-7" tabindex="-1"></a><span class="do">## Model 1: restricted model</span></span>
+<span id="cb39-8"><a href="ch5.html#cb39-8" tabindex="-1"></a><span class="do">## Model 2: stndfnl ~ atndrte * priGPA + ACT + frosh + soph</span></span>
+<span id="cb39-9"><a href="ch5.html#cb39-9" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb39-10"><a href="ch5.html#cb39-10" tabindex="-1"></a><span class="do">##   Res.Df Df      F    Pr(&gt;F)    </span></span>
+<span id="cb39-11"><a href="ch5.html#cb39-11" tabindex="-1"></a><span class="do">## 1    675                        </span></span>
+<span id="cb39-12"><a href="ch5.html#cb39-12" tabindex="-1"></a><span class="do">## 2    673  2 7.8085 0.0004442 ***</span></span>
+<span id="cb39-13"><a href="ch5.html#cb39-13" tabindex="-1"></a><span class="do">## ---</span></span>
+<span id="cb39-14"><a href="ch5.html#cb39-14" tabindex="-1"></a><span class="do">## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</span></span>
+<span id="cb39-15"><a href="ch5.html#cb39-15" tabindex="-1"></a><span class="fu">linearHypothesis</span>(models_57[<span class="dv">4</span>]<span class="sc">$</span><span class="st">`</span><span class="at">(4)</span><span class="st">`</span>, <span class="at">test =</span> <span class="st">&quot;F&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;I(priGPA^2)&quot;</span>, <span class="st">&quot;I(ACT^2)&quot;</span>))</span>
+<span id="cb39-16"><a href="ch5.html#cb39-16" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb39-17"><a href="ch5.html#cb39-17" tabindex="-1"></a><span class="do">## Linear hypothesis test:</span></span>
+<span id="cb39-18"><a href="ch5.html#cb39-18" tabindex="-1"></a><span class="do">## I(priGPA^2) = 0</span></span>
+<span id="cb39-19"><a href="ch5.html#cb39-19" tabindex="-1"></a><span class="do">## I(ACT^2) = 0</span></span>
+<span id="cb39-20"><a href="ch5.html#cb39-20" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb39-21"><a href="ch5.html#cb39-21" tabindex="-1"></a><span class="do">## Model 1: restricted model</span></span>
+<span id="cb39-22"><a href="ch5.html#cb39-22" tabindex="-1"></a><span class="do">## Model 2: stndfnl ~ atndrte + priGPA + I(priGPA^2) + ACT + I(ACT^2) + frosh + </span></span>
+<span id="cb39-23"><a href="ch5.html#cb39-23" tabindex="-1"></a><span class="do">##     soph</span></span>
+<span id="cb39-24"><a href="ch5.html#cb39-24" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb39-25"><a href="ch5.html#cb39-25" tabindex="-1"></a><span class="do">##   Res.Df Df      F    Pr(&gt;F)    </span></span>
+<span id="cb39-26"><a href="ch5.html#cb39-26" tabindex="-1"></a><span class="do">## 1    674                        </span></span>
+<span id="cb39-27"><a href="ch5.html#cb39-27" tabindex="-1"></a><span class="do">## 2    672  2 11.772 9.438e-06 ***</span></span>
+<span id="cb39-28"><a href="ch5.html#cb39-28" tabindex="-1"></a><span class="do">## ---</span></span>
+<span id="cb39-29"><a href="ch5.html#cb39-29" tabindex="-1"></a><span class="do">## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</span></span>
+<span id="cb39-30"><a href="ch5.html#cb39-30" tabindex="-1"></a><span class="fu">linearHypothesis</span>(models_57[<span class="dv">5</span>]<span class="sc">$</span><span class="st">`</span><span class="at">(5)</span><span class="st">`</span>, <span class="at">test =</span> <span class="st">&quot;F&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;atndrte&quot;</span>, <span class="st">&quot;atndrte:priGPA&quot;</span>, <span class="st">&quot;atndrte:I(priGPA^2)&quot;</span>))</span>
+<span id="cb39-31"><a href="ch5.html#cb39-31" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb39-32"><a href="ch5.html#cb39-32" tabindex="-1"></a><span class="do">## Linear hypothesis test:</span></span>
+<span id="cb39-33"><a href="ch5.html#cb39-33" tabindex="-1"></a><span class="do">## atndrte = 0</span></span>
+<span id="cb39-34"><a href="ch5.html#cb39-34" tabindex="-1"></a><span class="do">## atndrte:priGPA = 0</span></span>
+<span id="cb39-35"><a href="ch5.html#cb39-35" tabindex="-1"></a><span class="do">## atndrte:I(priGPA^2) = 0</span></span>
+<span id="cb39-36"><a href="ch5.html#cb39-36" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb39-37"><a href="ch5.html#cb39-37" tabindex="-1"></a><span class="do">## Model 1: restricted model</span></span>
+<span id="cb39-38"><a href="ch5.html#cb39-38" tabindex="-1"></a><span class="do">## Model 2: stndfnl ~ atndrte * priGPA + atndrte * I(priGPA^2) + ACT + I(ACT^2) + </span></span>
+<span id="cb39-39"><a href="ch5.html#cb39-39" tabindex="-1"></a><span class="do">##     frosh + soph</span></span>
+<span id="cb39-40"><a href="ch5.html#cb39-40" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb39-41"><a href="ch5.html#cb39-41" tabindex="-1"></a><span class="do">##   Res.Df Df      F    Pr(&gt;F)    </span></span>
+<span id="cb39-42"><a href="ch5.html#cb39-42" tabindex="-1"></a><span class="do">## 1    673                        </span></span>
+<span id="cb39-43"><a href="ch5.html#cb39-43" tabindex="-1"></a><span class="do">## 2    670  3 6.2543 0.0003437 ***</span></span>
+<span id="cb39-44"><a href="ch5.html#cb39-44" tabindex="-1"></a><span class="do">## ---</span></span>
+<span id="cb39-45"><a href="ch5.html#cb39-45" tabindex="-1"></a><span class="do">## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</span></span>
+<span id="cb39-46"><a href="ch5.html#cb39-46" tabindex="-1"></a><span class="fu">linearHypothesis</span>(models_57[<span class="dv">5</span>]<span class="sc">$</span><span class="st">`</span><span class="at">(5)</span><span class="st">`</span>, <span class="at">test =</span> <span class="st">&quot;F&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;I(priGPA^2)&quot;</span>, <span class="st">&quot;atndrte:I(priGPA^2)&quot;</span>, <span class="st">&quot;I(ACT^2)&quot;</span>))</span>
+<span id="cb39-47"><a href="ch5.html#cb39-47" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb39-48"><a href="ch5.html#cb39-48" tabindex="-1"></a><span class="do">## Linear hypothesis test:</span></span>
+<span id="cb39-49"><a href="ch5.html#cb39-49" tabindex="-1"></a><span class="do">## I(priGPA^2) = 0</span></span>
+<span id="cb39-50"><a href="ch5.html#cb39-50" tabindex="-1"></a><span class="do">## atndrte:I(priGPA^2) = 0</span></span>
+<span id="cb39-51"><a href="ch5.html#cb39-51" tabindex="-1"></a><span class="do">## I(ACT^2) = 0</span></span>
+<span id="cb39-52"><a href="ch5.html#cb39-52" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb39-53"><a href="ch5.html#cb39-53" tabindex="-1"></a><span class="do">## Model 1: restricted model</span></span>
+<span id="cb39-54"><a href="ch5.html#cb39-54" tabindex="-1"></a><span class="do">## Model 2: stndfnl ~ atndrte * priGPA + atndrte * I(priGPA^2) + ACT + I(ACT^2) + </span></span>
+<span id="cb39-55"><a href="ch5.html#cb39-55" tabindex="-1"></a><span class="do">##     frosh + soph</span></span>
 <span id="cb39-56"><a href="ch5.html#cb39-56" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb39-57"><a href="ch5.html#cb39-57" tabindex="-1"></a><span class="do">## Model 1: restricted model</span></span>
-<span id="cb39-58"><a href="ch5.html#cb39-58" tabindex="-1"></a><span class="do">## Model 2: stndfnl ~ atndrte * priGPA + atndrte * I(priGPA^2) + ACT + I(ACT^2) + </span></span>
-<span id="cb39-59"><a href="ch5.html#cb39-59" tabindex="-1"></a><span class="do">##     frosh + soph</span></span>
-<span id="cb39-60"><a href="ch5.html#cb39-60" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb39-61"><a href="ch5.html#cb39-61" tabindex="-1"></a><span class="do">##   Res.Df Df      F    Pr(&gt;F)    </span></span>
-<span id="cb39-62"><a href="ch5.html#cb39-62" tabindex="-1"></a><span class="do">## 1    673                        </span></span>
-<span id="cb39-63"><a href="ch5.html#cb39-63" tabindex="-1"></a><span class="do">## 2    670  3 7.5692 5.521e-05 ***</span></span>
-<span id="cb39-64"><a href="ch5.html#cb39-64" tabindex="-1"></a><span class="do">## ---</span></span>
-<span id="cb39-65"><a href="ch5.html#cb39-65" tabindex="-1"></a><span class="do">## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</span></span>
-<span id="cb39-66"><a href="ch5.html#cb39-66" tabindex="-1"></a><span class="fu">linearHypothesis</span>(models_57[<span class="dv">5</span>]<span class="sc">$</span><span class="st">`</span><span class="at">(5)</span><span class="st">`</span>, <span class="at">test =</span> <span class="st">&quot;F&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;atndrte:priGPA&quot;</span>, <span class="st">&quot;atndrte:I(priGPA^2)&quot;</span>))</span>
-<span id="cb39-67"><a href="ch5.html#cb39-67" tabindex="-1"></a><span class="do">## Linear hypothesis test</span></span>
-<span id="cb39-68"><a href="ch5.html#cb39-68" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb39-69"><a href="ch5.html#cb39-69" tabindex="-1"></a><span class="do">## Hypothesis:</span></span>
-<span id="cb39-70"><a href="ch5.html#cb39-70" tabindex="-1"></a><span class="do">## atndrte:priGPA = 0</span></span>
-<span id="cb39-71"><a href="ch5.html#cb39-71" tabindex="-1"></a><span class="do">## atndrte:I(priGPA^2) = 0</span></span>
-<span id="cb39-72"><a href="ch5.html#cb39-72" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb39-73"><a href="ch5.html#cb39-73" tabindex="-1"></a><span class="do">## Model 1: restricted model</span></span>
-<span id="cb39-74"><a href="ch5.html#cb39-74" tabindex="-1"></a><span class="do">## Model 2: stndfnl ~ atndrte * priGPA + atndrte * I(priGPA^2) + ACT + I(ACT^2) + </span></span>
-<span id="cb39-75"><a href="ch5.html#cb39-75" tabindex="-1"></a><span class="do">##     frosh + soph</span></span>
-<span id="cb39-76"><a href="ch5.html#cb39-76" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb39-77"><a href="ch5.html#cb39-77" tabindex="-1"></a><span class="do">##   Res.Df Df      F   Pr(&gt;F)   </span></span>
-<span id="cb39-78"><a href="ch5.html#cb39-78" tabindex="-1"></a><span class="do">## 1    672                      </span></span>
-<span id="cb39-79"><a href="ch5.html#cb39-79" tabindex="-1"></a><span class="do">## 2    670  2 5.1942 0.005774 **</span></span>
-<span id="cb39-80"><a href="ch5.html#cb39-80" tabindex="-1"></a><span class="do">## ---</span></span>
-<span id="cb39-81"><a href="ch5.html#cb39-81" tabindex="-1"></a><span class="do">## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</span></span></code></pre></div>
+<span id="cb39-57"><a href="ch5.html#cb39-57" tabindex="-1"></a><span class="do">##   Res.Df Df      F    Pr(&gt;F)    </span></span>
+<span id="cb39-58"><a href="ch5.html#cb39-58" tabindex="-1"></a><span class="do">## 1    673                        </span></span>
+<span id="cb39-59"><a href="ch5.html#cb39-59" tabindex="-1"></a><span class="do">## 2    670  3 7.5692 5.521e-05 ***</span></span>
+<span id="cb39-60"><a href="ch5.html#cb39-60" tabindex="-1"></a><span class="do">## ---</span></span>
+<span id="cb39-61"><a href="ch5.html#cb39-61" tabindex="-1"></a><span class="do">## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</span></span>
+<span id="cb39-62"><a href="ch5.html#cb39-62" tabindex="-1"></a><span class="fu">linearHypothesis</span>(models_57[<span class="dv">5</span>]<span class="sc">$</span><span class="st">`</span><span class="at">(5)</span><span class="st">`</span>, <span class="at">test =</span> <span class="st">&quot;F&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;atndrte:priGPA&quot;</span>, <span class="st">&quot;atndrte:I(priGPA^2)&quot;</span>))</span>
+<span id="cb39-63"><a href="ch5.html#cb39-63" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb39-64"><a href="ch5.html#cb39-64" tabindex="-1"></a><span class="do">## Linear hypothesis test:</span></span>
+<span id="cb39-65"><a href="ch5.html#cb39-65" tabindex="-1"></a><span class="do">## atndrte:priGPA = 0</span></span>
+<span id="cb39-66"><a href="ch5.html#cb39-66" tabindex="-1"></a><span class="do">## atndrte:I(priGPA^2) = 0</span></span>
+<span id="cb39-67"><a href="ch5.html#cb39-67" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb39-68"><a href="ch5.html#cb39-68" tabindex="-1"></a><span class="do">## Model 1: restricted model</span></span>
+<span id="cb39-69"><a href="ch5.html#cb39-69" tabindex="-1"></a><span class="do">## Model 2: stndfnl ~ atndrte * priGPA + atndrte * I(priGPA^2) + ACT + I(ACT^2) + </span></span>
+<span id="cb39-70"><a href="ch5.html#cb39-70" tabindex="-1"></a><span class="do">##     frosh + soph</span></span>
+<span id="cb39-71"><a href="ch5.html#cb39-71" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb39-72"><a href="ch5.html#cb39-72" tabindex="-1"></a><span class="do">##   Res.Df Df      F   Pr(&gt;F)   </span></span>
+<span id="cb39-73"><a href="ch5.html#cb39-73" tabindex="-1"></a><span class="do">## 1    672                      </span></span>
+<span id="cb39-74"><a href="ch5.html#cb39-74" tabindex="-1"></a><span class="do">## 2    670  2 5.1942 0.005774 **</span></span>
+<span id="cb39-75"><a href="ch5.html#cb39-75" tabindex="-1"></a><span class="do">## ---</span></span>
+<span id="cb39-76"><a href="ch5.html#cb39-76" tabindex="-1"></a><span class="do">## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</span></span></code></pre></div>
 <!-- ## 練習問題 5-1 [確認] {.unnumbered}
 
 ## 練習問題 5-2 [確認] {.unnumbered}
@@ -2616,7 +2617,7 @@ gender:agese_q4
 <tfoot>
 <tr>
 <td style="padding: 0; " colspan="100%">
-<sup></sup> * p &lt; 0.05, ** p &lt; 0.01, *** p &lt; 0.001
+<sup></sup> * p &amp;lt; 0.05, ** p &amp;lt; 0.01, *** p &amp;lt; 0.001
 </td>
 </tr>
 </tfoot>
