@@ -110,19 +110,20 @@ p1 + p2
 ## 図10-5 GDPギャップ (年次データ) {-}
 
 別途内閣府のサイトからデータをダウンロードする.
+データが更新されるごとにファイルのリンクが変わるようなので, 下が404エラーとなるときは, [内閣府のページ](https://www5.cao.go.jp/keizai3/getsurei/getsurei-index.html#sonota)の「ＧＤＰギャップ、潜在成長率」という名前のExcelファイルをダウンロードすればよい.
 
 ```{r collapse=T, eval = FALSE}
-curl <- "https://www5.cao.go.jp/keizai3/getsurei/2342gap.xlsx"
-cdestfile <- "downloads/2342gap.xlsx"
+curl <- "https://www5.cao.go.jp/keizai3/getsurei/2412rgap.xlsx"
+cdestfile <- "downloads/2412gap.xlsx"
 download.file(curl, cdestfile)
 ```
 
 ダウンロードしたExcelファイルを確認して, `sheet`, `rows`, `cols`を指定してデータを読み込む.
 
 ```{r collapse=T, message=FALSE}
-fig10_5_data <- read_excel("downloads/2342gap.xlsx", sheet = "暦年")
+fig10_5_data <- read_excel("downloads/2412gap.xlsx", sheet = "暦年")
 fig10_5_data[-(1:5), 1:2] %>%
-    rename(year = `2023年10－12月期四半期別ＧＤＰ速報（２次速報値）`, GDP.Gap = 暦年) %>%
+    rename(year = `2024年１－３月期四半期別ＧＤＰ速報（２次速報（改定値））`, GDP.Gap = 暦年) %>%
     mutate(year = as.integer(year)) %>%
     mutate(GDP.Gap = as.numeric(GDP.Gap)) %>%
     ggplot(aes(x = year, y = GDP.Gap)) +
