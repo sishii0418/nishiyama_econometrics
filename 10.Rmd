@@ -542,6 +542,16 @@ table %>%
     kable(col.names = NULL, row.names = TRUE, escape = FALSE, align = "c")
 ```
 
+## 図10-16 東証株価指数 (対数階差収益率) {-}
+
+```{r collapse=T, message=FALSE}
+fig10_16_data <- read_excel("./data/10_第10章/Fig_16_TOPIXreturn_thinner.xlsx")
+fig10_16_data %>%
+    ggplot(aes(x = Date, y = return_topix)) +
+    geom_line() +
+    labs(x = "年", y = "")
+```
+
 <!-- ## 練習問題 10-1 [確認] {-}
 
 ## 練習問題 10-2 [確認] {-}
