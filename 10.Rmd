@@ -36,6 +36,7 @@ library(kableExtra)
 library(lmtest)
 library(sandwich)
 library(dynlm)
+library(fGarch)
 ```
 
 ## 図10-1 名目GDP {#figure10-1 .unnumbered}
@@ -551,6 +552,28 @@ fig10_16_data %>%
     geom_line() +
     labs(x = "年", y = "")
 ```
+
+## 実証例10.7 ARCHモデルとGARCHモデルの推定 {-}
+ARCHモデルやGARCHモデルは`fGarch::garchFit()`を使うと容易に推定できる.
+ARCH(1)モデルはGARCH(1, 0)モデルに等しいことからそれぞれ`formula`引数を適当に設定する.
+フィットした`garchFit`オブジェクトを`summary()`関数にいれると, 下部でAICやBICといった情報基準も得ることができる.
+本文中にある通り, AICとBICともにGARCH(1, 1)モデルのほうが値が小さく, こちらが選択されることが確認できた.
+
+```{r collapse=T, message=FALSE}
+data_ex10.7 <- fig10_16_data %>%
+    mutate(res_sq = (return_topix - mean(return_topix, na.rm = TRUE))^2)
+# ARCH効果の検定
+serial_cor_table(data_ex10.7$res_sq[-1], digits = c(2, 1, 2, 2)) # 1行目はNAなので除く
+
+# ARCH(1)モデル
+garchFit(~garch(1, 0), data = data_ex10.7$return_topix[-1], trace = FALSE) %>% summary()
+# GARCH(1, 1)モデル
+garchFit(~garch(1, 1), data = data_ex10.7$return_topix[-1], trace = FALSE) %>% summary() # FIXME: muの値が結構違う?
+```
+
+<!-- ## (10.69) 式
+
+## (10.70) 式 -->
 
 <!-- ## 練習問題 10-1 [確認] {-}
 

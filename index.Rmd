@@ -38,6 +38,7 @@ install.packages("kableExtra")
 install.packages("estatapi")
 install.packages("tidyquant")
 install.packages("dynlm")
+install.packages("fGarch")
 ```
 
 ## 方針 {.unnumbered}
