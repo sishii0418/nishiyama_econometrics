@@ -273,7 +273,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#実証例10.5-gdpギャップのarモデルのラグ選択"><i class="fa fa-check"></i>実証例10.5 GDPギャップのARモデルのラグ選択</a></li>
 <li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#実証例10.6-ラグ付きインフレ率を含むフィリップス曲線の推定と誤差項の系列相関の検定"><i class="fa fa-check"></i>実証例10.6 ラグ付きインフレ率を含むフィリップス曲線の推定と誤差項の系列相関の検定</a></li>
 <li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#図10-16-東証株価指数-対数階差収益率"><i class="fa fa-check"></i>図10-16 東証株価指数 (対数階差収益率)</a></li>
-<li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#実証例10.7-archモデルとgarchモデルの推定"><i class="fa fa-check"></i>実証例10.7 ARCHモデルとGARCHモデルの推定</a></li>
+<li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#ex10.7"><i class="fa fa-check"></i>実証例10.7 ARCHモデルとGARCHモデルの推定</a></li>
+<li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#練習問題-10-10-実証"><i class="fa fa-check"></i>練習問題 10-10 [実証]</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="ch11.html"><a href="ch11.html"><i class="fa fa-check"></i>第11章 トレンドと構造変化</a></li>
 <li class="chapter" data-level="" data-path="ch12.html"><a href="ch12.html"><i class="fa fa-check"></i>第12章 VARモデル</a></li>
@@ -1336,8 +1337,8 @@ ADLモデルはRでは<code>dynlm::dynlm()</code>を用いることで推定で�
 ## range (`geom_line()`).</code></pre>
 <p><img src="_main_files/figure-html/unnamed-chunk-114-1.png" width="672" /></p>
 </div>
-<div id="実証例10.7-archモデルとgarchモデルの推定" class="section level2 unnumbered hasAnchor">
-<h2>実証例10.7 ARCHモデルとGARCHモデルの推定<a href="ch10.html#実証例10.7-archモデルとgarchモデルの推定" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="ex10.7" class="section level2 unnumbered hasAnchor">
+<h2>実証例10.7 ARCHモデルとGARCHモデルの推定<a href="ch10.html#ex10.7" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>ARCHモデルやGARCHモデルは<code>fGarch::garchFit()</code>を使うと容易に推定できる.
 ARCH(1)モデルはGARCH(1, 0)モデルに等しいことからそれぞれ<code>formula</code>引数を適当に設定する.
 フィットした<code>garchFit</code>オブジェクトを<code>summary()</code>関数にいれると, 下部でAICやBICといった情報基準も得ることができる.
@@ -1429,7 +1430,7 @@ ARCH(1)モデルはGARCH(1, 0)モデルに等しいことからそれぞれ<code
 ## 
 ## Mean and Variance Equation:
 ##  data ~ garch(1, 0)
-## &lt;environment: 0x558e9445f7f8&gt;
+## &lt;environment: 0x55af1e79e9e0&gt;
 ##  [data = data_ex10.7$return_topix[-1]]
 ## 
 ## Conditional Distribution:
@@ -1454,7 +1455,7 @@ ARCH(1)モデルはGARCH(1, 0)モデルに等しいことからそれぞれ<code
 ##  -7205.325    normalized:  -1.727067 
 ## 
 ## Description:
-##  Thu Jan 30 00:30:53 2025 by user:  
+##  Thu Jan 30 00:52:09 2025 by user:  
 ## 
 ## 
 ## Standardised Residuals Tests:
@@ -1484,7 +1485,7 @@ ARCH(1)モデルはGARCH(1, 0)モデルに等しいことからそれぞれ<code
 ## 
 ## Mean and Variance Equation:
 ##  data ~ garch(1, 1)
-## &lt;environment: 0x558e8e62b248&gt;
+## &lt;environment: 0x55af1d1c7118&gt;
 ##  [data = data_ex10.7$return_topix[-1]]
 ## 
 ## Conditional Distribution:
@@ -1510,7 +1511,7 @@ ARCH(1)モデルはGARCH(1, 0)モデルに等しいことからそれぞれ<code
 ##  -6898.781    normalized:  -1.653591 
 ## 
 ## Description:
-##  Thu Jan 30 00:30:54 2025 by user:  
+##  Thu Jan 30 00:52:09 2025 by user:  
 ## 
 ## 
 ## Standardised Residuals Tests:
@@ -1547,9 +1548,201 @@ ARCH(1)モデルはGARCH(1, 0)モデルに等しいことからそれぞれ<code
 
 ## 練習問題 10-8 [発展] {-}
 
-## 練習問題 10-9 [実証] {-}
-
-## 練習問題 10-10 [実証] {-} -->
+## 練習問題 10-9 [実証] {-} -->
+</div>
+<div id="練習問題-10-10-実証" class="section level2 unnumbered hasAnchor">
+<h2>練習問題 10-10 [実証]<a href="ch10.html#練習問題-10-10-実証" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>1 - 3. <a href="ch10.html#ex10.7">実証例10.7</a>を参照せよ.</p>
+<ol start="4" style="list-style-type: decimal">
+<li>平均の代わりにAR(1)モデルを用いてGARCHモデルを推定するには, <code>arma(1, 0)</code>を<code>formula</code>引数に追加する (正しく推定できているかあまり自信がないです…).</li>
+</ol>
+<div class="sourceCode" id="cb128"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb128-1"><a href="ch10.html#cb128-1" tabindex="-1"></a><span class="co"># AR(1)モデルを推定</span></span>
+<span id="cb128-2"><a href="ch10.html#cb128-2" tabindex="-1"></a>practice10<span class="fl">.10</span>_ar1 <span class="ot">&lt;-</span> <span class="fu">arima</span>(data_ex10<span class="fl">.7</span><span class="sc">$</span>return_topix[<span class="sc">-</span><span class="dv">1</span>], <span class="at">order =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="at">include.mean =</span> <span class="cn">FALSE</span>, <span class="at">method =</span> <span class="st">&quot;ML&quot;</span>)</span>
+<span id="cb128-3"><a href="ch10.html#cb128-3" tabindex="-1"></a><span class="co"># 誤差項の2乗値について, ARCH効果の検定</span></span>
+<span id="cb128-4"><a href="ch10.html#cb128-4" tabindex="-1"></a><span class="fu">serial_cor_table</span>(practice10<span class="fl">.10</span>_ar1<span class="sc">$</span>residuals<span class="sc">^</span><span class="dv">2</span>, <span class="at">digits =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>)) <span class="co"># 1行目はNAなので除く</span></span></code></pre></div>
+<table>
+<colgroup>
+<col width="19%" />
+<col width="9%" />
+<col width="9%" />
+<col width="10%" />
+<col width="10%" />
+<col width="10%" />
+<col width="10%" />
+<col width="10%" />
+<col width="10%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td align="left"><span class="math inline">\(m\)</span></td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">3</td>
+<td align="center">4</td>
+<td align="center">8</td>
+<td align="center">12</td>
+<td align="center">16</td>
+<td align="center">20</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(\hat{\rho}_m\)</span></td>
+<td align="center">0.28</td>
+<td align="center">0.34</td>
+<td align="center">0.33</td>
+<td align="center">0.20</td>
+<td align="center">0.19</td>
+<td align="center">0.23</td>
+<td align="center">0.12</td>
+<td align="center">0.08</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(Q_{LB}\)</span></td>
+<td align="center">338.2</td>
+<td align="center">814.7</td>
+<td align="center">1271.7</td>
+<td align="center">1432.3</td>
+<td align="center">2172.2</td>
+<td align="center">2883.9</td>
+<td align="center">3273.9</td>
+<td align="center">3451.5</td>
+</tr>
+<tr class="even">
+<td align="left">臨界値</td>
+<td align="center">3.84</td>
+<td align="center">5.99</td>
+<td align="center">7.81</td>
+<td align="center">9.49</td>
+<td align="center">15.51</td>
+<td align="center">21.03</td>
+<td align="center">26.30</td>
+<td align="center">31.41</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(P\)</span>値</td>
+<td align="center">0.00</td>
+<td align="center">0.00</td>
+<td align="center">0.00</td>
+<td align="center">0.00</td>
+<td align="center">0.00</td>
+<td align="center">0.00</td>
+<td align="center">0.00</td>
+<td align="center">0.00</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb129"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb129-1"><a href="ch10.html#cb129-1" tabindex="-1"></a><span class="co"># ARCH(1)モデル</span></span>
+<span id="cb129-2"><a href="ch10.html#cb129-2" tabindex="-1"></a><span class="fu">garchFit</span>(<span class="sc">~</span><span class="fu">arma</span>(<span class="dv">1</span>, <span class="dv">0</span>) <span class="sc">+</span> <span class="fu">garch</span>(<span class="dv">1</span>, <span class="dv">0</span>), <span class="at">data =</span> data_ex10<span class="fl">.7</span><span class="sc">$</span>return_topix[<span class="sc">-</span><span class="dv">1</span>], <span class="at">include.mean =</span> <span class="cn">FALSE</span>, <span class="at">trace =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span></code></pre></div>
+<pre><code>## 
+## Title:
+##  GARCH Modelling 
+## 
+## Call:
+##  garchFit(formula = ~arma(1, 0) + garch(1, 0), data = data_ex10.7$return_topix[-1], 
+##     include.mean = FALSE, trace = FALSE) 
+## 
+## Mean and Variance Equation:
+##  data ~ arma(1, 0) + garch(1, 0)
+## &lt;environment: 0x55af165dc408&gt;
+##  [data = data_ex10.7$return_topix[-1]]
+## 
+## Conditional Distribution:
+##  norm 
+## 
+## Coefficient(s):
+##      ar1     omega    alpha1  
+## 0.065549  1.487455  0.249316  
+## 
+## Std. Errors:
+##  based on Hessian 
+## 
+## Error Analysis:
+##         Estimate  Std. Error  t value Pr(&gt;|t|)    
+## ar1      0.06555     0.02221    2.952  0.00316 ** 
+## omega    1.48745     0.04413   33.706  &lt; 2e-16 ***
+## alpha1   0.24932     0.02600    9.591  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Log Likelihood:
+##  -7199.166    normalized:  -1.725591 
+## 
+## Description:
+##  Thu Jan 30 00:52:09 2025 by user:  
+## 
+## 
+## Standardised Residuals Tests:
+##                                    Statistic   p-Value
+##  Jarque-Bera Test   R    Chi^2  2055.9401647 0.0000000
+##  Shapiro-Wilk Test  R    W         0.9701342 0.0000000
+##  Ljung-Box Test     R    Q(10)    14.9460857 0.1340399
+##  Ljung-Box Test     R    Q(15)    21.0672902 0.1346931
+##  Ljung-Box Test     R    Q(20)    25.9775431 0.1665548
+##  Ljung-Box Test     R^2  Q(10)   661.4492228 0.0000000
+##  Ljung-Box Test     R^2  Q(15)   830.3951664 0.0000000
+##  Ljung-Box Test     R^2  Q(20)   920.6342120 0.0000000
+##  LM Arch Test       R    TR^2    427.1681942 0.0000000
+## 
+## Information Criterion Statistics:
+##      AIC      BIC      SIC     HQIC 
+## 3.452620 3.457177 3.452619 3.454232</code></pre>
+<div class="sourceCode" id="cb131"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb131-1"><a href="ch10.html#cb131-1" tabindex="-1"></a><span class="co"># GARCH(1, 1)モデル</span></span>
+<span id="cb131-2"><a href="ch10.html#cb131-2" tabindex="-1"></a><span class="fu">garchFit</span>(<span class="sc">~</span><span class="fu">arma</span>(<span class="dv">1</span>, <span class="dv">0</span>) <span class="sc">+</span> <span class="fu">garch</span>(<span class="dv">1</span>, <span class="dv">1</span>), <span class="at">data =</span> data_ex10<span class="fl">.7</span><span class="sc">$</span>return_topix[<span class="sc">-</span><span class="dv">1</span>], <span class="at">include.mean =</span> <span class="cn">FALSE</span>, <span class="at">trace =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span></code></pre></div>
+<pre><code>## 
+## Title:
+##  GARCH Modelling 
+## 
+## Call:
+##  garchFit(formula = ~arma(1, 0) + garch(1, 1), data = data_ex10.7$return_topix[-1], 
+##     include.mean = FALSE, trace = FALSE) 
+## 
+## Mean and Variance Equation:
+##  data ~ arma(1, 0) + garch(1, 1)
+## &lt;environment: 0x55af1d20b208&gt;
+##  [data = data_ex10.7$return_topix[-1]]
+## 
+## Conditional Distribution:
+##  norm 
+## 
+## Coefficient(s):
+##      ar1     omega    alpha1     beta1  
+## 0.043979  0.054850  0.124020  0.851386  
+## 
+## Std. Errors:
+##  based on Hessian 
+## 
+## Error Analysis:
+##         Estimate  Std. Error  t value Pr(&gt;|t|)    
+## ar1      0.04398     0.01671    2.631  0.00851 ** 
+## omega    0.05485     0.01033    5.309  1.1e-07 ***
+## alpha1   0.12402     0.01151   10.779  &lt; 2e-16 ***
+## beta1    0.85139     0.01295   65.720  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Log Likelihood:
+##  -6896.307    normalized:  -1.652998 
+## 
+## Description:
+##  Thu Jan 30 00:52:09 2025 by user:  
+## 
+## 
+## Standardised Residuals Tests:
+##                                   Statistic   p-Value
+##  Jarque-Bera Test   R    Chi^2  447.6576934 0.0000000
+##  Shapiro-Wilk Test  R    W        0.9876457 0.0000000
+##  Ljung-Box Test     R    Q(10)    7.8991992 0.6386824
+##  Ljung-Box Test     R    Q(15)   13.2793885 0.5807278
+##  Ljung-Box Test     R    Q(20)   16.9210259 0.6580957
+##  Ljung-Box Test     R^2  Q(10)    8.8533756 0.5460731
+##  Ljung-Box Test     R^2  Q(15)   12.2545227 0.6596704
+##  Ljung-Box Test     R^2  Q(20)   17.5635752 0.6161333
+##  LM Arch Test       R    TR^2    11.8579164 0.4571571
+## 
+## Information Criterion Statistics:
+##      AIC      BIC      SIC     HQIC 
+## 3.307913 3.313988 3.307911 3.310062</code></pre>
+<p>やはりARCH(1)モデルではなく, GARCH(1, 1)モデルが選択された.
+また, AR(1)モデルを取り入れたこちらのほうが僅かに情報量基準の値が小さいことがわかる.</p>
 
 </div>
 </div>
