@@ -35,6 +35,7 @@ library(gt)
 library(car)
 library(wooldridge)
 library(haven)
+library(kableExtra)
 ```
 
 ## 単回帰 (5.1), (5.2) {.unnumbered}
