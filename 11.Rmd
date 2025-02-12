@@ -22,6 +22,95 @@ if(.Platform$OS.type == "unix") {
 }
 ```
 
+必要なライブラリを読み込む.
+
+```{r collapse=T}
+library(tidyverse)
+library(readxl)
+# library(patchwork)
+library(estatapi)
+# library(tidyquant)
+# library(estimatr)
+# library(latex2exp)
+# library(kableExtra)
+# library(lmtest)
+# library(sandwich)
+# library(dynlm)
+# library(fGarch)
+# library(momentfit)
+```
+
+## (11.3) 式 {#exp11.3 .unnumbered}
+
+データは前章[図10-3](#figure10-3)図10-3で用いたものを使う.
+本文中にある通りデータの期間を1991年から1997年に絞り込み, さらにトレンド用の変数を作成する.
+```{r collapse=T}
+Fig_1_nominalGDP_annual <- read_excel("./data/10_第10章/Fig_1_nominalGDP_annual.xlsx")
+data_exp11.3 <- Fig_1_nominalGDP_annual %>%
+    filter(1991 <= ...1 & ...1 <= 2017)
+data_exp11.3 <- data_exp11.3 %>%
+    mutate(trend = 1:dim(data_exp11.3)[1])
+lm(log(実質暦年) * 100 ~ trend, data = data_exp11.3) %>% summary()
+```
+
+## 図11-1 対数実質GDPと線形トレンド {-}
+
+[(11.3) 式](#exp11.3)に続いてggplotでグラフを描画する.
+```{r collapse=T}
+data_exp11.3 %>%
+    ggplot(aes(x = ...1, y = log(実質暦年) * 100)) +
+    geom_smooth(method = "lm", se = FALSE, aes(color = "線形トレンド (OLS推定値)")) +
+    geom_line(aes(color = "対数実質GDP")) +
+    scale_color_hue(name = element_blank()) +
+    labs(x = "年", y = "対数実質GDP x 100") +
+    theme(legend.position = c(0, 1), legend.justification = c(0, 1)) + # 凡例を左上に表示
+    scale_y_continuous(labels = scales::label_number())
+```
+
+## 図11-2 対数実質GDPの長期系列 {-}
+内閣府のサイトには, GDPデータ自体は1955年から掲載されているが, 現在に至るまで幾度か基準が変更されたため異なる体型基準年間でデータが直接接続しない旨注意が記載されている(https://www.esri.cao.go.jp/jp/sna/otoiawase/faq/qa2.html).
+
+まずは1990基準により計算された, 1955～1998年の実質国民総支出データをダウンロードする.
+この基準では, 1979年までの数値を用いる.
+```{r collapse=T, eval = FALSE}
+curl <- "https://www.esri.cao.go.jp/jp/sna/data/data_list/kakuhou/files/h10/tables/55fcm1r.xls"
+cdestfile <- "downloads/55fcm1r.xls"
+download.file(curl, cdestfile)
+```
+
+1980年以降のデータは, [図10-7](#figure10-7)と同じ手順でe-Statからダウンロードする.
+それぞれ2000基準のデータを1980～1993年, それ以降は2015基準のを用いる.
+```{r collapse=T, message=FALSE}
+appId <- scan("e-stat_appId.txt", what = "character")
+fig11_2_data_h12 <- estat_getStatsData(appId = appId, statsDataId = "0003398787")
+fig11_2_data_h12 <- fig11_2_data_h12 %>% filter(`国内総生産(支出側)項目(平成12年基準)` == "５．国内総生産（支出側）" &
+                            表章項目 == "金額" &
+                            time_code <= "1993000000") %>%
+                        dplyr::select(value) %>%
+                        rename("実質国内総支出" = value) %>%
+                        mutate(年 = 1980:1993)
+fig11_2_data_2015 <- estat_getStatsData(appId = appId, statsDataId = "0003109751")
+fig11_2_data_2015 <- fig11_2_data_2015 %>% filter(国内総生産_実質暦年 == "国内総生産(支出側)" &
+                            表章項目 == "金額") %>%
+                        dplyr::select(value) %>%
+                        rename("実質国内総支出" = value) %>%
+                        mutate(年 = 1994:2023)
+```
+
+```{r collapse=T, message=FALSE}
+fig11_2_data_55fcm1r <- read_excel("downloads/55fcm1r.xls", sheet = "実数")
+fig11_2_data <- data.frame(実質国内総支出 = as.numeric(t(fig11_2_data_55fcm1r[35, 2:26]))) %>%
+    remove_rownames() %>%
+    mutate(年 = 1955:1979)
+
+fig11_2_data <- bind_rows(fig11_2_data, fig11_2_data_h12) %>%
+                    bind_rows(fig11_2_data_2015)
+
+fig11_2_data %>%
+    ggplot(aes(x = 年, y = log(実質国内総支出) * 100)) +
+    geom_line()
+```
+
 <!-- ## 練習問題 11-1 [確認] {-}
 
 ## 練習問題 11-2 [確認] {-}

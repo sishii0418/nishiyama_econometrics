@@ -252,7 +252,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#figure10-1"><i class="fa fa-check"></i>図10-1 名目GDP</a></li>
 <li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#図10-2-gdpデフレーター"><i class="fa fa-check"></i>図10-2 GDPデフレーター</a></li>
-<li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#図10-3-名目系列と実質系列"><i class="fa fa-check"></i>図10-3 名目系列と実質系列</a></li>
+<li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#figure10-3"><i class="fa fa-check"></i>図10-3 名目系列と実質系列</a></li>
 <li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#図10-4-原系列と対数系列"><i class="fa fa-check"></i>図10-4 原系列と対数系列</a></li>
 <li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#図10-5-gdpギャップ-年次データ"><i class="fa fa-check"></i>図10-5 GDPギャップ (年次データ)</a></li>
 <li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#図10-6-実質gdp成長率"><i class="fa fa-check"></i>図10-6 実質GDP成長率</a></li>
@@ -278,7 +278,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#exp10.70"><i class="fa fa-check"></i>(10.70) 式</a></li>
 <li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#練習問題-10-10-実証"><i class="fa fa-check"></i>練習問題 10-10 [実証]</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="ch11.html"><a href="ch11.html"><i class="fa fa-check"></i>第11章 トレンドと構造変化</a></li>
+<li class="chapter" data-level="" data-path="ch11.html"><a href="ch11.html"><i class="fa fa-check"></i>第11章 トレンドと構造変化</a>
+<ul>
+<li class="chapter" data-level="" data-path="ch11.html"><a href="ch11.html#exp11.3"><i class="fa fa-check"></i>(11.3) 式</a></li>
+<li class="chapter" data-level="" data-path="ch11.html"><a href="ch11.html#図11-1-対数実質gdpと線形トレンド"><i class="fa fa-check"></i>図11-1 対数実質GDPと線形トレンド</a></li>
+<li class="chapter" data-level="" data-path="ch11.html"><a href="ch11.html#図11-2-対数実質gdpの長期系列"><i class="fa fa-check"></i>図11-2 対数実質GDPの長期系列</a></li>
+</ul></li>
 <li class="chapter" data-level="" data-path="ch12.html"><a href="ch12.html"><i class="fa fa-check"></i>第12章 VARモデル</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -322,6 +327,101 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb137-17"><a href="ch11.html#cb137-17" tabindex="-1"></a>} <span class="cf">else</span> {</span>
 <span id="cb137-18"><a href="ch11.html#cb137-18" tabindex="-1"></a>    <span class="fu">print</span>(<span class="st">&quot;Windowsで解凍するコマンドを別途追加せよ.&quot;</span>)</span>
 <span id="cb137-19"><a href="ch11.html#cb137-19" tabindex="-1"></a>}</span></code></pre></div>
+<p>必要なライブラリを読み込む.</p>
+<div class="sourceCode" id="cb138"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb138-1"><a href="ch11.html#cb138-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb138-2"><a href="ch11.html#cb138-2" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
+<span id="cb138-3"><a href="ch11.html#cb138-3" tabindex="-1"></a><span class="co"># library(patchwork)</span></span>
+<span id="cb138-4"><a href="ch11.html#cb138-4" tabindex="-1"></a><span class="fu">library</span>(estatapi)</span>
+<span id="cb138-5"><a href="ch11.html#cb138-5" tabindex="-1"></a><span class="co"># library(tidyquant)</span></span>
+<span id="cb138-6"><a href="ch11.html#cb138-6" tabindex="-1"></a><span class="co"># library(estimatr)</span></span>
+<span id="cb138-7"><a href="ch11.html#cb138-7" tabindex="-1"></a><span class="co"># library(latex2exp)</span></span>
+<span id="cb138-8"><a href="ch11.html#cb138-8" tabindex="-1"></a><span class="co"># library(kableExtra)</span></span>
+<span id="cb138-9"><a href="ch11.html#cb138-9" tabindex="-1"></a><span class="co"># library(lmtest)</span></span>
+<span id="cb138-10"><a href="ch11.html#cb138-10" tabindex="-1"></a><span class="co"># library(sandwich)</span></span>
+<span id="cb138-11"><a href="ch11.html#cb138-11" tabindex="-1"></a><span class="co"># library(dynlm)</span></span>
+<span id="cb138-12"><a href="ch11.html#cb138-12" tabindex="-1"></a><span class="co"># library(fGarch)</span></span>
+<span id="cb138-13"><a href="ch11.html#cb138-13" tabindex="-1"></a><span class="co"># library(momentfit)</span></span></code></pre></div>
+<div id="exp11.3" class="section level2 unnumbered hasAnchor">
+<h2>(11.3) 式<a href="ch11.html#exp11.3" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>データは前章<a href="ch10.html#figure10-3">図10-3</a>図10-3で用いたものを使う.
+本文中にある通りデータの期間を1991年から1997年に絞り込み, さらにトレンド用の変数を作成する.</p>
+<div class="sourceCode" id="cb139"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb139-1"><a href="ch11.html#cb139-1" tabindex="-1"></a>Fig_1_nominalGDP_annual <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">&quot;./data/10_第10章/Fig_1_nominalGDP_annual.xlsx&quot;</span>)</span></code></pre></div>
+<pre><code>## New names:
+## • `` -&gt; `...1`</code></pre>
+<div class="sourceCode" id="cb141"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb141-1"><a href="ch11.html#cb141-1" tabindex="-1"></a>data_exp11<span class="fl">.3</span> <span class="ot">&lt;-</span> Fig_1_nominalGDP_annual <span class="sc">%&gt;%</span></span>
+<span id="cb141-2"><a href="ch11.html#cb141-2" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="dv">1991</span> <span class="sc">&lt;=</span> ...<span class="dv">1</span> <span class="sc">&amp;</span> ...<span class="dv">1</span> <span class="sc">&lt;=</span> <span class="dv">2017</span>)</span>
+<span id="cb141-3"><a href="ch11.html#cb141-3" tabindex="-1"></a>data_exp11<span class="fl">.3</span> <span class="ot">&lt;-</span> data_exp11<span class="fl">.3</span> <span class="sc">%&gt;%</span></span>
+<span id="cb141-4"><a href="ch11.html#cb141-4" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">trend =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">dim</span>(data_exp11<span class="fl">.3</span>)[<span class="dv">1</span>])</span>
+<span id="cb141-5"><a href="ch11.html#cb141-5" tabindex="-1"></a><span class="fu">lm</span>(<span class="fu">log</span>(実質暦年) <span class="sc">*</span> <span class="dv">100</span> <span class="sc">~</span> trend, <span class="at">data =</span> data_exp11<span class="fl">.3</span>) <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = log(実質暦年) * 100 ~ trend, data = data_exp11.3)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -4.4861 -0.9720 -0.3222  1.3159  3.8803 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 1.295e+03  7.527e-01 1720.39  &lt; 2e-16 ***
+## trend       8.491e-01  4.698e-02   18.07 7.26e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.901 on 25 degrees of freedom
+## Multiple R-squared:  0.9289, Adjusted R-squared:  0.9261 
+## F-statistic: 326.7 on 1 and 25 DF,  p-value: 7.259e-16</code></pre>
+</div>
+<div id="図11-1-対数実質gdpと線形トレンド" class="section level2 unnumbered hasAnchor">
+<h2>図11-1 対数実質GDPと線形トレンド<a href="ch11.html#図11-1-対数実質gdpと線形トレンド" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><a href="ch11.html#exp11.3">(11.3) 式</a>に続いてggplotでグラフを描画する.</p>
+<div class="sourceCode" id="cb143"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb143-1"><a href="ch11.html#cb143-1" tabindex="-1"></a>data_exp11<span class="fl">.3</span> <span class="sc">%&gt;%</span></span>
+<span id="cb143-2"><a href="ch11.html#cb143-2" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> ...<span class="dv">1</span>, <span class="at">y =</span> <span class="fu">log</span>(実質暦年) <span class="sc">*</span> <span class="dv">100</span>)) <span class="sc">+</span></span>
+<span id="cb143-3"><a href="ch11.html#cb143-3" tabindex="-1"></a>    <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="fu">aes</span>(<span class="at">color =</span> <span class="st">&quot;線形トレンド (OLS推定値)&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb143-4"><a href="ch11.html#cb143-4" tabindex="-1"></a>    <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">color =</span> <span class="st">&quot;対数実質GDP&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb143-5"><a href="ch11.html#cb143-5" tabindex="-1"></a>    <span class="fu">scale_color_hue</span>(<span class="at">name =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
+<span id="cb143-6"><a href="ch11.html#cb143-6" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;年&quot;</span>, <span class="at">y =</span> <span class="st">&quot;対数実質GDP x 100&quot;</span>) <span class="sc">+</span></span>
+<span id="cb143-7"><a href="ch11.html#cb143-7" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">legend.justification =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="sc">+</span> <span class="co"># 凡例を左上に表示</span></span>
+<span id="cb143-8"><a href="ch11.html#cb143-8" tabindex="-1"></a>    <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">label_number</span>())</span></code></pre></div>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-122-1.png" width="672" /></p>
+</div>
+<div id="図11-2-対数実質gdpの長期系列" class="section level2 unnumbered hasAnchor">
+<h2>図11-2 対数実質GDPの長期系列<a href="ch11.html#図11-2-対数実質gdpの長期系列" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>内閣府のサイトには, GDPデータ自体は1955年から掲載されているが, 現在に至るまで幾度か基準が変更されたため異なる体型基準年間でデータが直接接続しない旨注意が記載されている(<a href="https://www.esri.cao.go.jp/jp/sna/otoiawase/faq/qa2.html" class="uri">https://www.esri.cao.go.jp/jp/sna/otoiawase/faq/qa2.html</a>).</p>
+<p>まずは1990基準により計算された, 1955～1998年の実質国民総支出データをダウンロードする.
+この基準では, 1979年までの数値を用いる.</p>
+<div class="sourceCode" id="cb145"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb145-1"><a href="ch11.html#cb145-1" tabindex="-1"></a>curl <span class="ot">&lt;-</span> <span class="st">&quot;https://www.esri.cao.go.jp/jp/sna/data/data_list/kakuhou/files/h10/tables/55fcm1r.xls&quot;</span></span>
+<span id="cb145-2"><a href="ch11.html#cb145-2" tabindex="-1"></a>cdestfile <span class="ot">&lt;-</span> <span class="st">&quot;downloads/55fcm1r.xls&quot;</span></span>
+<span id="cb145-3"><a href="ch11.html#cb145-3" tabindex="-1"></a><span class="fu">download.file</span>(curl, cdestfile)</span></code></pre></div>
+<p>1980年以降のデータは, <a href="#figure10-7">図10-7</a>と同じ手順でe-Statからダウンロードする.
+それぞれ2000基準のデータを1980～1993年, それ以降は2015基準のを用いる.</p>
+<div class="sourceCode" id="cb146"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb146-1"><a href="ch11.html#cb146-1" tabindex="-1"></a>appId <span class="ot">&lt;-</span> <span class="fu">scan</span>(<span class="st">&quot;e-stat_appId.txt&quot;</span>, <span class="at">what =</span> <span class="st">&quot;character&quot;</span>)</span>
+<span id="cb146-2"><a href="ch11.html#cb146-2" tabindex="-1"></a>fig11_2_data_h12 <span class="ot">&lt;-</span> <span class="fu">estat_getStatsData</span>(<span class="at">appId =</span> appId, <span class="at">statsDataId =</span> <span class="st">&quot;0003398787&quot;</span>)</span>
+<span id="cb146-3"><a href="ch11.html#cb146-3" tabindex="-1"></a>fig11_2_data_h12 <span class="ot">&lt;-</span> fig11_2_data_h12 <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="st">`</span><span class="at">国内総生産(支出側)項目(平成12年基準)</span><span class="st">`</span> <span class="sc">==</span> <span class="st">&quot;５．国内総生産（支出側）&quot;</span> <span class="sc">&amp;</span></span>
+<span id="cb146-4"><a href="ch11.html#cb146-4" tabindex="-1"></a>                            表章項目 <span class="sc">==</span> <span class="st">&quot;金額&quot;</span> <span class="sc">&amp;</span></span>
+<span id="cb146-5"><a href="ch11.html#cb146-5" tabindex="-1"></a>                            time_code <span class="sc">&lt;=</span> <span class="st">&quot;1993000000&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb146-6"><a href="ch11.html#cb146-6" tabindex="-1"></a>                        dplyr<span class="sc">::</span><span class="fu">select</span>(value) <span class="sc">%&gt;%</span></span>
+<span id="cb146-7"><a href="ch11.html#cb146-7" tabindex="-1"></a>                        <span class="fu">rename</span>(<span class="st">&quot;実質国内総支出&quot;</span> <span class="ot">=</span> value) <span class="sc">%&gt;%</span></span>
+<span id="cb146-8"><a href="ch11.html#cb146-8" tabindex="-1"></a>                        <span class="fu">mutate</span>(年 <span class="ot">=</span> <span class="dv">1980</span><span class="sc">:</span><span class="dv">1993</span>)</span>
+<span id="cb146-9"><a href="ch11.html#cb146-9" tabindex="-1"></a>fig11_2_data_2015 <span class="ot">&lt;-</span> <span class="fu">estat_getStatsData</span>(<span class="at">appId =</span> appId, <span class="at">statsDataId =</span> <span class="st">&quot;0003109751&quot;</span>)</span>
+<span id="cb146-10"><a href="ch11.html#cb146-10" tabindex="-1"></a>fig11_2_data_2015 <span class="ot">&lt;-</span> fig11_2_data_2015 <span class="sc">%&gt;%</span> <span class="fu">filter</span>(国内総生産_実質暦年 <span class="sc">==</span> <span class="st">&quot;国内総生産(支出側)&quot;</span> <span class="sc">&amp;</span></span>
+<span id="cb146-11"><a href="ch11.html#cb146-11" tabindex="-1"></a>                            表章項目 <span class="sc">==</span> <span class="st">&quot;金額&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb146-12"><a href="ch11.html#cb146-12" tabindex="-1"></a>                        dplyr<span class="sc">::</span><span class="fu">select</span>(value) <span class="sc">%&gt;%</span></span>
+<span id="cb146-13"><a href="ch11.html#cb146-13" tabindex="-1"></a>                        <span class="fu">rename</span>(<span class="st">&quot;実質国内総支出&quot;</span> <span class="ot">=</span> value) <span class="sc">%&gt;%</span></span>
+<span id="cb146-14"><a href="ch11.html#cb146-14" tabindex="-1"></a>                        <span class="fu">mutate</span>(年 <span class="ot">=</span> <span class="dv">1994</span><span class="sc">:</span><span class="dv">2023</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb147"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb147-1"><a href="ch11.html#cb147-1" tabindex="-1"></a>fig11_2_data_55fcm1r <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">&quot;downloads/55fcm1r.xls&quot;</span>, <span class="at">sheet =</span> <span class="st">&quot;実数&quot;</span>)</span>
+<span id="cb147-2"><a href="ch11.html#cb147-2" tabindex="-1"></a>fig11_2_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(実質国内総支出 <span class="ot">=</span> <span class="fu">as.numeric</span>(<span class="fu">t</span>(fig11_2_data_55fcm1r[<span class="dv">35</span>, <span class="dv">2</span><span class="sc">:</span><span class="dv">26</span>]))) <span class="sc">%&gt;%</span></span>
+<span id="cb147-3"><a href="ch11.html#cb147-3" tabindex="-1"></a>    <span class="fu">remove_rownames</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb147-4"><a href="ch11.html#cb147-4" tabindex="-1"></a>    <span class="fu">mutate</span>(年 <span class="ot">=</span> <span class="dv">1955</span><span class="sc">:</span><span class="dv">1979</span>)</span>
+<span id="cb147-5"><a href="ch11.html#cb147-5" tabindex="-1"></a></span>
+<span id="cb147-6"><a href="ch11.html#cb147-6" tabindex="-1"></a>fig11_2_data <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(fig11_2_data, fig11_2_data_h12) <span class="sc">%&gt;%</span></span>
+<span id="cb147-7"><a href="ch11.html#cb147-7" tabindex="-1"></a>                    <span class="fu">bind_rows</span>(fig11_2_data_2015)</span>
+<span id="cb147-8"><a href="ch11.html#cb147-8" tabindex="-1"></a></span>
+<span id="cb147-9"><a href="ch11.html#cb147-9" tabindex="-1"></a>fig11_2_data <span class="sc">%&gt;%</span></span>
+<span id="cb147-10"><a href="ch11.html#cb147-10" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> 年, <span class="at">y =</span> <span class="fu">log</span>(実質国内総支出) <span class="sc">*</span> <span class="dv">100</span>)) <span class="sc">+</span></span>
+<span id="cb147-11"><a href="ch11.html#cb147-11" tabindex="-1"></a>    <span class="fu">geom_line</span>()</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-125-1.png" width="672" /></p>
 <!-- ## 練習問題 11-1 [確認] {-}
 
 ## 練習問題 11-2 [確認] {-}
@@ -340,6 +440,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 ## 練習問題 11-9 [実証] {-} -->
 
+</div>
 </div>
             </section>
 

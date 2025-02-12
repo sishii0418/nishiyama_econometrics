@@ -252,7 +252,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#figure10-1"><i class="fa fa-check"></i>図10-1 名目GDP</a></li>
 <li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#図10-2-gdpデフレーター"><i class="fa fa-check"></i>図10-2 GDPデフレーター</a></li>
-<li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#図10-3-名目系列と実質系列"><i class="fa fa-check"></i>図10-3 名目系列と実質系列</a></li>
+<li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#figure10-3"><i class="fa fa-check"></i>図10-3 名目系列と実質系列</a></li>
 <li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#図10-4-原系列と対数系列"><i class="fa fa-check"></i>図10-4 原系列と対数系列</a></li>
 <li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#図10-5-gdpギャップ-年次データ"><i class="fa fa-check"></i>図10-5 GDPギャップ (年次データ)</a></li>
 <li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#図10-6-実質gdp成長率"><i class="fa fa-check"></i>図10-6 実質GDP成長率</a></li>
@@ -278,7 +278,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#exp10.70"><i class="fa fa-check"></i>(10.70) 式</a></li>
 <li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#練習問題-10-10-実証"><i class="fa fa-check"></i>練習問題 10-10 [実証]</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="ch11.html"><a href="ch11.html"><i class="fa fa-check"></i>第11章 トレンドと構造変化</a></li>
+<li class="chapter" data-level="" data-path="ch11.html"><a href="ch11.html"><i class="fa fa-check"></i>第11章 トレンドと構造変化</a>
+<ul>
+<li class="chapter" data-level="" data-path="ch11.html"><a href="ch11.html#exp11.3"><i class="fa fa-check"></i>(11.3) 式</a></li>
+<li class="chapter" data-level="" data-path="ch11.html"><a href="ch11.html#図11-1-対数実質gdpと線形トレンド"><i class="fa fa-check"></i>図11-1 対数実質GDPと線形トレンド</a></li>
+<li class="chapter" data-level="" data-path="ch11.html"><a href="ch11.html#図11-2-対数実質gdpの長期系列"><i class="fa fa-check"></i>図11-2 対数実質GDPの長期系列</a></li>
+</ul></li>
 <li class="chapter" data-level="" data-path="ch12.html"><a href="ch12.html"><i class="fa fa-check"></i>第12章 VARモデル</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -395,8 +400,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb89-5"><a href="ch10.html#cb89-5" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;年&quot;</span>)</span></code></pre></div>
 <p><img src="_main_files/figure-html/unnamed-chunk-89-1.png" width="672" /></p>
 </div>
-<div id="図10-3-名目系列と実質系列" class="section level2 unnumbered hasAnchor">
-<h2>図10-3 名目系列と実質系列<a href="ch10.html#図10-3-名目系列と実質系列" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="figure10-3" class="section level2 unnumbered hasAnchor">
+<h2>図10-3 名目系列と実質系列<a href="ch10.html#figure10-3" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p><a href="ch9.html#figure9-5">図9-5</a>で行ったように, 一旦データフレームをlong型に変換する.
 軸の桁表示については(このブログ記事)[<a href="https://knknkn.hatenablog.com/entry/2020/04/11/160500" class="uri">https://knknkn.hatenablog.com/entry/2020/04/11/160500</a>]を参考にした.</p>
 <div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="ch10.html#cb90-1" tabindex="-1"></a>Fig_1_nominalGDP_annual <span class="sc">%&gt;%</span></span>
@@ -474,9 +479,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb95-7"><a href="ch10.html#cb95-7" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> ...<span class="dv">1</span>, <span class="at">y =</span> value, <span class="at">color =</span> name, <span class="at">linetype =</span> name)) <span class="sc">+</span></span>
 <span id="cb95-8"><a href="ch10.html#cb95-8" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span></span>
 <span id="cb95-9"><a href="ch10.html#cb95-9" tabindex="-1"></a>    <span class="fu">scale_linetype_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;dotted&quot;</span>, <span class="st">&quot;solid&quot;</span>)) <span class="sc">+</span></span>
-<span id="cb95-10"><a href="ch10.html#cb95-10" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;年&quot;</span>, <span class="at">y =</span> <span class="fu">element_blank</span>())</span>
-<span id="cb95-11"><a href="ch10.html#cb95-11" tabindex="-1"></a><span class="do">## Warning: Removed 2 rows containing missing values or values outside the scale</span></span>
-<span id="cb95-12"><a href="ch10.html#cb95-12" tabindex="-1"></a><span class="do">## range (`geom_line()`).</span></span></code></pre></div>
+<span id="cb95-10"><a href="ch10.html#cb95-10" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;年&quot;</span>, <span class="at">y =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
+<span id="cb95-11"><a href="ch10.html#cb95-11" tabindex="-1"></a>    <span class="co"># scale_color_hue(name = element_blank()) +</span></span>
+<span id="cb95-12"><a href="ch10.html#cb95-12" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">legend.justification =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>))</span>
+<span id="cb95-13"><a href="ch10.html#cb95-13" tabindex="-1"></a><span class="do">## Warning: A numeric `legend.position` argument in `theme()` was deprecated in</span></span>
+<span id="cb95-14"><a href="ch10.html#cb95-14" tabindex="-1"></a><span class="do">## ggplot2 3.5.0.</span></span>
+<span id="cb95-15"><a href="ch10.html#cb95-15" tabindex="-1"></a><span class="do">## ℹ Please use the `legend.position.inside` argument of `theme()`</span></span>
+<span id="cb95-16"><a href="ch10.html#cb95-16" tabindex="-1"></a><span class="do">##   instead.</span></span>
+<span id="cb95-17"><a href="ch10.html#cb95-17" tabindex="-1"></a><span class="do">## This warning is displayed once every 8 hours.</span></span>
+<span id="cb95-18"><a href="ch10.html#cb95-18" tabindex="-1"></a><span class="do">## Call `lifecycle::last_lifecycle_warnings()` to see where this warning</span></span>
+<span id="cb95-19"><a href="ch10.html#cb95-19" tabindex="-1"></a><span class="do">## was generated.</span></span>
+<span id="cb95-20"><a href="ch10.html#cb95-20" tabindex="-1"></a><span class="do">## Warning: Removed 2 rows containing missing values or values outside the scale</span></span>
+<span id="cb95-21"><a href="ch10.html#cb95-21" tabindex="-1"></a><span class="do">## range (`geom_line()`).</span></span></code></pre></div>
 <p><img src="_main_files/figure-html/unnamed-chunk-95-1.png" width="672" /></p>
 </div>
 <div id="図10-7-実質gdp-公表季調値" class="section level2 unnumbered hasAnchor">
@@ -602,14 +616,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb101-10"><a href="ch10.html#cb101-10" tabindex="-1"></a>    <span class="fu">geom_ma</span>(<span class="at">n =</span> <span class="dv">12</span>, <span class="fu">aes</span>(<span class="at">color =</span> <span class="st">&quot;移動平均&quot;</span>)) <span class="sc">+</span></span>
 <span id="cb101-11"><a href="ch10.html#cb101-11" tabindex="-1"></a>    <span class="fu">scale_color_hue</span>(<span class="at">name =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
 <span id="cb101-12"><a href="ch10.html#cb101-12" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="fu">element_blank</span>(), <span class="at">y =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
-<span id="cb101-13"><a href="ch10.html#cb101-13" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">legend.justification =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="co"># 凡例を左上に表示</span></span>
-<span id="cb101-14"><a href="ch10.html#cb101-14" tabindex="-1"></a><span class="do">## Warning: A numeric `legend.position` argument in `theme()` was deprecated in</span></span>
-<span id="cb101-15"><a href="ch10.html#cb101-15" tabindex="-1"></a><span class="do">## ggplot2 3.5.0.</span></span>
-<span id="cb101-16"><a href="ch10.html#cb101-16" tabindex="-1"></a><span class="do">## ℹ Please use the `legend.position.inside` argument of `theme()`</span></span>
-<span id="cb101-17"><a href="ch10.html#cb101-17" tabindex="-1"></a><span class="do">##   instead.</span></span>
-<span id="cb101-18"><a href="ch10.html#cb101-18" tabindex="-1"></a><span class="do">## This warning is displayed once every 8 hours.</span></span>
-<span id="cb101-19"><a href="ch10.html#cb101-19" tabindex="-1"></a><span class="do">## Call `lifecycle::last_lifecycle_warnings()` to see where this warning</span></span>
-<span id="cb101-20"><a href="ch10.html#cb101-20" tabindex="-1"></a><span class="do">## was generated.</span></span></code></pre></div>
+<span id="cb101-13"><a href="ch10.html#cb101-13" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">legend.justification =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="co"># 凡例を左上に表示</span></span></code></pre></div>
 <p><img src="_main_files/figure-html/unnamed-chunk-101-1.png" width="672" /></p>
 </div>
 <div id="figure10-11" class="section level2 unnumbered hasAnchor">

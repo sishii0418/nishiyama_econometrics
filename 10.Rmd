@@ -58,7 +58,7 @@ Fig_2_GDPdeflator_annual %>%
     labs(x = "年")
 ```
 
-## 図10-3 名目系列と実質系列 {-}
+## 図10-3 名目系列と実質系列 {#figure10-3 .unnumbered}
 
 [図9-5](#figure9-5)で行ったように, 一旦データフレームをlong型に変換する.
 軸の桁表示については(このブログ記事)[https://knknkn.hatenablog.com/entry/2020/04/11/160500]を参考にした.
@@ -147,7 +147,9 @@ Fig_1_nominalGDP_annual %>%
     ggplot(aes(x = ...1, y = value, color = name, linetype = name)) +
     geom_line() +
     scale_linetype_manual(values = c("dotted", "solid")) +
-    labs(x = "年", y = element_blank())
+    labs(x = "年", y = element_blank()) +
+    # scale_color_hue(name = element_blank()) +
+    theme(legend.position = c(0, 1), legend.justification = c(0, 1))
 ```
 
 ## 図10-7 実質GDP (公表季調値) {-}
