@@ -573,7 +573,7 @@ garchFit(~garch(1, 0), data = data_ex10.7$return_topix[-1], trace = FALSE) %>% s
 garchFit(~garch(1, 1), data = data_ex10.7$return_topix[-1], trace = FALSE) %>% summary() # FIXME: muの値が結構違う?
 ```
 
-## (10.69) 式 { - }
+## (10.69) 式 {#exp10.69 .unnumbered}
 データは[実証例10.6](#ex10.6)で用いたものをそのまま使う.
 ただし, 上では`ts`オブジェクトにしたのを`data.frame`に戻す.
 ここには1980年～2016年の四半期ごとのインフレ率とGDPギャップのデータが含まれている.
@@ -581,7 +581,7 @@ garchFit(~garch(1, 1), data = data_ex10.7$return_topix[-1], trace = FALSE) %>% s
 RでGMM推定をするには, `momentfit`パッケージを用いることができる.
 モーメント関数を指定して推定することもできるが, ここでは簡単に通常通りformulaを`momentModel()`で指定し, そこでできたオブジェクトを`gmmFit()`関数に渡すことで推定結果が得られる.
 
-```{r collapse=T, message=FALSE, cache=TRUE}
+```{r collapse=T, message=FALSE}
 data_exp10.69 <- data.frame(data_ex10.6)
 formula_exp10.69 <- momentModel(inflation ~ lag(inflation) + lag(inflation, 2) + lag(inflation, 3) + lag(inflation, 4) + 内閣府,
                        ~ lag(inflation) + lag(inflation, 2) + lag(inflation, 3) + lag(inflation, 4) + lag(inflation, 5) + lag(inflation, 6) + lag(inflation, 7) + lag(inflation, 8) + lag(内閣府) + lag(内閣府, 2) + lag(内閣府, 3) + lag(内閣府, 4) + lag(内閣府, 5) + lag(内閣府, 6) + lag(内閣府, 7) + lag(内閣府, 8),
@@ -590,8 +590,8 @@ formula_exp10.69 <- momentModel(inflation ~ lag(inflation) + lag(inflation, 2) +
 gmmFit(formula_exp10.69) %>% summary()
 ```
 
-## (10.70) 式 { - }
-```{r collapse=T, message=FALSE, cache=TRUE}
+## (10.70) 式 {#exp10.70 .unnumbered}
+```{r collapse=T, message=FALSE}
 formula_exp10.70 <- momentModel(inflation ~ lead(inflation) + 内閣府,
                        ~ lag(inflation) + lag(inflation, 2) + lag(inflation, 3) + lag(inflation, 4) + lag(inflation, 5) + lag(inflation, 6) + lag(inflation, 7) + lag(inflation, 8) + lag(内閣府) + lag(内閣府, 2) + lag(内閣府, 3) + lag(内閣府, 4) + lag(内閣府, 5) + lag(内閣府, 6) + lag(内閣府, 7) + lag(内閣府, 8),
                        data = data_exp10.69,

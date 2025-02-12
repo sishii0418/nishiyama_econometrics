@@ -23,7 +23,7 @@
 <meta name="author" content="石井 俊輔" />
 
 
-<meta name="date" content="2025-01-30" />
+<meta name="date" content="2025-02-12" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -271,9 +271,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#実証例10.3-フィリップス曲線の誤差項の系列相関"><i class="fa fa-check"></i>実証例10.3 フィリップス曲線の誤差項の系列相関</a></li>
 <li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#ex10.4"><i class="fa fa-check"></i>実証例10.4 フィリップス曲線のHAC標準誤差</a></li>
 <li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#実証例10.5-gdpギャップのarモデルのラグ選択"><i class="fa fa-check"></i>実証例10.5 GDPギャップのARモデルのラグ選択</a></li>
-<li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#実証例10.6-ラグ付きインフレ率を含むフィリップス曲線の推定と誤差項の系列相関の検定"><i class="fa fa-check"></i>実証例10.6 ラグ付きインフレ率を含むフィリップス曲線の推定と誤差項の系列相関の検定</a></li>
+<li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#ex10.6"><i class="fa fa-check"></i>実証例10.6 ラグ付きインフレ率を含むフィリップス曲線の推定と誤差項の系列相関の検定</a></li>
 <li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#図10-16-東証株価指数-対数階差収益率"><i class="fa fa-check"></i>図10-16 東証株価指数 (対数階差収益率)</a></li>
 <li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#ex10.7"><i class="fa fa-check"></i>実証例10.7 ARCHモデルとGARCHモデルの推定</a></li>
+<li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#exp10.69"><i class="fa fa-check"></i>(10.69) 式</a></li>
+<li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#exp10.70"><i class="fa fa-check"></i>(10.70) 式</a></li>
 <li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#練習問題-10-10-実証"><i class="fa fa-check"></i>練習問題 10-10 [実証]</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="ch11.html"><a href="ch11.html"><i class="fa fa-check"></i>第11章 トレンドと構造変化</a></li>
@@ -327,33 +329,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb75-4"><a href="ch8.html#cb75-4" tabindex="-1"></a><span class="fu">library</span>(modelsummary)</span>
 <span id="cb75-5"><a href="ch8.html#cb75-5" tabindex="-1"></a><span class="fu">library</span>(gt)</span>
 <span id="cb75-6"><a href="ch8.html#cb75-6" tabindex="-1"></a><span class="fu">library</span>(MASS)</span>
-<span id="cb75-7"><a href="ch8.html#cb75-7" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb75-8"><a href="ch8.html#cb75-8" tabindex="-1"></a><span class="do">## Attaching package: &#39;MASS&#39;</span></span>
-<span id="cb75-9"><a href="ch8.html#cb75-9" tabindex="-1"></a><span class="do">## The following object is masked from &#39;package:wooldridge&#39;:</span></span>
-<span id="cb75-10"><a href="ch8.html#cb75-10" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb75-11"><a href="ch8.html#cb75-11" tabindex="-1"></a><span class="do">##     cement</span></span>
-<span id="cb75-12"><a href="ch8.html#cb75-12" tabindex="-1"></a><span class="do">## The following object is masked from &#39;package:dplyr&#39;:</span></span>
-<span id="cb75-13"><a href="ch8.html#cb75-13" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb75-14"><a href="ch8.html#cb75-14" tabindex="-1"></a><span class="do">##     select</span></span>
-<span id="cb75-15"><a href="ch8.html#cb75-15" tabindex="-1"></a><span class="fu">library</span>(marginaleffects)</span>
-<span id="cb75-16"><a href="ch8.html#cb75-16" tabindex="-1"></a><span class="fu">library</span>(pscl)</span>
-<span id="cb75-17"><a href="ch8.html#cb75-17" tabindex="-1"></a><span class="do">## Classes and Methods for R originally developed in the</span></span>
-<span id="cb75-18"><a href="ch8.html#cb75-18" tabindex="-1"></a><span class="do">## Political Science Computational Laboratory</span></span>
-<span id="cb75-19"><a href="ch8.html#cb75-19" tabindex="-1"></a><span class="do">## Department of Political Science</span></span>
-<span id="cb75-20"><a href="ch8.html#cb75-20" tabindex="-1"></a><span class="do">## Stanford University (2002-2015),</span></span>
-<span id="cb75-21"><a href="ch8.html#cb75-21" tabindex="-1"></a><span class="do">## by and under the direction of Simon Jackman.</span></span>
-<span id="cb75-22"><a href="ch8.html#cb75-22" tabindex="-1"></a><span class="do">## hurdle and zeroinfl functions by Achim Zeileis.</span></span>
-<span id="cb75-23"><a href="ch8.html#cb75-23" tabindex="-1"></a><span class="fu">library</span>(nnet)</span>
-<span id="cb75-24"><a href="ch8.html#cb75-24" tabindex="-1"></a><span class="fu">library</span>(AER)</span>
-<span id="cb75-25"><a href="ch8.html#cb75-25" tabindex="-1"></a><span class="fu">library</span>(sampleSelection)</span>
-<span id="cb75-26"><a href="ch8.html#cb75-26" tabindex="-1"></a><span class="do">## Loading required package: maxLik</span></span>
-<span id="cb75-27"><a href="ch8.html#cb75-27" tabindex="-1"></a><span class="do">## Loading required package: miscTools</span></span>
-<span id="cb75-28"><a href="ch8.html#cb75-28" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb75-29"><a href="ch8.html#cb75-29" tabindex="-1"></a><span class="do">## Please cite the &#39;maxLik&#39; package as:</span></span>
-<span id="cb75-30"><a href="ch8.html#cb75-30" tabindex="-1"></a><span class="do">## Henningsen, Arne and Toomet, Ott (2011). maxLik: A package for maximum likelihood estimation in R. Computational Statistics 26(3), 443-458. DOI 10.1007/s00180-010-0217-1.</span></span>
-<span id="cb75-31"><a href="ch8.html#cb75-31" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb75-32"><a href="ch8.html#cb75-32" tabindex="-1"></a><span class="do">## If you have questions, suggestions, or comments regarding the &#39;maxLik&#39; package, please use a forum or &#39;tracker&#39; at maxLik&#39;s R-Forge site:</span></span>
-<span id="cb75-33"><a href="ch8.html#cb75-33" tabindex="-1"></a><span class="do">## https://r-forge.r-project.org/projects/maxlik/</span></span></code></pre></div>
+<span id="cb75-7"><a href="ch8.html#cb75-7" tabindex="-1"></a><span class="fu">library</span>(marginaleffects)</span>
+<span id="cb75-8"><a href="ch8.html#cb75-8" tabindex="-1"></a><span class="fu">library</span>(pscl)</span>
+<span id="cb75-9"><a href="ch8.html#cb75-9" tabindex="-1"></a><span class="fu">library</span>(nnet)</span>
+<span id="cb75-10"><a href="ch8.html#cb75-10" tabindex="-1"></a><span class="fu">library</span>(AER)</span>
+<span id="cb75-11"><a href="ch8.html#cb75-11" tabindex="-1"></a><span class="fu">library</span>(sampleSelection)</span></code></pre></div>
 <div id="実証例8.1-piaacを用いた女性の就業選択の実証例" class="section level2 unnumbered hasAnchor">
 <h2>実証例8.1 PIAACを用いた女性の就業選択の実証例<a href="ch8.html#実証例8.1-piaacを用いた女性の就業選択の実証例" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>まずはデータを読み込む.</p>
