@@ -62,4 +62,7 @@ install.packages("fGarch")
 knitr::write_bib(c(
   .packages(), 'bookdown', 'knitr', 'rmarkdown'
 ), 'packages.bib')
+if(!file.exists("docs/.nojekyll")) {
+  file.create("docs/.nojekyll")
+}
 ```
