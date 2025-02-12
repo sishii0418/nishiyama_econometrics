@@ -37,6 +37,7 @@ library(lmtest)
 library(sandwich)
 library(dynlm)
 library(fGarch)
+library(momentfit)
 ```
 
 ## 図10-1 名目GDP {#figure10-1 .unnumbered}
@@ -322,7 +323,7 @@ Fig_12_GDPgap_quarterly %>%
 ```{r collapse=T, message=FALSE}
 data_exp10.12 <- inner_join(fig10_8_data, Fig_12_GDPgap_quarterly) %>%
     dplyr::select(year, inflation, 内閣府) %>%
-    filter(ym(198001) < year & year < ym(201701))
+    filter(ym(198001) <= year & year < ym(201701))
 model10.12 <- lm_robust(inflation ~ 内閣府, data = data_exp10.12, se_type = "stata")
 summary(model10.12)
 ```
@@ -366,7 +367,7 @@ Kableでは行ごとに桁丸め処理を行うことが難しいため, ここ�
 一方似たような表作成パッケージであるgtでは行ごとの処理が可能ではあるが, 数式の表示が難しいという難点がある.
 同様の表を複数作成するため, 関数としておく.
 
-```{r collapse=T, message=FALSE}
+```{r collapse=T, message=FALSE, cache=TRUE}
 data_ex10.1 <- Fig_12_GDPgap_quarterly %>%
     filter(ym(198001) < year & year < ym(201701)) %>%
     dplyr::select(GDP.Gap)
@@ -402,13 +403,13 @@ serial_cor_table(data_ex10.1)
 [図10-11](#figure10-11)で生成したデータを用いる.
 表のフォーマットは[実証例10.1](#ex10.1)と同様であるため, 上で作成した関数にデータを渡すだけでよい.
 
-```{r collapse=T, message=FALSE}
+```{r collapse=T, message=FALSE, cache=TRUE}
 serial_cor_table(fig10_11_a)
 ```
 
 ## 図10-15 実験系列 (ホワイトノイズ) のコレログラム {-}
 
-```{r collapse=T, message=FALSE}
+```{r collapse=T, message=FALSE, cache=TRUE}
 fig10_15_data <- fig10_11_a %>%
     acf(plot = FALSE)
 ci <- 0.95
@@ -429,8 +430,9 @@ data.frame(acf = fig10_15_data$acf[-1], lag = fig10_15_data$lag[-1]) %>%
 [(10.12)式](#exp10.12)のモデルの誤差項を調べる.
 インフレ率は内閣府から自身でダウンロードしたデータを用いているため値が異なる.
 
-```{r collapse=T, message=FALSE}
-resid_10.3 <- data_exp10.12$inflation - model10.12$fitted.values
+```{r collapse=T, message=FALSE, cache=TRUE}
+# インフレ率の1行目はNAになっているので取り除く
+resid_10.3 <- data_exp10.12$inflation[-1] - model10.12$fitted.values
 serial_cor_table(resid_10.3, digits = c(3, 2, 2, 2))
 ```
 
@@ -439,7 +441,7 @@ serial_cor_table(resid_10.3, digits = c(3, 2, 2, 2))
 HAC標準誤差は[(10.12) 式](#exp10.12)で求めたモデルを一旦`lm()`で計算し直して, それを`lmtest::coeftest()`に渡すことで求められる.
 下の通り, この方法でもStataと同じホワイト標準誤差 (HC1) を求めることができる.
 
-```{r collapse=T, message=FALSE}
+```{r collapse=T, message=FALSE, cache=TRUE}
 model10.12_lm <- lm(inflation ~ 内閣府, data = data_exp10.12)
 # HAC標準誤差
 coeftest(model10.12_lm, vcov = NeweyWest)
@@ -457,7 +459,7 @@ RでARモデルを推定するには, `ar()`を用いれば適切なラグ次数
 
 p.500にあるAICとBICの定義は本文中で説明されている通り簡易なものであり, 下では手動で計算した.
 
-```{r collapse=T, message=FALSE}
+```{r collapse=T, message=FALSE, cache=TRUE}
 ex10.5_data <- Fig_12_GDPgap_quarterly %>%
     filter(year < ym(201701)) %>%
     dplyr::select(内閣府)
@@ -496,7 +498,7 @@ ex10.5_table1 %>%
 arima(x = ex10.5_data, order = c(1, 0, 0), method = "ML")
 ```
 
-## 実証例10.6 ラグ付きインフレ率を含むフィリップス曲線の推定と誤差項の系列相関の検定 {-}
+## 実証例10.6 ラグ付きインフレ率を含むフィリップス曲線の推定と誤差項の系列相関の検定 {#ex10.6 .unnumbered}
 
 データは[(10.12)式](#exp10.12)用に作成したものを再利用する.
 ADLモデルはRでは`dynlm::dynlm()`を用いることで推定できるが, このとき関数に渡すデータは先に`ts`オブジェクトにしておく.
@@ -504,10 +506,10 @@ ADLモデルはRでは`dynlm::dynlm()`を用いることで推定できるが, �
 ここではボックス=ピアースによる近似を用いているが, これは`Box.test(type = "Box-Pierce")`と指定する.
 また, ブルイッシュ=ゴッドフレイ検定は`lmtest::bgtest()`を用いて実行できる.
 
-```{r collapse=T, message=FALSE}
+```{r collapse=T, message=FALSE, cache=TRUE}
 data_ex10.6 <- data_exp10.12 %>%
     dplyr::select(inflation, 内閣府) %>%
-    ts(start = c(1980, 2),
+    ts(start = c(1980, 1),
        end = c(2016, 4),
        frequency = 4)
 
@@ -559,7 +561,7 @@ ARCH(1)モデルはGARCH(1, 0)モデルに等しいことからそれぞれ`form
 フィットした`garchFit`オブジェクトを`summary()`関数にいれると, 下部でAICやBICといった情報基準も得ることができる.
 本文中にある通り, AICとBICともにGARCH(1, 1)モデルのほうが値が小さく, こちらが選択されることが確認できた.
 
-```{r collapse=T, message=FALSE}
+```{r collapse=T, message=FALSE, cache=TRUE}
 data_ex10.7 <- fig10_16_data %>%
     mutate(res_sq = (return_topix - mean(return_topix, na.rm = TRUE))^2)
 # ARCH効果の検定
@@ -571,9 +573,31 @@ garchFit(~garch(1, 0), data = data_ex10.7$return_topix[-1], trace = FALSE) %>% s
 garchFit(~garch(1, 1), data = data_ex10.7$return_topix[-1], trace = FALSE) %>% summary() # FIXME: muの値が結構違う?
 ```
 
-<!-- ## (10.69) 式
+## (10.69) 式 { - }
+データは[実証例10.6](#ex10.6)で用いたものをそのまま使う.
+ただし, 上では`ts`オブジェクトにしたのを`data.frame`に戻す.
+ここには1980年～2016年の四半期ごとのインフレ率とGDPギャップのデータが含まれている.
 
-## (10.70) 式 -->
+RでGMM推定をするには, `momentfit`パッケージを用いることができる.
+モーメント関数を指定して推定することもできるが, ここでは簡単に通常通りformulaを`momentModel()`で指定し, そこでできたオブジェクトを`gmmFit()`関数に渡すことで推定結果が得られる.
+
+```{r collapse=T, message=FALSE, cache=TRUE}
+data_exp10.69 <- data.frame(data_ex10.6)
+formula_exp10.69 <- momentModel(inflation ~ lag(inflation) + lag(inflation, 2) + lag(inflation, 3) + lag(inflation, 4) + 内閣府,
+                       ~ lag(inflation) + lag(inflation, 2) + lag(inflation, 3) + lag(inflation, 4) + lag(inflation, 5) + lag(inflation, 6) + lag(inflation, 7) + lag(inflation, 8) + lag(内閣府) + lag(内閣府, 2) + lag(内閣府, 3) + lag(内閣府, 4) + lag(内閣府, 5) + lag(内閣府, 6) + lag(内閣府, 7) + lag(内閣府, 8),
+                       data = data_exp10.69,
+                       vcov = "HAC")
+gmmFit(formula_exp10.69) %>% summary()
+```
+
+## (10.70) 式 { - }
+```{r collapse=T, message=FALSE, cache=TRUE}
+formula_exp10.70 <- momentModel(inflation ~ lead(inflation) + 内閣府,
+                       ~ lag(inflation) + lag(inflation, 2) + lag(inflation, 3) + lag(inflation, 4) + lag(inflation, 5) + lag(inflation, 6) + lag(inflation, 7) + lag(inflation, 8) + lag(内閣府) + lag(内閣府, 2) + lag(内閣府, 3) + lag(内閣府, 4) + lag(内閣府, 5) + lag(内閣府, 6) + lag(内閣府, 7) + lag(内閣府, 8),
+                       data = data_exp10.69,
+                       vcov = "HAC")
+gmmFit(formula_exp10.70) %>% summary()
+```
 
 <!-- ## 練習問題 10-1 [確認] {-}
 
@@ -597,7 +621,7 @@ garchFit(~garch(1, 1), data = data_ex10.7$return_topix[-1], trace = FALSE) %>% s
 1 - 3. [実証例10.7](#ex10.7)を参照せよ.
 
 4. 平均の代わりにAR(1)モデルを用いてGARCHモデルを推定するには, `arma(1, 0)`を`formula`引数に追加する (正しく推定できているかあまり自信がないです...).
-```{r collapse=T, message=FALSE}
+```{r collapse=T, message=FALSE, cache=TRUE}
 # AR(1)モデルを推定
 practice10.10_ar1 <- arima(data_ex10.7$return_topix[-1], order = c(1, 0, 0), include.mean = FALSE, method = "ML")
 # 誤差項の2乗値について, ARCH効果の検定
