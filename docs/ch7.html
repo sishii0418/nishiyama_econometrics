@@ -326,7 +326,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="ch7.html#cb66-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb66-2"><a href="ch7.html#cb66-2" tabindex="-1"></a><span class="fu">library</span>(estimatr)</span>
 <span id="cb66-3"><a href="ch7.html#cb66-3" tabindex="-1"></a><span class="fu">library</span>(AER)</span>
-<span id="cb66-4"><a href="ch7.html#cb66-4" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span></code></pre></div>
+<span id="cb66-4"><a href="ch7.html#cb66-4" tabindex="-1"></a><span class="do">## Loading required package: lmtest</span></span>
+<span id="cb66-5"><a href="ch7.html#cb66-5" tabindex="-1"></a><span class="do">## Loading required package: zoo</span></span>
+<span id="cb66-6"><a href="ch7.html#cb66-6" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb66-7"><a href="ch7.html#cb66-7" tabindex="-1"></a><span class="do">## Attaching package: &#39;zoo&#39;</span></span>
+<span id="cb66-8"><a href="ch7.html#cb66-8" tabindex="-1"></a><span class="do">## The following objects are masked from &#39;package:base&#39;:</span></span>
+<span id="cb66-9"><a href="ch7.html#cb66-9" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb66-10"><a href="ch7.html#cb66-10" tabindex="-1"></a><span class="do">##     as.Date, as.Date.numeric</span></span>
+<span id="cb66-11"><a href="ch7.html#cb66-11" tabindex="-1"></a><span class="do">## Loading required package: sandwich</span></span>
+<span id="cb66-12"><a href="ch7.html#cb66-12" tabindex="-1"></a><span class="do">## Loading required package: survival</span></span>
+<span id="cb66-13"><a href="ch7.html#cb66-13" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span>
+<span id="cb66-14"><a href="ch7.html#cb66-14" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb66-15"><a href="ch7.html#cb66-15" tabindex="-1"></a><span class="do">## Attaching package: &#39;kableExtra&#39;</span></span>
+<span id="cb66-16"><a href="ch7.html#cb66-16" tabindex="-1"></a><span class="do">## The following object is masked from &#39;package:dplyr&#39;:</span></span>
+<span id="cb66-17"><a href="ch7.html#cb66-17" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb66-18"><a href="ch7.html#cb66-18" tabindex="-1"></a><span class="do">##     group_rows</span></span></code></pre></div>
 <div id="ex7.1" class="section level2 unnumbered hasAnchor">
 <h2>実証例7.1 単回帰モデルの操作変数推定<a href="ch7.html#ex7.1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>まずはデータを読み込む.</p>

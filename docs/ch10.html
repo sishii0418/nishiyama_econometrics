@@ -326,16 +326,57 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb87-1"><a href="ch10.html#cb87-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb87-2"><a href="ch10.html#cb87-2" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
 <span id="cb87-3"><a href="ch10.html#cb87-3" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
-<span id="cb87-4"><a href="ch10.html#cb87-4" tabindex="-1"></a><span class="fu">library</span>(estatapi)</span>
-<span id="cb87-5"><a href="ch10.html#cb87-5" tabindex="-1"></a><span class="fu">library</span>(tidyquant)</span>
-<span id="cb87-6"><a href="ch10.html#cb87-6" tabindex="-1"></a><span class="fu">library</span>(estimatr)</span>
-<span id="cb87-7"><a href="ch10.html#cb87-7" tabindex="-1"></a><span class="fu">library</span>(latex2exp)</span>
-<span id="cb87-8"><a href="ch10.html#cb87-8" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span>
-<span id="cb87-9"><a href="ch10.html#cb87-9" tabindex="-1"></a><span class="fu">library</span>(lmtest)</span>
-<span id="cb87-10"><a href="ch10.html#cb87-10" tabindex="-1"></a><span class="fu">library</span>(sandwich)</span>
-<span id="cb87-11"><a href="ch10.html#cb87-11" tabindex="-1"></a><span class="fu">library</span>(dynlm)</span>
-<span id="cb87-12"><a href="ch10.html#cb87-12" tabindex="-1"></a><span class="fu">library</span>(fGarch)</span>
-<span id="cb87-13"><a href="ch10.html#cb87-13" tabindex="-1"></a><span class="fu">library</span>(momentfit)</span></code></pre></div>
+<span id="cb87-4"><a href="ch10.html#cb87-4" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb87-5"><a href="ch10.html#cb87-5" tabindex="-1"></a><span class="do">## Attaching package: &#39;patchwork&#39;</span></span>
+<span id="cb87-6"><a href="ch10.html#cb87-6" tabindex="-1"></a><span class="do">## The following object is masked from &#39;package:MASS&#39;:</span></span>
+<span id="cb87-7"><a href="ch10.html#cb87-7" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb87-8"><a href="ch10.html#cb87-8" tabindex="-1"></a><span class="do">##     area</span></span>
+<span id="cb87-9"><a href="ch10.html#cb87-9" tabindex="-1"></a><span class="fu">library</span>(estatapi)</span>
+<span id="cb87-10"><a href="ch10.html#cb87-10" tabindex="-1"></a><span class="do">## このサービスは、政府統計総合窓口(e-Stat)のAPI機能を使用していますが、サービスの内容は国によって保証されたものではありません。</span></span>
+<span id="cb87-11"><a href="ch10.html#cb87-11" tabindex="-1"></a><span class="fu">library</span>(tidyquant)</span>
+<span id="cb87-12"><a href="ch10.html#cb87-12" tabindex="-1"></a><span class="do">## Registered S3 method overwritten by &#39;quantmod&#39;:</span></span>
+<span id="cb87-13"><a href="ch10.html#cb87-13" tabindex="-1"></a><span class="do">##   method            from</span></span>
+<span id="cb87-14"><a href="ch10.html#cb87-14" tabindex="-1"></a><span class="do">##   as.zoo.data.frame zoo</span></span>
+<span id="cb87-15"><a href="ch10.html#cb87-15" tabindex="-1"></a><span class="do">## ── Attaching core tidyquant packages ───────────── tidyquant 1.0.10 ──</span></span>
+<span id="cb87-16"><a href="ch10.html#cb87-16" tabindex="-1"></a><span class="do">## ✔ PerformanceAnalytics 2.0.4      ✔ TTR                  0.24.4</span></span>
+<span id="cb87-17"><a href="ch10.html#cb87-17" tabindex="-1"></a><span class="do">## ✔ quantmod             0.4.26     ✔ xts                  0.14.1</span></span>
+<span id="cb87-18"><a href="ch10.html#cb87-18" tabindex="-1"></a><span class="do">## ── Conflicts ──────────────────────────────── tidyquant_conflicts() ──</span></span>
+<span id="cb87-19"><a href="ch10.html#cb87-19" tabindex="-1"></a><span class="do">## ✖ zoo::as.Date()                 masks base::as.Date()</span></span>
+<span id="cb87-20"><a href="ch10.html#cb87-20" tabindex="-1"></a><span class="do">## ✖ zoo::as.Date.numeric()         masks base::as.Date.numeric()</span></span>
+<span id="cb87-21"><a href="ch10.html#cb87-21" tabindex="-1"></a><span class="do">## ✖ dplyr::filter()                masks stats::filter()</span></span>
+<span id="cb87-22"><a href="ch10.html#cb87-22" tabindex="-1"></a><span class="do">## ✖ xts::first()                   masks dplyr::first()</span></span>
+<span id="cb87-23"><a href="ch10.html#cb87-23" tabindex="-1"></a><span class="do">## ✖ kableExtra::group_rows()       masks dplyr::group_rows()</span></span>
+<span id="cb87-24"><a href="ch10.html#cb87-24" tabindex="-1"></a><span class="do">## ✖ dplyr::lag()                   masks stats::lag()</span></span>
+<span id="cb87-25"><a href="ch10.html#cb87-25" tabindex="-1"></a><span class="do">## ✖ xts::last()                    masks dplyr::last()</span></span>
+<span id="cb87-26"><a href="ch10.html#cb87-26" tabindex="-1"></a><span class="do">## ✖ PerformanceAnalytics::legend() masks graphics::legend()</span></span>
+<span id="cb87-27"><a href="ch10.html#cb87-27" tabindex="-1"></a><span class="do">## ✖ car::recode()                  masks dplyr::recode()</span></span>
+<span id="cb87-28"><a href="ch10.html#cb87-28" tabindex="-1"></a><span class="do">## ✖ MASS::select()                 masks dplyr::select()</span></span>
+<span id="cb87-29"><a href="ch10.html#cb87-29" tabindex="-1"></a><span class="do">## ✖ car::some()                    masks purrr::some()</span></span>
+<span id="cb87-30"><a href="ch10.html#cb87-30" tabindex="-1"></a><span class="do">## ✖ quantmod::summary()            masks base::summary()</span></span>
+<span id="cb87-31"><a href="ch10.html#cb87-31" tabindex="-1"></a><span class="do">## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</span></span>
+<span id="cb87-32"><a href="ch10.html#cb87-32" tabindex="-1"></a><span class="fu">library</span>(estimatr)</span>
+<span id="cb87-33"><a href="ch10.html#cb87-33" tabindex="-1"></a><span class="fu">library</span>(latex2exp)</span>
+<span id="cb87-34"><a href="ch10.html#cb87-34" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span>
+<span id="cb87-35"><a href="ch10.html#cb87-35" tabindex="-1"></a><span class="fu">library</span>(lmtest)</span>
+<span id="cb87-36"><a href="ch10.html#cb87-36" tabindex="-1"></a><span class="fu">library</span>(sandwich)</span>
+<span id="cb87-37"><a href="ch10.html#cb87-37" tabindex="-1"></a><span class="fu">library</span>(dynlm)</span>
+<span id="cb87-38"><a href="ch10.html#cb87-38" tabindex="-1"></a><span class="fu">library</span>(fGarch)</span>
+<span id="cb87-39"><a href="ch10.html#cb87-39" tabindex="-1"></a><span class="do">## </span><span class="al">NOTE</span><span class="do">: Packages &#39;fBasics&#39;, &#39;timeDate&#39;, and &#39;timeSeries&#39; are no longer</span></span>
+<span id="cb87-40"><a href="ch10.html#cb87-40" tabindex="-1"></a><span class="do">## attached to the search() path when &#39;fGarch&#39; is attached.</span></span>
+<span id="cb87-41"><a href="ch10.html#cb87-41" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb87-42"><a href="ch10.html#cb87-42" tabindex="-1"></a><span class="do">## If needed attach them yourself in your R script by e.g.,</span></span>
+<span id="cb87-43"><a href="ch10.html#cb87-43" tabindex="-1"></a><span class="do">##         require(&quot;timeSeries&quot;)</span></span>
+<span id="cb87-44"><a href="ch10.html#cb87-44" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb87-45"><a href="ch10.html#cb87-45" tabindex="-1"></a><span class="do">## Attaching package: &#39;fGarch&#39;</span></span>
+<span id="cb87-46"><a href="ch10.html#cb87-46" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb87-47"><a href="ch10.html#cb87-47" tabindex="-1"></a><span class="do">## The following objects are masked from &#39;package:PerformanceAnalytics&#39;:</span></span>
+<span id="cb87-48"><a href="ch10.html#cb87-48" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb87-49"><a href="ch10.html#cb87-49" tabindex="-1"></a><span class="do">##     ES, VaR</span></span>
+<span id="cb87-50"><a href="ch10.html#cb87-50" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb87-51"><a href="ch10.html#cb87-51" tabindex="-1"></a><span class="do">## The following object is masked from &#39;package:TTR&#39;:</span></span>
+<span id="cb87-52"><a href="ch10.html#cb87-52" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb87-53"><a href="ch10.html#cb87-53" tabindex="-1"></a><span class="do">##     volatility</span></span>
+<span id="cb87-54"><a href="ch10.html#cb87-54" tabindex="-1"></a><span class="fu">library</span>(momentfit)</span></code></pre></div>
 <div id="figure10-1" class="section level2 unnumbered hasAnchor">
 <h2>図10-1 名目GDP<a href="ch10.html#figure10-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb88-1"><a href="ch10.html#cb88-1" tabindex="-1"></a>Fig_1_nominalGDP_annual <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">&quot;./data/10_第10章/Fig_1_nominalGDP_annual.xlsx&quot;</span>)</span>
@@ -434,7 +475,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb95-8"><a href="ch10.html#cb95-8" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span></span>
 <span id="cb95-9"><a href="ch10.html#cb95-9" tabindex="-1"></a>    <span class="fu">scale_linetype_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;dotted&quot;</span>, <span class="st">&quot;solid&quot;</span>)) <span class="sc">+</span></span>
 <span id="cb95-10"><a href="ch10.html#cb95-10" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;年&quot;</span>, <span class="at">y =</span> <span class="fu">element_blank</span>())</span>
-<span id="cb95-11"><a href="ch10.html#cb95-11" tabindex="-1"></a><span class="do">## Warning: Removed 2 rows containing missing values or values outside the scale range (`geom_line()`).</span></span></code></pre></div>
+<span id="cb95-11"><a href="ch10.html#cb95-11" tabindex="-1"></a><span class="do">## Warning: Removed 2 rows containing missing values or values outside the scale</span></span>
+<span id="cb95-12"><a href="ch10.html#cb95-12" tabindex="-1"></a><span class="do">## range (`geom_line()`).</span></span></code></pre></div>
 <p><img src="_main_files/figure-html/unnamed-chunk-95-1.png" width="672" /></p>
 </div>
 <div id="図10-7-実質gdp-公表季調値" class="section level2 unnumbered hasAnchor">
@@ -523,7 +565,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb99-26"><a href="ch10.html#cb99-26" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> inflation)) <span class="sc">+</span></span>
 <span id="cb99-27"><a href="ch10.html#cb99-27" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span></span>
 <span id="cb99-28"><a href="ch10.html#cb99-28" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;年&quot;</span>, <span class="at">y =</span> <span class="st">&quot;インフレ率 (%)&quot;</span>)</span>
-<span id="cb99-29"><a href="ch10.html#cb99-29" tabindex="-1"></a><span class="do">## Warning: Removed 1 row containing missing values or values outside the scale range (`geom_line()`).</span></span></code></pre></div>
+<span id="cb99-29"><a href="ch10.html#cb99-29" tabindex="-1"></a><span class="do">## Warning: Removed 1 row containing missing values or values outside the scale</span></span>
+<span id="cb99-30"><a href="ch10.html#cb99-30" tabindex="-1"></a><span class="do">## range (`geom_line()`).</span></span></code></pre></div>
 <p><img src="_main_files/figure-html/unnamed-chunk-99-1.png" width="672" /></p>
 </div>
 <div id="図10-9-消費者物価指数の-対数季節階差-インフレ率" class="section level2 unnumbered hasAnchor">
@@ -567,10 +610,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb101-11"><a href="ch10.html#cb101-11" tabindex="-1"></a>    <span class="fu">scale_color_hue</span>(<span class="at">name =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
 <span id="cb101-12"><a href="ch10.html#cb101-12" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="fu">element_blank</span>(), <span class="at">y =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
 <span id="cb101-13"><a href="ch10.html#cb101-13" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">legend.justification =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="co"># 凡例を左上に表示</span></span>
-<span id="cb101-14"><a href="ch10.html#cb101-14" tabindex="-1"></a><span class="do">## Warning: A numeric `legend.position` argument in `theme()` was deprecated in ggplot2 3.5.0.</span></span>
-<span id="cb101-15"><a href="ch10.html#cb101-15" tabindex="-1"></a><span class="do">## ℹ Please use the `legend.position.inside` argument of `theme()` instead.</span></span>
-<span id="cb101-16"><a href="ch10.html#cb101-16" tabindex="-1"></a><span class="do">## This warning is displayed once every 8 hours.</span></span>
-<span id="cb101-17"><a href="ch10.html#cb101-17" tabindex="-1"></a><span class="do">## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.</span></span></code></pre></div>
+<span id="cb101-14"><a href="ch10.html#cb101-14" tabindex="-1"></a><span class="do">## Warning: A numeric `legend.position` argument in `theme()` was deprecated in</span></span>
+<span id="cb101-15"><a href="ch10.html#cb101-15" tabindex="-1"></a><span class="do">## ggplot2 3.5.0.</span></span>
+<span id="cb101-16"><a href="ch10.html#cb101-16" tabindex="-1"></a><span class="do">## ℹ Please use the `legend.position.inside` argument of `theme()`</span></span>
+<span id="cb101-17"><a href="ch10.html#cb101-17" tabindex="-1"></a><span class="do">##   instead.</span></span>
+<span id="cb101-18"><a href="ch10.html#cb101-18" tabindex="-1"></a><span class="do">## This warning is displayed once every 8 hours.</span></span>
+<span id="cb101-19"><a href="ch10.html#cb101-19" tabindex="-1"></a><span class="do">## Call `lifecycle::last_lifecycle_warnings()` to see where this warning</span></span>
+<span id="cb101-20"><a href="ch10.html#cb101-20" tabindex="-1"></a><span class="do">## was generated.</span></span></code></pre></div>
 <p><img src="_main_files/figure-html/unnamed-chunk-101-1.png" width="672" /></p>
 </div>
 <div id="figure10-11" class="section level2 unnumbered hasAnchor">
@@ -670,8 +716,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb106-13"><a href="ch10.html#cb106-13" tabindex="-1"></a>    <span class="fu">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="at">x =</span> <span class="dv">20</span>, <span class="at">y =</span> <span class="fu">qnorm</span>((<span class="dv">1</span><span class="sc">+</span>ci)<span class="sc">/</span><span class="dv">2</span>)<span class="sc">/</span><span class="fu">sqrt</span>(N) <span class="sc">+</span> <span class="fl">0.02</span>, <span class="at">label =</span> <span class="fu">TeX</span>(<span class="st">&quot;$2 </span><span class="sc">\\</span><span class="st">times $SE&quot;</span>)) <span class="sc">+</span></span>
 <span id="cb106-14"><a href="ch10.html#cb106-14" tabindex="-1"></a>    <span class="fu">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="at">x =</span> <span class="dv">20</span>, <span class="at">y =</span> <span class="sc">-</span><span class="fu">qnorm</span>((<span class="dv">1</span><span class="sc">+</span>ci)<span class="sc">/</span><span class="dv">2</span>)<span class="sc">/</span><span class="fu">sqrt</span>(N) <span class="sc">-</span> <span class="fl">0.02</span>, <span class="at">label =</span> <span class="fu">TeX</span>(<span class="st">&quot;$-2 </span><span class="sc">\\</span><span class="st">times $SE&quot;</span>)) <span class="sc">+</span></span>
 <span id="cb106-15"><a href="ch10.html#cb106-15" tabindex="-1"></a>    <span class="fu">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="at">x =</span> <span class="dv">5</span>, <span class="at">y =</span> <span class="fl">0.6</span>, <span class="at">label =</span> <span class="st">&quot;自己相関&quot;</span>)</span>
-<span id="cb106-16"><a href="ch10.html#cb106-16" tabindex="-1"></a><span class="do">## Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;expression&#39;</span></span>
-<span id="cb106-17"><a href="ch10.html#cb106-17" tabindex="-1"></a><span class="do">## Warning in is.na(x): is.na() applied to non-(list or vector) of type &#39;expression&#39;</span></span></code></pre></div>
+<span id="cb106-16"><a href="ch10.html#cb106-16" tabindex="-1"></a><span class="do">## Warning in is.na(x): is.na() applied to non-(list or vector) of type</span></span>
+<span id="cb106-17"><a href="ch10.html#cb106-17" tabindex="-1"></a><span class="do">## &#39;expression&#39;</span></span>
+<span id="cb106-18"><a href="ch10.html#cb106-18" tabindex="-1"></a><span class="do">## Warning in is.na(x): is.na() applied to non-(list or vector) of type</span></span>
+<span id="cb106-19"><a href="ch10.html#cb106-19" tabindex="-1"></a><span class="do">## &#39;expression&#39;</span></span></code></pre></div>
 <p><img src="_main_files/figure-html/unnamed-chunk-106-1.png" width="672" /></p>
 </div>
 <div id="ex10.1" class="section level2 unnumbered hasAnchor">
@@ -1288,7 +1336,8 @@ ADLモデルはRでは<code>dynlm::dynlm()</code>を用いることで推定で�
 <span id="cb121-3"><a href="ch10.html#cb121-3" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Date, <span class="at">y =</span> return_topix)) <span class="sc">+</span></span>
 <span id="cb121-4"><a href="ch10.html#cb121-4" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span></span>
 <span id="cb121-5"><a href="ch10.html#cb121-5" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;年&quot;</span>, <span class="at">y =</span> <span class="st">&quot;&quot;</span>)</span></code></pre></div>
-<pre><code>## Warning: Removed 1 row containing missing values or values outside the scale range (`geom_line()`).</code></pre>
+<pre><code>## Warning: Removed 1 row containing missing values or values outside the scale
+## range (`geom_line()`).</code></pre>
 <p><img src="_main_files/figure-html/unnamed-chunk-114-1.png" width="672" /></p>
 </div>
 <div id="ex10.7" class="section level2 unnumbered hasAnchor">

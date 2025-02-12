@@ -329,11 +329,33 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb75-4"><a href="ch8.html#cb75-4" tabindex="-1"></a><span class="fu">library</span>(modelsummary)</span>
 <span id="cb75-5"><a href="ch8.html#cb75-5" tabindex="-1"></a><span class="fu">library</span>(gt)</span>
 <span id="cb75-6"><a href="ch8.html#cb75-6" tabindex="-1"></a><span class="fu">library</span>(MASS)</span>
-<span id="cb75-7"><a href="ch8.html#cb75-7" tabindex="-1"></a><span class="fu">library</span>(marginaleffects)</span>
-<span id="cb75-8"><a href="ch8.html#cb75-8" tabindex="-1"></a><span class="fu">library</span>(pscl)</span>
-<span id="cb75-9"><a href="ch8.html#cb75-9" tabindex="-1"></a><span class="fu">library</span>(nnet)</span>
-<span id="cb75-10"><a href="ch8.html#cb75-10" tabindex="-1"></a><span class="fu">library</span>(AER)</span>
-<span id="cb75-11"><a href="ch8.html#cb75-11" tabindex="-1"></a><span class="fu">library</span>(sampleSelection)</span></code></pre></div>
+<span id="cb75-7"><a href="ch8.html#cb75-7" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb75-8"><a href="ch8.html#cb75-8" tabindex="-1"></a><span class="do">## Attaching package: &#39;MASS&#39;</span></span>
+<span id="cb75-9"><a href="ch8.html#cb75-9" tabindex="-1"></a><span class="do">## The following object is masked from &#39;package:wooldridge&#39;:</span></span>
+<span id="cb75-10"><a href="ch8.html#cb75-10" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb75-11"><a href="ch8.html#cb75-11" tabindex="-1"></a><span class="do">##     cement</span></span>
+<span id="cb75-12"><a href="ch8.html#cb75-12" tabindex="-1"></a><span class="do">## The following object is masked from &#39;package:dplyr&#39;:</span></span>
+<span id="cb75-13"><a href="ch8.html#cb75-13" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb75-14"><a href="ch8.html#cb75-14" tabindex="-1"></a><span class="do">##     select</span></span>
+<span id="cb75-15"><a href="ch8.html#cb75-15" tabindex="-1"></a><span class="fu">library</span>(marginaleffects)</span>
+<span id="cb75-16"><a href="ch8.html#cb75-16" tabindex="-1"></a><span class="fu">library</span>(pscl)</span>
+<span id="cb75-17"><a href="ch8.html#cb75-17" tabindex="-1"></a><span class="do">## Classes and Methods for R originally developed in the</span></span>
+<span id="cb75-18"><a href="ch8.html#cb75-18" tabindex="-1"></a><span class="do">## Political Science Computational Laboratory</span></span>
+<span id="cb75-19"><a href="ch8.html#cb75-19" tabindex="-1"></a><span class="do">## Department of Political Science</span></span>
+<span id="cb75-20"><a href="ch8.html#cb75-20" tabindex="-1"></a><span class="do">## Stanford University (2002-2015),</span></span>
+<span id="cb75-21"><a href="ch8.html#cb75-21" tabindex="-1"></a><span class="do">## by and under the direction of Simon Jackman.</span></span>
+<span id="cb75-22"><a href="ch8.html#cb75-22" tabindex="-1"></a><span class="do">## hurdle and zeroinfl functions by Achim Zeileis.</span></span>
+<span id="cb75-23"><a href="ch8.html#cb75-23" tabindex="-1"></a><span class="fu">library</span>(nnet)</span>
+<span id="cb75-24"><a href="ch8.html#cb75-24" tabindex="-1"></a><span class="fu">library</span>(AER)</span>
+<span id="cb75-25"><a href="ch8.html#cb75-25" tabindex="-1"></a><span class="fu">library</span>(sampleSelection)</span>
+<span id="cb75-26"><a href="ch8.html#cb75-26" tabindex="-1"></a><span class="do">## Loading required package: maxLik</span></span>
+<span id="cb75-27"><a href="ch8.html#cb75-27" tabindex="-1"></a><span class="do">## Loading required package: miscTools</span></span>
+<span id="cb75-28"><a href="ch8.html#cb75-28" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb75-29"><a href="ch8.html#cb75-29" tabindex="-1"></a><span class="do">## Please cite the &#39;maxLik&#39; package as:</span></span>
+<span id="cb75-30"><a href="ch8.html#cb75-30" tabindex="-1"></a><span class="do">## Henningsen, Arne and Toomet, Ott (2011). maxLik: A package for maximum likelihood estimation in R. Computational Statistics 26(3), 443-458. DOI 10.1007/s00180-010-0217-1.</span></span>
+<span id="cb75-31"><a href="ch8.html#cb75-31" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb75-32"><a href="ch8.html#cb75-32" tabindex="-1"></a><span class="do">## If you have questions, suggestions, or comments regarding the &#39;maxLik&#39; package, please use a forum or &#39;tracker&#39; at maxLik&#39;s R-Forge site:</span></span>
+<span id="cb75-33"><a href="ch8.html#cb75-33" tabindex="-1"></a><span class="do">## https://r-forge.r-project.org/projects/maxlik/</span></span></code></pre></div>
 <div id="実証例8.1-piaacを用いた女性の就業選択の実証例" class="section level2 unnumbered hasAnchor">
 <h2>実証例8.1 PIAACを用いた女性の就業選択の実証例<a href="ch8.html#実証例8.1-piaacを用いた女性の就業選択の実証例" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>まずはデータを読み込む.</p>
