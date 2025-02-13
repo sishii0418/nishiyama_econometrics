@@ -27,18 +27,11 @@ if(.Platform$OS.type == "unix") {
 ```{r collapse=T}
 library(tidyverse)
 library(readxl)
-# library(patchwork)
 library(estatapi)
-# library(tidyquant)
-# library(estimatr)
-# library(latex2exp)
-# library(kableExtra)
-# library(lmtest)
-# library(sandwich)
-# library(dynlm)
-# library(fGarch)
-# library(momentfit)
 library(hpfilter)
+library(fredr)
+library(urca)
+library(tsm)
 ```
 
 ## (11.3) 式 {#exp11.3 .unnumbered}
@@ -192,6 +185,101 @@ lm(GDP ~ trend, data = ex11.1_data_3) %>% summary()
 lm(GDP ~ trend + GDP_lag, data = ex11.1_data_1) %>% summary()
 lm(GDP ~ trend + GDP_lag, data = ex11.1_data_2) %>% summary()
 lm(GDP ~ trend + GDP_lag, data = ex11.1_data_3) %>% summary()
+```
+
+## 実証例11.2 為替レートの単位根検定 {-}
+
+ここでは, [FRED, St. Louis Fed](https://fred.stlouisfed.org/)からデータを取得することにする.
+Rでは`fredr`というパッケージによるAPI実装があり, これを使うと簡単にデータをダウンロードすることができる.
+API利用には事前に登録とAPIキーの取得が必要で, 取得したAPIキーは`fred_APIkey.txt`に保存しておく.
+
+```{r collapse=T, message=FALSE}
+# APIキーを読み込む
+fred_APIkey <- scan("fred_APIkey.txt", what = "character")
+# 読み込んだAPIキーをセット
+fredr_set_key(fred_APIkey)
+```
+
+```{r collapse=T, message=FALSE}
+# データ取得
+DEXJPUS <- fredr(
+  series_id = "DEXJPUS",
+  observation_start = as.Date("1991-04-01"),
+  observation_end = as.Date("2002-12-31")
+)
+```
+
+```{r collapse=T, message=FALSE}
+data_ex11.2 <- DEXJPUS %>%
+    mutate(S = log(value) * 100) %>%
+    mutate(trend = 1:dim(DEXJPUS)[1])
+lm(S - lag(S) ~ 0 + lag(S), data = data_ex11.2) %>% summary()
+lm(S - lag(S) ~ lag(S), data = data_ex11.2) %>% summary()
+lm(S - lag(S) ~ trend + lag(S), data = data_ex11.2) %>% summary()
+```
+
+## 図11-6 円ドルレート {-}
+```{r collapse=T, message=FALSE}
+DEXJPUS %>%
+    ggplot(aes(x = date, y = value)) +
+    geom_line() +
+    labs(x = "年", y = "")
+```
+
+## 実証例11.3 インフレ率の単位根検定 {-}
+データは[図10-9](#figure10-9)で用いたのと同じである (2016年7月までしかないようだ).
+ADF検定は, Rでは`urca`パッケージの`ur.df()`という関数に実装されており, 引数の`type = c("none", "drift", "trend")`を選択することでそれぞれ定数項を含まない式, 定数項を含む式, 定数項とトレンドを含む式を推定できる.
+```{r collapse=T, message=FALSE}
+Fig_9_CPEinflation_monthly <- read_excel("./data/10_第10章/Fig_9_CPEinflation_monthly.xlsx")
+data_ex11.3 <- Fig_9_CPEinflation_monthly %>%
+    mutate(year = ym(`類・品目`)) %>%
+    mutate(CPI = as.numeric(生鮮食品を除く総合)) %>%
+    mutate(対数季節階差 = 100 * log(CPI/lag(CPI, n = 12))) %>%
+    dplyr::select(対数季節階差, year) %>%
+    mutate(対数季節階差_delta = 対数季節階差 - lag(対数季節階差)) %>%
+    filter(ym(197101) <= year)
+ur.df(data_ex11.3$対数季節階差, lags = 12, type = "none") %>% summary()
+ur.df(data_ex11.3$対数季節階差, lags = 12, type = "drift") %>% summary()
+ur.df(data_ex11.3$対数季節階差, lags = 12, type = "trend") %>% summary()
+```
+
+## 実証例11.3 インフレ率の単位根検定 {-}
+```{r collapse=T, message=FALSE}
+data_ex11.3 %>%
+    filter(year >= ym(197101)) %>%
+    ggplot(aes(x = year, y = 対数季節階差)) +
+    geom_line() +
+    labs(x = "年", y = "インフレ率 (%)")
+```
+
+## 実証例11.4 ランダムウォーク型のトレンド・インフレ率の推定 {-}
+Beveridge Nelson分解は[Kevin Kotzé](https://www.kevinkotze.org/)氏による`tsm`パッケージに実装されている.
+このパッケージはCRANにはなく, 彼のGithubリポジトリに公開されているため, `devtools::install_github()`でインストールする.
+
+```{r collapse=T, eval=FALSE}
+devtools::install_github("KevinKotze/tsm")
+library(tsm)
+```
+
+```{r collapse=T, message=FALSE}
+data_ex11.4 <- bnd(data_ex11.3$対数季節階差, nlag = 12)
+```
+
+## 図11-8 BN分解とランダムウォーク型トレンド・インフレ率 {-}
+続いて, もとのインフレ率データと合わせてグラフにプロットする.
+```{r collapse=T, message=FALSE}
+data_fig11_8 <- data_ex11.4 %>%
+    data.frame() %>%
+    dplyr::select(trend) %>%
+    rename("トレンド成分 (トレンド・インフレ率)" = trend) %>%
+    cbind(data_ex11.3)
+data_fig11_8 %>%
+    pivot_longer(cols = c("トレンド成分 (トレンド・インフレ率)", "対数季節階差")) %>%
+    ggplot(aes(x = year, y = value, color = name)) +
+    geom_line() +
+    scale_color_hue(name = element_blank(), labels = c("トレンド成分 (トレンド・インフレ率)", "インフレ率")) +
+    labs(x = element_blank(), y = element_blank()) +
+    theme(legend.position = c(0, 1), legend.justification = c(0, 1))
 ```
 
 <!-- ## 練習問題 11-1 [確認] {-}

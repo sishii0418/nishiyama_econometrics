@@ -258,7 +258,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#図10-6-実質gdp成長率"><i class="fa fa-check"></i>図10-6 実質GDP成長率</a></li>
 <li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#図10-7-実質gdp-公表季調値"><i class="fa fa-check"></i>図10-7 実質GDP (公表季調値)</a></li>
 <li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#図10-8-季調済みgdpデフレーターのインフレ率"><i class="fa fa-check"></i>図10-8 季調済みGDPデフレーターのインフレ率</a></li>
-<li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#図10-9-消費者物価指数の-対数季節階差-インフレ率"><i class="fa fa-check"></i>図10-9 消費者物価指数の (対数季節階差) インフレ率</a></li>
+<li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#figure10-9"><i class="fa fa-check"></i>図10-9 消費者物価指数の (対数季節階差) インフレ率</a></li>
 <li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#図10-10-完全失業率-移動平均"><i class="fa fa-check"></i>図10-10 完全失業率 (移動平均)</a></li>
 <li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#figure10-11"><i class="fa fa-check"></i>図10-11 実験系列</a></li>
 <li class="chapter" data-level="" data-path="ch10.html"><a href="ch10.html#figure10-12"><i class="fa fa-check"></i>図10-12 GDPギャップ (四半期データ)</a></li>
@@ -286,6 +286,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="ch11.html"><a href="ch11.html#図11-3-hpフィルターのトレンド成分"><i class="fa fa-check"></i>図11-3 HPフィルターのトレンド成分</a></li>
 <li class="chapter" data-level="" data-path="ch11.html"><a href="ch11.html#図11-4-gdpギャップ推定値の比較"><i class="fa fa-check"></i>図11-4 GDPギャップ推定値の比較</a></li>
 <li class="chapter" data-level="" data-path="ch11.html"><a href="ch11.html#実証例11.1-gdpの線形トレンドモデル推定"><i class="fa fa-check"></i>実証例11.1 GDPの線形トレンド・モデル推定</a></li>
+<li class="chapter" data-level="" data-path="ch11.html"><a href="ch11.html#実証例11.2-為替レートの単位根検定"><i class="fa fa-check"></i>実証例11.2 為替レートの単位根検定</a></li>
+<li class="chapter" data-level="" data-path="ch11.html"><a href="ch11.html#図11-6-円ドルレート"><i class="fa fa-check"></i>図11-6 円ドルレート</a></li>
+<li class="chapter" data-level="" data-path="ch11.html"><a href="ch11.html#実証例11.3-インフレ率の単位根検定"><i class="fa fa-check"></i>実証例11.3 インフレ率の単位根検定</a></li>
+<li class="chapter" data-level="" data-path="ch11.html"><a href="ch11.html#実証例11.3-インフレ率の単位根検定-1"><i class="fa fa-check"></i>実証例11.3 インフレ率の単位根検定</a></li>
+<li class="chapter" data-level="" data-path="ch11.html"><a href="ch11.html#実証例11.4-ランダムウォーク型のトレンドインフレ率の推定"><i class="fa fa-check"></i>実証例11.4 ランダムウォーク型のトレンド・インフレ率の推定</a></li>
+<li class="chapter" data-level="" data-path="ch11.html"><a href="ch11.html#図11-8-bn分解とランダムウォーク型トレンドインフレ率"><i class="fa fa-check"></i>図11-8 BN分解とランダムウォーク型トレンド・インフレ率</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="ch12.html"><a href="ch12.html"><i class="fa fa-check"></i>第12章 VARモデル</a></li>
 <li class="divider"></li>
@@ -333,18 +339,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>必要なライブラリを読み込む.</p>
 <div class="sourceCode" id="cb138"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb138-1"><a href="ch11.html#cb138-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb138-2"><a href="ch11.html#cb138-2" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
-<span id="cb138-3"><a href="ch11.html#cb138-3" tabindex="-1"></a><span class="co"># library(patchwork)</span></span>
-<span id="cb138-4"><a href="ch11.html#cb138-4" tabindex="-1"></a><span class="fu">library</span>(estatapi)</span>
-<span id="cb138-5"><a href="ch11.html#cb138-5" tabindex="-1"></a><span class="co"># library(tidyquant)</span></span>
-<span id="cb138-6"><a href="ch11.html#cb138-6" tabindex="-1"></a><span class="co"># library(estimatr)</span></span>
-<span id="cb138-7"><a href="ch11.html#cb138-7" tabindex="-1"></a><span class="co"># library(latex2exp)</span></span>
-<span id="cb138-8"><a href="ch11.html#cb138-8" tabindex="-1"></a><span class="co"># library(kableExtra)</span></span>
-<span id="cb138-9"><a href="ch11.html#cb138-9" tabindex="-1"></a><span class="co"># library(lmtest)</span></span>
-<span id="cb138-10"><a href="ch11.html#cb138-10" tabindex="-1"></a><span class="co"># library(sandwich)</span></span>
-<span id="cb138-11"><a href="ch11.html#cb138-11" tabindex="-1"></a><span class="co"># library(dynlm)</span></span>
-<span id="cb138-12"><a href="ch11.html#cb138-12" tabindex="-1"></a><span class="co"># library(fGarch)</span></span>
-<span id="cb138-13"><a href="ch11.html#cb138-13" tabindex="-1"></a><span class="co"># library(momentfit)</span></span>
-<span id="cb138-14"><a href="ch11.html#cb138-14" tabindex="-1"></a><span class="fu">library</span>(hpfilter)</span></code></pre></div>
+<span id="cb138-3"><a href="ch11.html#cb138-3" tabindex="-1"></a><span class="fu">library</span>(estatapi)</span>
+<span id="cb138-4"><a href="ch11.html#cb138-4" tabindex="-1"></a><span class="fu">library</span>(hpfilter)</span>
+<span id="cb138-5"><a href="ch11.html#cb138-5" tabindex="-1"></a><span class="fu">library</span>(fredr)</span>
+<span id="cb138-6"><a href="ch11.html#cb138-6" tabindex="-1"></a><span class="fu">library</span>(urca)</span>
+<span id="cb138-7"><a href="ch11.html#cb138-7" tabindex="-1"></a><span class="fu">library</span>(tsm)</span></code></pre></div>
 <div id="exp11.3" class="section level2 unnumbered hasAnchor">
 <h2>(11.3) 式<a href="ch11.html#exp11.3" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>データは前章<a href="ch10.html#figure10-3">図10-3</a>図10-3で用いたものを使う.
@@ -616,6 +615,284 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## Residual standard error: 1.875 on 24 degrees of freedom
 ## Multiple R-squared:  0.904,  Adjusted R-squared:  0.896 
 ## F-statistic:   113 on 2 and 24 DF,  p-value: 6.131e-13</code></pre>
+</div>
+<div id="実証例11.2-為替レートの単位根検定" class="section level2 unnumbered hasAnchor">
+<h2>実証例11.2 為替レートの単位根検定<a href="ch11.html#実証例11.2-為替レートの単位根検定" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>ここでは, <a href="https://fred.stlouisfed.org/">FRED, St. Louis Fed</a>からデータを取得することにする.
+Rでは<code>fredr</code>というパッケージによるAPI実装があり, これを使うと簡単にデータをダウンロードすることができる.
+API利用には事前に登録とAPIキーの取得が必要で, 取得したAPIキーは<code>fred_APIkey.txt</code>に保存しておく.</p>
+<div class="sourceCode" id="cb162"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb162-1"><a href="ch11.html#cb162-1" tabindex="-1"></a><span class="co"># APIキーを読み込む</span></span>
+<span id="cb162-2"><a href="ch11.html#cb162-2" tabindex="-1"></a>fred_APIkey <span class="ot">&lt;-</span> <span class="fu">scan</span>(<span class="st">&quot;fred_APIkey.txt&quot;</span>, <span class="at">what =</span> <span class="st">&quot;character&quot;</span>)</span>
+<span id="cb162-3"><a href="ch11.html#cb162-3" tabindex="-1"></a><span class="co"># 読み込んだAPIキーをセット</span></span>
+<span id="cb162-4"><a href="ch11.html#cb162-4" tabindex="-1"></a><span class="fu">fredr_set_key</span>(fred_APIkey)</span></code></pre></div>
+<div class="sourceCode" id="cb163"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb163-1"><a href="ch11.html#cb163-1" tabindex="-1"></a><span class="co"># データ取得</span></span>
+<span id="cb163-2"><a href="ch11.html#cb163-2" tabindex="-1"></a>DEXJPUS <span class="ot">&lt;-</span> <span class="fu">fredr</span>(</span>
+<span id="cb163-3"><a href="ch11.html#cb163-3" tabindex="-1"></a>  <span class="at">series_id =</span> <span class="st">&quot;DEXJPUS&quot;</span>,</span>
+<span id="cb163-4"><a href="ch11.html#cb163-4" tabindex="-1"></a>  <span class="at">observation_start =</span> <span class="fu">as.Date</span>(<span class="st">&quot;1991-04-01&quot;</span>),</span>
+<span id="cb163-5"><a href="ch11.html#cb163-5" tabindex="-1"></a>  <span class="at">observation_end =</span> <span class="fu">as.Date</span>(<span class="st">&quot;2002-12-31&quot;</span>)</span>
+<span id="cb163-6"><a href="ch11.html#cb163-6" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb164"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb164-1"><a href="ch11.html#cb164-1" tabindex="-1"></a>data_ex11<span class="fl">.2</span> <span class="ot">&lt;-</span> DEXJPUS <span class="sc">%&gt;%</span></span>
+<span id="cb164-2"><a href="ch11.html#cb164-2" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">S =</span> <span class="fu">log</span>(value) <span class="sc">*</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb164-3"><a href="ch11.html#cb164-3" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">trend =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">dim</span>(DEXJPUS)[<span class="dv">1</span>])</span>
+<span id="cb164-4"><a href="ch11.html#cb164-4" tabindex="-1"></a><span class="fu">lm</span>(S <span class="sc">-</span> <span class="fu">lag</span>(S) <span class="sc">~</span> <span class="dv">0</span> <span class="sc">+</span> <span class="fu">lag</span>(S), <span class="at">data =</span> data_ex11<span class="fl">.2</span>) <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = S - lag(S) ~ 0 + lag(S), data = data_ex11.2)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -5.6179 -0.3605  0.0121  0.3893  3.2522 
+## 
+## Coefficients:
+##          Estimate Std. Error t value Pr(&gt;|t|)
+## lag(S) -2.518e-05  2.810e-05  -0.896     0.37
+## 
+## Residual standard error: 0.7121 on 2845 degrees of freedom
+##   (221 observations deleted due to missingness)
+## Multiple R-squared:  0.0002822,  Adjusted R-squared:  -6.916e-05 
+## F-statistic: 0.8032 on 1 and 2845 DF,  p-value: 0.3702</code></pre>
+<div class="sourceCode" id="cb166"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb166-1"><a href="ch11.html#cb166-1" tabindex="-1"></a><span class="fu">lm</span>(S <span class="sc">-</span> <span class="fu">lag</span>(S) <span class="sc">~</span> <span class="fu">lag</span>(S), <span class="at">data =</span> data_ex11<span class="fl">.2</span>) <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = S - lag(S) ~ lag(S), data = data_ex11.2)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -5.5872 -0.3644  0.0138  0.3855  3.2847 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)  
+## (Intercept)  1.165682   0.562528   2.072   0.0383 *
+## lag(S)      -0.002479   0.001184  -2.093   0.0364 *
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.7116 on 2844 degrees of freedom
+##   (221 observations deleted due to missingness)
+## Multiple R-squared:  0.001538,   Adjusted R-squared:  0.001187 
+## F-statistic:  4.38 on 1 and 2844 DF,  p-value: 0.03645</code></pre>
+<div class="sourceCode" id="cb168"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb168-1"><a href="ch11.html#cb168-1" tabindex="-1"></a><span class="fu">lm</span>(S <span class="sc">-</span> <span class="fu">lag</span>(S) <span class="sc">~</span> trend <span class="sc">+</span> <span class="fu">lag</span>(S), <span class="at">data =</span> data_ex11<span class="fl">.2</span>) <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = S - lag(S) ~ trend + lag(S), data = data_ex11.2)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -5.5909 -0.3616  0.0152  0.3860  3.2812 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(&gt;|t|)  
+## (Intercept)  1.176e+00  5.628e-01   2.089   0.0368 *
+## trend        1.015e-05  1.511e-05   0.671   0.5020  
+## lag(S)      -2.533e-03  1.187e-03  -2.133   0.0330 *
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.7117 on 2843 degrees of freedom
+##   (221 observations deleted due to missingness)
+## Multiple R-squared:  0.001696,   Adjusted R-squared:  0.0009938 
+## F-statistic: 2.415 on 2 and 2843 DF,  p-value: 0.08954</code></pre>
+</div>
+<div id="図11-6-円ドルレート" class="section level2 unnumbered hasAnchor">
+<h2>図11-6 円ドルレート<a href="ch11.html#図11-6-円ドルレート" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb170"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb170-1"><a href="ch11.html#cb170-1" tabindex="-1"></a>DEXJPUS <span class="sc">%&gt;%</span></span>
+<span id="cb170-2"><a href="ch11.html#cb170-2" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> date, <span class="at">y =</span> value)) <span class="sc">+</span></span>
+<span id="cb170-3"><a href="ch11.html#cb170-3" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb170-4"><a href="ch11.html#cb170-4" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;年&quot;</span>, <span class="at">y =</span> <span class="st">&quot;&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-132-1.png" width="672" /></p>
+</div>
+<div id="実証例11.3-インフレ率の単位根検定" class="section level2 unnumbered hasAnchor">
+<h2>実証例11.3 インフレ率の単位根検定<a href="ch11.html#実証例11.3-インフレ率の単位根検定" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>データは<a href="ch10.html#figure10-9">図10-9</a>で用いたのと同じである (2016年7月までしかないようだ).
+ADF検定は, Rでは<code>urca</code>パッケージの<code>ur.df()</code>という関数に実装されており, 引数の<code>type = c("none", "drift", "trend")</code>を選択することでそれぞれ定数項を含まない式, 定数項を含む式, 定数項とトレンドを含む式を推定できる.</p>
+<div class="sourceCode" id="cb171"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb171-1"><a href="ch11.html#cb171-1" tabindex="-1"></a>Fig_9_CPEinflation_monthly <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">&quot;./data/10_第10章/Fig_9_CPEinflation_monthly.xlsx&quot;</span>)</span>
+<span id="cb171-2"><a href="ch11.html#cb171-2" tabindex="-1"></a>data_ex11<span class="fl">.3</span> <span class="ot">&lt;-</span> Fig_9_CPEinflation_monthly <span class="sc">%&gt;%</span></span>
+<span id="cb171-3"><a href="ch11.html#cb171-3" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">ym</span>(<span class="st">`</span><span class="at">類・品目</span><span class="st">`</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb171-4"><a href="ch11.html#cb171-4" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">CPI =</span> <span class="fu">as.numeric</span>(生鮮食品を除く総合)) <span class="sc">%&gt;%</span></span>
+<span id="cb171-5"><a href="ch11.html#cb171-5" tabindex="-1"></a>    <span class="fu">mutate</span>(対数季節階差 <span class="ot">=</span> <span class="dv">100</span> <span class="sc">*</span> <span class="fu">log</span>(CPI<span class="sc">/</span><span class="fu">lag</span>(CPI, <span class="at">n =</span> <span class="dv">12</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb171-6"><a href="ch11.html#cb171-6" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">select</span>(対数季節階差, year) <span class="sc">%&gt;%</span></span>
+<span id="cb171-7"><a href="ch11.html#cb171-7" tabindex="-1"></a>    <span class="fu">mutate</span>(対数季節階差<span class="at">_delta =</span> 対数季節階差 <span class="sc">-</span> <span class="fu">lag</span>(対数季節階差)) <span class="sc">%&gt;%</span></span>
+<span id="cb171-8"><a href="ch11.html#cb171-8" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="fu">ym</span>(<span class="dv">197101</span>) <span class="sc">&lt;=</span> year)</span></code></pre></div>
+<pre><code>## Warning: There was 1 warning in `mutate()`.
+## ℹ In argument: `year = ym(`類・品目`)`.
+## Caused by warning:
+## !  5 failed to parse.</code></pre>
+<pre><code>## Warning: There was 1 warning in `mutate()`.
+## ℹ In argument: `CPI = as.numeric(生鮮食品を除く総合)`.
+## Caused by warning:
+## ! NAs introduced by coercion</code></pre>
+<div class="sourceCode" id="cb174"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb174-1"><a href="ch11.html#cb174-1" tabindex="-1"></a><span class="fu">ur.df</span>(data_ex11<span class="fl">.3</span><span class="sc">$</span>対数季節階差, <span class="at">lags =</span> <span class="dv">12</span>, <span class="at">type =</span> <span class="st">&quot;none&quot;</span>) <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span></code></pre></div>
+<pre><code>## 
+## ############################################### 
+## # Augmented Dickey-Fuller Test Unit Root Test # 
+## ############################################### 
+## 
+## Test regression none 
+## 
+## 
+## Call:
+## lm(formula = z.diff ~ z.lag.1 - 1 + z.diff.lag)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -1.57507 -0.13809  0.01211  0.13991  1.97211 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(&gt;|t|)    
+## z.lag.1      -0.004990   0.003206  -1.556 0.120218    
+## z.diff.lag1   0.235206   0.036471   6.449 2.57e-10 ***
+## z.diff.lag2   0.127218   0.037754   3.370 0.000808 ***
+## z.diff.lag3   0.087580   0.037955   2.307 0.021419 *  
+## z.diff.lag4   0.029009   0.037732   0.769 0.442346    
+## z.diff.lag5   0.074163   0.037539   1.976 0.048728 *  
+## z.diff.lag6   0.064343   0.037666   1.708 0.088188 .  
+## z.diff.lag7  -0.016920   0.037550  -0.451 0.652471    
+## z.diff.lag8   0.090587   0.037230   2.433 0.015302 *  
+## z.diff.lag9   0.107932   0.037461   2.881 0.004125 ** 
+## z.diff.lag10  0.096177   0.037554   2.561 0.010716 *  
+## z.diff.lag11  0.056726   0.037355   1.519 0.129485    
+## z.diff.lag12 -0.537739   0.036170 -14.867  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.338 on 521 degrees of freedom
+## Multiple R-squared:  0.4434, Adjusted R-squared:  0.4295 
+## F-statistic: 31.93 on 13 and 521 DF,  p-value: &lt; 2.2e-16
+## 
+## 
+## Value of test-statistic is: -1.5564 
+## 
+## Critical values for test statistics: 
+##       1pct  5pct 10pct
+## tau1 -2.58 -1.95 -1.62</code></pre>
+<div class="sourceCode" id="cb176"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb176-1"><a href="ch11.html#cb176-1" tabindex="-1"></a><span class="fu">ur.df</span>(data_ex11<span class="fl">.3</span><span class="sc">$</span>対数季節階差, <span class="at">lags =</span> <span class="dv">12</span>, <span class="at">type =</span> <span class="st">&quot;drift&quot;</span>) <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span></code></pre></div>
+<pre><code>## 
+## ############################################### 
+## # Augmented Dickey-Fuller Test Unit Root Test # 
+## ############################################### 
+## 
+## Test regression drift 
+## 
+## 
+## Call:
+## lm(formula = z.diff ~ z.lag.1 + 1 + z.diff.lag)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -1.57058 -0.14236  0.00337  0.13442  1.97347 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   0.009221   0.017532   0.526 0.599146    
+## z.lag.1      -0.006098   0.003837  -1.589 0.112677    
+## z.diff.lag1   0.235058   0.036497   6.440 2.71e-10 ***
+## z.diff.lag2   0.127304   0.037780   3.370 0.000809 ***
+## z.diff.lag3   0.087842   0.037984   2.313 0.021136 *  
+## z.diff.lag4   0.029479   0.037769   0.781 0.435439    
+## z.diff.lag5   0.074728   0.037581   1.988 0.047285 *  
+## z.diff.lag6   0.064924   0.037709   1.722 0.085715 .  
+## z.diff.lag7  -0.016193   0.037602  -0.431 0.666896    
+## z.diff.lag8   0.091351   0.037284   2.450 0.014609 *  
+## z.diff.lag9   0.108797   0.037523   2.900 0.003896 ** 
+## z.diff.lag10  0.097194   0.037629   2.583 0.010069 *  
+## z.diff.lag11  0.057959   0.037455   1.547 0.122365    
+## z.diff.lag12 -0.536201   0.036313 -14.766  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.3383 on 520 degrees of freedom
+## Multiple R-squared:  0.4434, Adjusted R-squared:  0.4294 
+## F-statistic: 31.86 on 13 and 520 DF,  p-value: &lt; 2.2e-16
+## 
+## 
+## Value of test-statistic is: -1.589 1.3478 
+## 
+## Critical values for test statistics: 
+##       1pct  5pct 10pct
+## tau2 -3.43 -2.86 -2.57
+## phi1  6.43  4.59  3.78</code></pre>
+<div class="sourceCode" id="cb178"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb178-1"><a href="ch11.html#cb178-1" tabindex="-1"></a><span class="fu">ur.df</span>(data_ex11<span class="fl">.3</span><span class="sc">$</span>対数季節階差, <span class="at">lags =</span> <span class="dv">12</span>, <span class="at">type =</span> <span class="st">&quot;trend&quot;</span>) <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span></code></pre></div>
+<pre><code>## 
+## ############################################### 
+## # Augmented Dickey-Fuller Test Unit Root Test # 
+## ############################################### 
+## 
+## Test regression trend 
+## 
+## 
+## Call:
+## lm(formula = z.diff ~ z.lag.1 + 1 + tt + z.diff.lag)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -1.54891 -0.13648 -0.00533  0.12540  1.97034 
+## 
+## Coefficients:
+##                Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   0.1086391  0.0535763   2.028 0.043097 *  
+## z.lag.1      -0.0145446  0.0057585  -2.526 0.011841 *  
+## tt           -0.0002798  0.0001425  -1.963 0.050167 .  
+## z.diff.lag1   0.2324677  0.0364212   6.383 3.86e-10 ***
+## z.diff.lag2   0.1271276  0.0376771   3.374 0.000796 ***
+## z.diff.lag3   0.0890027  0.0378853   2.349 0.019184 *  
+## z.diff.lag4   0.0325407  0.0376976   0.863 0.388423    
+## z.diff.lag5   0.0786255  0.0375307   2.095 0.036658 *  
+## z.diff.lag6   0.0690914  0.0376654   1.834 0.067175 .  
+## z.diff.lag7  -0.0106739  0.0376041  -0.284 0.776640    
+## z.diff.lag8   0.0966499  0.0372802   2.593 0.009796 ** 
+## z.diff.lag9   0.1145864  0.0375361   3.053 0.002384 ** 
+## z.diff.lag10  0.1043355  0.0377025   2.767 0.005853 ** 
+## z.diff.lag11  0.0666170  0.0376120   1.771 0.077120 .  
+## z.diff.lag12 -0.5257571  0.0366026 -14.364  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.3373 on 519 degrees of freedom
+## Multiple R-squared:  0.4475, Adjusted R-squared:  0.4326 
+## F-statistic: 30.02 on 14 and 519 DF,  p-value: &lt; 2.2e-16
+## 
+## 
+## Value of test-statistic is: -2.5258 2.1881 3.1962 
+## 
+## Critical values for test statistics: 
+##       1pct  5pct 10pct
+## tau3 -3.96 -3.41 -3.12
+## phi2  6.09  4.68  4.03
+## phi3  8.27  6.25  5.34</code></pre>
+</div>
+<div id="実証例11.3-インフレ率の単位根検定-1" class="section level2 unnumbered hasAnchor">
+<h2>実証例11.3 インフレ率の単位根検定<a href="ch11.html#実証例11.3-インフレ率の単位根検定-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb180"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb180-1"><a href="ch11.html#cb180-1" tabindex="-1"></a>data_ex11<span class="fl">.3</span> <span class="sc">%&gt;%</span></span>
+<span id="cb180-2"><a href="ch11.html#cb180-2" tabindex="-1"></a>    <span class="fu">filter</span>(year <span class="sc">&gt;=</span> <span class="fu">ym</span>(<span class="dv">197101</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb180-3"><a href="ch11.html#cb180-3" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> 対数季節階差)) <span class="sc">+</span></span>
+<span id="cb180-4"><a href="ch11.html#cb180-4" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb180-5"><a href="ch11.html#cb180-5" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;年&quot;</span>, <span class="at">y =</span> <span class="st">&quot;インフレ率 (%)&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-134-1.png" width="672" /></p>
+</div>
+<div id="実証例11.4-ランダムウォーク型のトレンドインフレ率の推定" class="section level2 unnumbered hasAnchor">
+<h2>実証例11.4 ランダムウォーク型のトレンド・インフレ率の推定<a href="ch11.html#実証例11.4-ランダムウォーク型のトレンドインフレ率の推定" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Beveridge Nelson分解は<a href="https://www.kevinkotze.org/">Kevin Kotzé</a>氏による<code>tsm</code>パッケージに実装されている.
+このパッケージはCRANにはなく, 彼のGithubリポジトリに公開されているため, <code>devtools::install_github()</code>でインストールする.</p>
+<div class="sourceCode" id="cb181"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb181-1"><a href="ch11.html#cb181-1" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;KevinKotze/tsm&quot;</span>)</span>
+<span id="cb181-2"><a href="ch11.html#cb181-2" tabindex="-1"></a><span class="fu">library</span>(tsm)</span></code></pre></div>
+<div class="sourceCode" id="cb182"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb182-1"><a href="ch11.html#cb182-1" tabindex="-1"></a>data_ex11<span class="fl">.4</span> <span class="ot">&lt;-</span> <span class="fu">bnd</span>(data_ex11<span class="fl">.3</span><span class="sc">$</span>対数季節階差, <span class="at">nlag =</span> <span class="dv">12</span>)</span></code></pre></div>
+</div>
+<div id="図11-8-bn分解とランダムウォーク型トレンドインフレ率" class="section level2 unnumbered hasAnchor">
+<h2>図11-8 BN分解とランダムウォーク型トレンド・インフレ率<a href="ch11.html#図11-8-bn分解とランダムウォーク型トレンドインフレ率" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>続いて, もとのインフレ率データと合わせてグラフにプロットする.</p>
+<div class="sourceCode" id="cb183"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb183-1"><a href="ch11.html#cb183-1" tabindex="-1"></a>data_fig11_8 <span class="ot">&lt;-</span> data_ex11<span class="fl">.4</span> <span class="sc">%&gt;%</span></span>
+<span id="cb183-2"><a href="ch11.html#cb183-2" tabindex="-1"></a>    <span class="fu">data.frame</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb183-3"><a href="ch11.html#cb183-3" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">select</span>(trend) <span class="sc">%&gt;%</span></span>
+<span id="cb183-4"><a href="ch11.html#cb183-4" tabindex="-1"></a>    <span class="fu">rename</span>(<span class="st">&quot;トレンド成分 (トレンド・インフレ率)&quot;</span> <span class="ot">=</span> trend) <span class="sc">%&gt;%</span></span>
+<span id="cb183-5"><a href="ch11.html#cb183-5" tabindex="-1"></a>    <span class="fu">cbind</span>(data_ex11<span class="fl">.3</span>)</span>
+<span id="cb183-6"><a href="ch11.html#cb183-6" tabindex="-1"></a>data_fig11_8 <span class="sc">%&gt;%</span></span>
+<span id="cb183-7"><a href="ch11.html#cb183-7" tabindex="-1"></a>    <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(<span class="st">&quot;トレンド成分 (トレンド・インフレ率)&quot;</span>, <span class="st">&quot;対数季節階差&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb183-8"><a href="ch11.html#cb183-8" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> value, <span class="at">color =</span> name)) <span class="sc">+</span></span>
+<span id="cb183-9"><a href="ch11.html#cb183-9" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb183-10"><a href="ch11.html#cb183-10" tabindex="-1"></a>    <span class="fu">scale_color_hue</span>(<span class="at">name =</span> <span class="fu">element_blank</span>(), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;トレンド成分 (トレンド・インフレ率)&quot;</span>, <span class="st">&quot;インフレ率&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb183-11"><a href="ch11.html#cb183-11" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="fu">element_blank</span>(), <span class="at">y =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
+<span id="cb183-12"><a href="ch11.html#cb183-12" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">legend.justification =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>))</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-137-1.png" width="672" /></p>
 <!-- ## 練習問題 11-1 [確認] {-}
 
 ## 練習問題 11-2 [確認] {-}
