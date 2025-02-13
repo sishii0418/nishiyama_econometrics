@@ -23,7 +23,7 @@
 <meta name="author" content="石井 俊輔" />
 
 
-<meta name="date" content="2025-02-12" />
+<meta name="date" content="2025-02-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -283,6 +283,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="ch11.html"><a href="ch11.html#exp11.3"><i class="fa fa-check"></i>(11.3) 式</a></li>
 <li class="chapter" data-level="" data-path="ch11.html"><a href="ch11.html#図11-1-対数実質gdpと線形トレンド"><i class="fa fa-check"></i>図11-1 対数実質GDPと線形トレンド</a></li>
 <li class="chapter" data-level="" data-path="ch11.html"><a href="ch11.html#図11-2-対数実質gdpの長期系列"><i class="fa fa-check"></i>図11-2 対数実質GDPの長期系列</a></li>
+<li class="chapter" data-level="" data-path="ch11.html"><a href="ch11.html#図11-3-hpフィルターのトレンド成分"><i class="fa fa-check"></i>図11-3 HPフィルターのトレンド成分</a></li>
+<li class="chapter" data-level="" data-path="ch11.html"><a href="ch11.html#図11-4-gdpギャップ推定値の比較"><i class="fa fa-check"></i>図11-4 GDPギャップ推定値の比較</a></li>
+<li class="chapter" data-level="" data-path="ch11.html"><a href="ch11.html#実証例11.1-gdpの線形トレンドモデル推定"><i class="fa fa-check"></i>実証例11.1 GDPの線形トレンド・モデル推定</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="ch12.html"><a href="ch12.html"><i class="fa fa-check"></i>第12章 VARモデル</a></li>
 <li class="divider"></li>
@@ -340,7 +343,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb138-10"><a href="ch11.html#cb138-10" tabindex="-1"></a><span class="co"># library(sandwich)</span></span>
 <span id="cb138-11"><a href="ch11.html#cb138-11" tabindex="-1"></a><span class="co"># library(dynlm)</span></span>
 <span id="cb138-12"><a href="ch11.html#cb138-12" tabindex="-1"></a><span class="co"># library(fGarch)</span></span>
-<span id="cb138-13"><a href="ch11.html#cb138-13" tabindex="-1"></a><span class="co"># library(momentfit)</span></span></code></pre></div>
+<span id="cb138-13"><a href="ch11.html#cb138-13" tabindex="-1"></a><span class="co"># library(momentfit)</span></span>
+<span id="cb138-14"><a href="ch11.html#cb138-14" tabindex="-1"></a><span class="fu">library</span>(hpfilter)</span></code></pre></div>
 <div id="exp11.3" class="section level2 unnumbered hasAnchor">
 <h2>(11.3) 式<a href="ch11.html#exp11.3" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>データは前章<a href="ch10.html#figure10-3">図10-3</a>図10-3で用いたものを使う.
@@ -422,6 +426,196 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb147-10"><a href="ch11.html#cb147-10" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> 年, <span class="at">y =</span> <span class="fu">log</span>(実質国内総支出) <span class="sc">*</span> <span class="dv">100</span>)) <span class="sc">+</span></span>
 <span id="cb147-11"><a href="ch11.html#cb147-11" tabindex="-1"></a>    <span class="fu">geom_line</span>()</span></code></pre></div>
 <p><img src="_main_files/figure-html/unnamed-chunk-125-1.png" width="672" /></p>
+</div>
+<div id="図11-3-hpフィルターのトレンド成分" class="section level2 unnumbered hasAnchor">
+<h2>図11-3 HPフィルターのトレンド成分<a href="ch11.html#図11-3-hpフィルターのトレンド成分" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>HPフィルターはRでは<code>hpfilter</code>というパッケージで実装されている.
+データフレーム形式の時系列データ<code>y</code>のトレンド成分を求めるには, <code>hpfilter::hp1(y, lambda = lambda)</code>とすればよい.</p>
+<div class="sourceCode" id="cb148"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb148-1"><a href="ch11.html#cb148-1" tabindex="-1"></a>fig11_3_data_trend <span class="ot">&lt;-</span> fig11_2_data <span class="sc">%&gt;%</span></span>
+<span id="cb148-2"><a href="ch11.html#cb148-2" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">select</span>(実質国内総支出) <span class="sc">%&gt;%</span></span>
+<span id="cb148-3"><a href="ch11.html#cb148-3" tabindex="-1"></a>    <span class="fu">hp1</span>(<span class="at">lambda =</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb148-4"><a href="ch11.html#cb148-4" tabindex="-1"></a>    <span class="fu">rename</span>(<span class="st">&quot;トレンド成分&quot;</span> <span class="ot">=</span> 実質国内総支出)</span>
+<span id="cb148-5"><a href="ch11.html#cb148-5" tabindex="-1"></a>fig11_3_data <span class="ot">&lt;-</span> <span class="fu">cbind</span>(fig11_2_data, fig11_3_data_trend)</span>
+<span id="cb148-6"><a href="ch11.html#cb148-6" tabindex="-1"></a>fig11_3_data <span class="sc">%&gt;%</span></span>
+<span id="cb148-7"><a href="ch11.html#cb148-7" tabindex="-1"></a>    <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(<span class="st">&quot;実質国内総支出&quot;</span>, <span class="st">&quot;トレンド成分&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb148-8"><a href="ch11.html#cb148-8" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> 年, <span class="at">y =</span> value, <span class="at">color =</span> name)) <span class="sc">+</span></span>
+<span id="cb148-9"><a href="ch11.html#cb148-9" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb148-10"><a href="ch11.html#cb148-10" tabindex="-1"></a>    <span class="fu">scale_color_hue</span>(<span class="at">name =</span> <span class="fu">element_blank</span>(), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;トレンド成分&quot;</span>, <span class="st">&quot;GDP&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb148-11"><a href="ch11.html#cb148-11" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="fu">element_blank</span>(), <span class="at">y =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
+<span id="cb148-12"><a href="ch11.html#cb148-12" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">legend.justification =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>))</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-126-1.png" width="672" /></p>
+</div>
+<div id="図11-4-gdpギャップ推定値の比較" class="section level2 unnumbered hasAnchor">
+<h2>図11-4 GDPギャップ推定値の比較<a href="ch11.html#図11-4-gdpギャップ推定値の比較" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>内閣府によるデータは<a href="ch10.html#figure10-12">図10-12</a>で用いたものを使う.
+ただし観測頻度を四半期ごとから年次にするため, 一度<code>ts</code>形式にしたうえで<code>aggregate()</code>を用いて変換する.</p>
+<p>線形トレンド回帰は, 本文中にある通り1990年より前か否かを示すダミー変数を作って推定した.</p>
+<p>またHPフィルターは, ここでは<code>lambda = 6.25</code>とした.</p>
+<div class="sourceCode" id="cb149"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb149-1"><a href="ch11.html#cb149-1" tabindex="-1"></a>Fig_12_GDPgap_quarterly <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">&quot;./data/10_第10章/Fig_12_GDPgap_quarterly.xlsx&quot;</span>)</span>
+<span id="cb149-2"><a href="ch11.html#cb149-2" tabindex="-1"></a>fig11_4_data <span class="ot">&lt;-</span> Fig_12_GDPgap_quarterly <span class="sc">%&gt;%</span></span>
+<span id="cb149-3"><a href="ch11.html#cb149-3" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">select</span>(内閣府) <span class="sc">%&gt;%</span></span>
+<span id="cb149-4"><a href="ch11.html#cb149-4" tabindex="-1"></a>    <span class="fu">ts</span>(<span class="at">start =</span> <span class="fu">c</span>(<span class="dv">1980</span>, <span class="dv">1</span>), <span class="at">frequency =</span> <span class="dv">4</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb149-5"><a href="ch11.html#cb149-5" tabindex="-1"></a>    <span class="fu">aggregate</span>(<span class="at">nfrequency =</span> <span class="dv">1</span>, <span class="at">FUN =</span> mean) <span class="sc">%&gt;%</span></span>
+<span id="cb149-6"><a href="ch11.html#cb149-6" tabindex="-1"></a>    <span class="fu">data.frame</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb149-7"><a href="ch11.html#cb149-7" tabindex="-1"></a>    <span class="fu">cbind</span>(年 <span class="ot">=</span> <span class="dv">1980</span><span class="sc">:</span><span class="dv">2017</span>)</span>
+<span id="cb149-8"><a href="ch11.html#cb149-8" tabindex="-1"></a></span>
+<span id="cb149-9"><a href="ch11.html#cb149-9" tabindex="-1"></a>fig11_4_data <span class="ot">&lt;-</span> fig11_2_data <span class="sc">%&gt;%</span></span>
+<span id="cb149-10"><a href="ch11.html#cb149-10" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="dv">1980</span> <span class="sc">&lt;=</span> 年 <span class="sc">&amp;</span> 年 <span class="sc">&lt;=</span> <span class="dv">2017</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb149-11"><a href="ch11.html#cb149-11" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">select</span>(実質国内総支出) <span class="sc">%&gt;%</span></span>
+<span id="cb149-12"><a href="ch11.html#cb149-12" tabindex="-1"></a>    <span class="fu">cbind</span>(fig11_4_data) <span class="sc">%&gt;%</span></span>
+<span id="cb149-13"><a href="ch11.html#cb149-13" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">trend =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">dim</span>(fig11_4_data)[<span class="dv">1</span>],</span>
+<span id="cb149-14"><a href="ch11.html#cb149-14" tabindex="-1"></a>           <span class="at">pre1990 =</span> 年 <span class="sc">&lt;</span> <span class="dv">1990</span>)</span>
+<span id="cb149-15"><a href="ch11.html#cb149-15" tabindex="-1"></a>fig11_4_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="fu">log</span>(実質国内総支出) <span class="sc">*</span> <span class="dv">100</span> <span class="sc">~</span> trend <span class="sc">*</span> pre1990, <span class="at">data =</span> fig11_4_data)</span>
+<span id="cb149-16"><a href="ch11.html#cb149-16" tabindex="-1"></a>fig11_4_hp_trend <span class="ot">&lt;-</span> <span class="fu">hp1</span>(fig11_4_data <span class="sc">%&gt;%</span></span>
+<span id="cb149-17"><a href="ch11.html#cb149-17" tabindex="-1"></a>                            dplyr<span class="sc">::</span><span class="fu">select</span>(実質国内総支出) <span class="sc">%&gt;%</span></span>
+<span id="cb149-18"><a href="ch11.html#cb149-18" tabindex="-1"></a>                            <span class="fu">mutate</span>(実質国内総支出 <span class="ot">=</span> <span class="fu">log</span>(実質国内総支出) <span class="sc">*</span> <span class="dv">100</span>)</span>
+<span id="cb149-19"><a href="ch11.html#cb149-19" tabindex="-1"></a>                            , <span class="at">lambda =</span> <span class="fl">6.25</span>) <span class="sc">%&gt;%</span> <span class="fu">pull</span>()</span>
+<span id="cb149-20"><a href="ch11.html#cb149-20" tabindex="-1"></a>fig11_4_data <span class="ot">&lt;-</span> fig11_4_data <span class="sc">%&gt;%</span></span>
+<span id="cb149-21"><a href="ch11.html#cb149-21" tabindex="-1"></a>    <span class="fu">mutate</span>(線形トレンド回帰 <span class="ot">=</span> fig11_4_lm<span class="sc">$</span>residuals,</span>
+<span id="cb149-22"><a href="ch11.html#cb149-22" tabindex="-1"></a>           HPフィルター <span class="ot">=</span> <span class="fu">log</span>(実質国内総支出) <span class="sc">*</span> <span class="dv">100</span> <span class="sc">-</span> fig11_4_hp_trend)</span>
+<span id="cb149-23"><a href="ch11.html#cb149-23" tabindex="-1"></a></span>
+<span id="cb149-24"><a href="ch11.html#cb149-24" tabindex="-1"></a>fig11_4_data <span class="sc">%&gt;%</span></span>
+<span id="cb149-25"><a href="ch11.html#cb149-25" tabindex="-1"></a>    <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(<span class="st">&quot;内閣府&quot;</span>, <span class="st">&quot;線形トレンド回帰&quot;</span>, <span class="st">&quot;HPフィルター&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb149-26"><a href="ch11.html#cb149-26" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> 年, <span class="at">y =</span> value, <span class="at">color =</span> name)) <span class="sc">+</span></span>
+<span id="cb149-27"><a href="ch11.html#cb149-27" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb149-28"><a href="ch11.html#cb149-28" tabindex="-1"></a>    <span class="fu">scale_color_hue</span>(<span class="at">name =</span> <span class="fu">element_blank</span>(), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;HPフィルター&quot;</span>, <span class="st">&quot;内閣府&quot;</span>, <span class="st">&quot;線形トレンド回帰&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb149-29"><a href="ch11.html#cb149-29" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="fu">element_blank</span>(), <span class="at">y =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
+<span id="cb149-30"><a href="ch11.html#cb149-30" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">legend.justification =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>))</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-127-1.png" width="672" /></p>
+</div>
+<div id="実証例11.1-gdpの線形トレンドモデル推定" class="section level2 unnumbered hasAnchor">
+<h2>実証例11.1 GDPの線形トレンド・モデル推定<a href="ch11.html#実証例11.1-gdpの線形トレンドモデル推定" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb150"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb150-1"><a href="ch11.html#cb150-1" tabindex="-1"></a>ex11<span class="fl">.1</span>_data <span class="ot">&lt;-</span> fig11_2_data <span class="sc">%&gt;%</span></span>
+<span id="cb150-2"><a href="ch11.html#cb150-2" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">GDP =</span> <span class="fu">log</span>(実質国内総支出) <span class="sc">*</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb150-3"><a href="ch11.html#cb150-3" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">GDP_lag =</span> <span class="fu">lag</span>(GDP))</span>
+<span id="cb150-4"><a href="ch11.html#cb150-4" tabindex="-1"></a>ex11<span class="fl">.1</span>_data_1 <span class="ot">&lt;-</span> ex11<span class="fl">.1</span>_data <span class="sc">%&gt;%</span></span>
+<span id="cb150-5"><a href="ch11.html#cb150-5" tabindex="-1"></a>    <span class="fu">filter</span>(年 <span class="sc">&lt;=</span> <span class="dv">1973</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb150-6"><a href="ch11.html#cb150-6" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">trend =</span> <span class="dv">1</span><span class="sc">:</span>(<span class="dv">1973</span> <span class="sc">-</span> <span class="dv">1955</span> <span class="sc">+</span> <span class="dv">1</span>))</span>
+<span id="cb150-7"><a href="ch11.html#cb150-7" tabindex="-1"></a><span class="fu">lm</span>(GDP <span class="sc">~</span> trend, <span class="at">data =</span> ex11<span class="fl">.1</span>_data_1) <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = GDP ~ trend, data = ex11.1_data_1)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -3.639 -1.671 -0.331  1.407  4.397 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 1063.5336     1.1535   922.0   &lt;2e-16 ***
+## trend          9.1663     0.1012    90.6   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 2.415 on 17 degrees of freedom
+## Multiple R-squared:  0.9979, Adjusted R-squared:  0.9978 
+## F-statistic:  8209 on 1 and 17 DF,  p-value: &lt; 2.2e-16</code></pre>
+<div class="sourceCode" id="cb152"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb152-1"><a href="ch11.html#cb152-1" tabindex="-1"></a>ex11<span class="fl">.1</span>_data_2 <span class="ot">&lt;-</span> ex11<span class="fl">.1</span>_data <span class="sc">%&gt;%</span></span>
+<span id="cb152-2"><a href="ch11.html#cb152-2" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="dv">1974</span> <span class="sc">&lt;=</span> 年 <span class="sc">&amp;</span> 年 <span class="sc">&lt;=</span> <span class="dv">1990</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb152-3"><a href="ch11.html#cb152-3" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">trend =</span> <span class="dv">1</span><span class="sc">:</span>(<span class="dv">1990</span> <span class="sc">-</span> <span class="dv">1974</span> <span class="sc">+</span> <span class="dv">1</span>))</span>
+<span id="cb152-4"><a href="ch11.html#cb152-4" tabindex="-1"></a><span class="fu">lm</span>(GDP <span class="sc">~</span> trend, <span class="at">data =</span> ex11<span class="fl">.1</span>_data_2) <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = GDP ~ trend, data = ex11.1_data_2)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -2.737 -1.660  0.077  1.319  3.499 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 1.228e+03  9.487e-01  1294.5   &lt;2e-16 ***
+## trend       4.092e+00  9.258e-02    44.2   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.87 on 15 degrees of freedom
+## Multiple R-squared:  0.9924, Adjusted R-squared:  0.9919 
+## F-statistic:  1954 on 1 and 15 DF,  p-value: &lt; 2.2e-16</code></pre>
+<div class="sourceCode" id="cb154"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb154-1"><a href="ch11.html#cb154-1" tabindex="-1"></a>ex11<span class="fl">.1</span>_data_3 <span class="ot">&lt;-</span> ex11<span class="fl">.1</span>_data <span class="sc">%&gt;%</span></span>
+<span id="cb154-2"><a href="ch11.html#cb154-2" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="dv">1991</span> <span class="sc">&lt;=</span> 年 <span class="sc">&amp;</span> 年 <span class="sc">&lt;=</span> <span class="dv">2017</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb154-3"><a href="ch11.html#cb154-3" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">trend =</span> <span class="dv">1</span><span class="sc">:</span>(<span class="dv">2017</span> <span class="sc">-</span> <span class="dv">1991</span> <span class="sc">+</span> <span class="dv">1</span>))</span>
+<span id="cb154-4"><a href="ch11.html#cb154-4" tabindex="-1"></a><span class="fu">lm</span>(GDP <span class="sc">~</span> trend, <span class="at">data =</span> ex11<span class="fl">.1</span>_data_3) <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = GDP ~ trend, data = ex11.1_data_3)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -4.6946 -1.2527 -0.0614  1.4012  3.7776 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 1301.9385     0.7946  1638.5  &lt; 2e-16 ***
+## trend          0.6894     0.0496    13.9  2.9e-13 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 2.007 on 25 degrees of freedom
+## Multiple R-squared:  0.8854, Adjusted R-squared:  0.8808 
+## F-statistic: 193.2 on 1 and 25 DF,  p-value: 2.899e-13</code></pre>
+<div class="sourceCode" id="cb156"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb156-1"><a href="ch11.html#cb156-1" tabindex="-1"></a></span>
+<span id="cb156-2"><a href="ch11.html#cb156-2" tabindex="-1"></a><span class="fu">lm</span>(GDP <span class="sc">~</span> trend <span class="sc">+</span> GDP_lag, <span class="at">data =</span> ex11<span class="fl">.1</span>_data_1) <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = GDP ~ trend + GDP_lag, data = ex11.1_data_1)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -2.81645 -1.37189  0.00691  1.73576  3.03942 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)  
+## (Intercept) 518.1008   229.4803   2.258   0.0393 *
+## trend         4.4632     2.0108   2.220   0.0423 *
+## GDP_lag       0.5167     0.2177   2.373   0.0314 *
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 2.042 on 15 degrees of freedom
+##   (1 observation deleted due to missingness)
+## Multiple R-squared:  0.9985, Adjusted R-squared:  0.9983 
+## F-statistic:  4950 on 2 and 15 DF,  p-value: &lt; 2.2e-16</code></pre>
+<div class="sourceCode" id="cb158"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb158-1"><a href="ch11.html#cb158-1" tabindex="-1"></a><span class="fu">lm</span>(GDP <span class="sc">~</span> trend <span class="sc">+</span> GDP_lag, <span class="at">data =</span> ex11<span class="fl">.1</span>_data_2) <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = GDP ~ trend + GDP_lag, data = ex11.1_data_2)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -1.9907 -1.2997  0.4490  0.9211  2.2835 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)   
+## (Intercept) 543.3746   227.1009   2.393  0.03131 * 
+## trend         1.9227     0.7235   2.658  0.01874 * 
+## GDP_lag       0.5585     0.1852   3.015  0.00927 **
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.507 on 14 degrees of freedom
+## Multiple R-squared:  0.9954, Adjusted R-squared:  0.9947 
+## F-statistic:  1508 on 2 and 14 DF,  p-value: &lt; 2.2e-16</code></pre>
+<div class="sourceCode" id="cb160"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb160-1"><a href="ch11.html#cb160-1" tabindex="-1"></a><span class="fu">lm</span>(GDP <span class="sc">~</span> trend <span class="sc">+</span> GDP_lag, <span class="at">data =</span> ex11<span class="fl">.1</span>_data_3) <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = GDP ~ trend + GDP_lag, data = ex11.1_data_3)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -5.4941 -0.5359  0.4347  1.1741  2.5211 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)   
+## (Intercept) 773.6247   245.1207   3.156  0.00427 **
+## trend         0.4118     0.1369   3.009  0.00607 **
+## GDP_lag       0.4060     0.1884   2.155  0.04138 * 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.875 on 24 degrees of freedom
+## Multiple R-squared:  0.904,  Adjusted R-squared:  0.896 
+## F-statistic:   113 on 2 and 24 DF,  p-value: 6.131e-13</code></pre>
 <!-- ## 練習問題 11-1 [確認] {-}
 
 ## 練習問題 11-2 [確認] {-}

@@ -38,6 +38,7 @@ library(estatapi)
 # library(dynlm)
 # library(fGarch)
 # library(momentfit)
+library(hpfilter)
 ```
 
 ## (11.3) 式 {#exp11.3 .unnumbered}
@@ -109,6 +110,88 @@ fig11_2_data <- bind_rows(fig11_2_data, fig11_2_data_h12) %>%
 fig11_2_data %>%
     ggplot(aes(x = 年, y = log(実質国内総支出) * 100)) +
     geom_line()
+```
+
+## 図11-3 HPフィルターのトレンド成分 {-}
+HPフィルターはRでは`hpfilter`というパッケージで実装されている.
+データフレーム形式の時系列データ`y`のトレンド成分を求めるには, `hpfilter::hp1(y, lambda = lambda)`とすればよい.
+
+```{r collapse=T, message=FALSE}
+fig11_3_data_trend <- fig11_2_data %>%
+    dplyr::select(実質国内総支出) %>%
+    hp1(lambda = 100) %>%
+    rename("トレンド成分" = 実質国内総支出)
+fig11_3_data <- cbind(fig11_2_data, fig11_3_data_trend)
+fig11_3_data %>%
+    pivot_longer(cols = c("実質国内総支出", "トレンド成分")) %>%
+    ggplot(aes(x = 年, y = value, color = name)) +
+    geom_line() +
+    scale_color_hue(name = element_blank(), labels = c("トレンド成分", "GDP")) +
+    labs(x = element_blank(), y = element_blank()) +
+    theme(legend.position = c(0, 1), legend.justification = c(0, 1))
+```
+
+## 図11-4 GDPギャップ推定値の比較 {-}
+内閣府によるデータは[図10-12](#figure10-12)で用いたものを使う.
+ただし観測頻度を四半期ごとから年次にするため, 一度`ts`形式にしたうえで`aggregate()`を用いて変換する.
+
+線形トレンド回帰は, 本文中にある通り1990年より前か否かを示すダミー変数を作って推定した.
+
+またHPフィルターは, ここでは`lambda = 6.25`とした.
+```{r collapse=T, message=FALSE}
+Fig_12_GDPgap_quarterly <- read_excel("./data/10_第10章/Fig_12_GDPgap_quarterly.xlsx")
+fig11_4_data <- Fig_12_GDPgap_quarterly %>%
+    dplyr::select(内閣府) %>%
+    ts(start = c(1980, 1), frequency = 4) %>%
+    aggregate(nfrequency = 1, FUN = mean) %>%
+    data.frame() %>%
+    cbind(年 = 1980:2017)
+
+fig11_4_data <- fig11_2_data %>%
+    filter(1980 <= 年 & 年 <= 2017) %>%
+    dplyr::select(実質国内総支出) %>%
+    cbind(fig11_4_data) %>%
+    mutate(trend = 1:dim(fig11_4_data)[1],
+           pre1990 = 年 < 1990)
+fig11_4_lm <- lm(log(実質国内総支出) * 100 ~ trend * pre1990, data = fig11_4_data)
+fig11_4_hp_trend <- hp1(fig11_4_data %>%
+                            dplyr::select(実質国内総支出) %>%
+                            mutate(実質国内総支出 = log(実質国内総支出) * 100)
+                            , lambda = 6.25) %>% pull()
+fig11_4_data <- fig11_4_data %>%
+    mutate(線形トレンド回帰 = fig11_4_lm$residuals,
+           HPフィルター = log(実質国内総支出) * 100 - fig11_4_hp_trend)
+
+fig11_4_data %>%
+    pivot_longer(cols = c("内閣府", "線形トレンド回帰", "HPフィルター")) %>%
+    ggplot(aes(x = 年, y = value, color = name)) +
+    geom_line() +
+    scale_color_hue(name = element_blank(), labels = c("HPフィルター", "内閣府", "線形トレンド回帰")) +
+    labs(x = element_blank(), y = element_blank()) +
+    theme(legend.position = c(0, 1), legend.justification = c(0, 1))
+```
+
+## 実証例11.1 GDPの線形トレンド・モデル推定 {-}
+```{r collapse=T, message=FALSE}
+ex11.1_data <- fig11_2_data %>%
+    mutate(GDP = log(実質国内総支出) * 100) %>%
+    mutate(GDP_lag = lag(GDP))
+ex11.1_data_1 <- ex11.1_data %>%
+    filter(年 <= 1973) %>%
+    mutate(trend = 1:(1973 - 1955 + 1))
+lm(GDP ~ trend, data = ex11.1_data_1) %>% summary()
+ex11.1_data_2 <- ex11.1_data %>%
+    filter(1974 <= 年 & 年 <= 1990) %>%
+    mutate(trend = 1:(1990 - 1974 + 1))
+lm(GDP ~ trend, data = ex11.1_data_2) %>% summary()
+ex11.1_data_3 <- ex11.1_data %>%
+    filter(1991 <= 年 & 年 <= 2017) %>%
+    mutate(trend = 1:(2017 - 1991 + 1))
+lm(GDP ~ trend, data = ex11.1_data_3) %>% summary()
+
+lm(GDP ~ trend + GDP_lag, data = ex11.1_data_1) %>% summary()
+lm(GDP ~ trend + GDP_lag, data = ex11.1_data_2) %>% summary()
+lm(GDP ~ trend + GDP_lag, data = ex11.1_data_3) %>% summary()
 ```
 
 <!-- ## 練習問題 11-1 [確認] {-}
