@@ -23,7 +23,7 @@
 <meta name="author" content="石井 俊輔" />
 
 
-<meta name="date" content="2025-02-13" />
+<meta name="date" content="2025-02-15" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -292,6 +292,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="ch11.html"><a href="ch11.html#実証例11.3-インフレ率の単位根検定-1"><i class="fa fa-check"></i>実証例11.3 インフレ率の単位根検定</a></li>
 <li class="chapter" data-level="" data-path="ch11.html"><a href="ch11.html#実証例11.4-ランダムウォーク型のトレンドインフレ率の推定"><i class="fa fa-check"></i>実証例11.4 ランダムウォーク型のトレンド・インフレ率の推定</a></li>
 <li class="chapter" data-level="" data-path="ch11.html"><a href="ch11.html#図11-8-bn分解とランダムウォーク型トレンドインフレ率"><i class="fa fa-check"></i>図11-8 BN分解とランダムウォーク型トレンド・インフレ率</a></li>
+<li class="chapter" data-level="" data-path="ch11.html"><a href="ch11.html#実証例11.5-水準シフト型のトレンドインフレ率推定と構造変化検定"><i class="fa fa-check"></i>実証例11.5 水準シフト型のトレンド・インフレ率推定と構造変化検定</a></li>
+<li class="chapter" data-level="" data-path="ch11.html"><a href="ch11.html#図11-9-トレンドインフレ率水準の構造変化-ワルド統計量"><i class="fa fa-check"></i>図11-9 トレンド・インフレ率水準の構造変化 (ワルド統計量)</a></li>
+<li class="chapter" data-level="" data-path="ch11.html"><a href="ch11.html#図11-10-水準シフト型トレンドインフレ率"><i class="fa fa-check"></i>図11-10 水準シフト型トレンド・インフレ率</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="ch12.html"><a href="ch12.html"><i class="fa fa-check"></i>第12章 VARモデル</a></li>
 <li class="divider"></li>
@@ -341,9 +344,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb138-2"><a href="ch11.html#cb138-2" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
 <span id="cb138-3"><a href="ch11.html#cb138-3" tabindex="-1"></a><span class="fu">library</span>(estatapi)</span>
 <span id="cb138-4"><a href="ch11.html#cb138-4" tabindex="-1"></a><span class="fu">library</span>(hpfilter)</span>
-<span id="cb138-5"><a href="ch11.html#cb138-5" tabindex="-1"></a><span class="fu">library</span>(fredr)</span>
-<span id="cb138-6"><a href="ch11.html#cb138-6" tabindex="-1"></a><span class="fu">library</span>(urca)</span>
-<span id="cb138-7"><a href="ch11.html#cb138-7" tabindex="-1"></a><span class="fu">library</span>(tsm)</span></code></pre></div>
+<span id="cb138-5"><a href="ch11.html#cb138-5" tabindex="-1"></a><span class="fu">library</span>(urca)</span>
+<span id="cb138-6"><a href="ch11.html#cb138-6" tabindex="-1"></a><span class="fu">library</span>(tsm)</span>
+<span id="cb138-7"><a href="ch11.html#cb138-7" tabindex="-1"></a><span class="fu">library</span>(fredr)</span></code></pre></div>
 <div id="exp11.3" class="section level2 unnumbered hasAnchor">
 <h2>(11.3) 式<a href="ch11.html#exp11.3" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>データは前章<a href="ch10.html#figure10-3">図10-3</a>図10-3で用いたものを使う.
@@ -618,39 +621,39 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="実証例11.2-為替レートの単位根検定" class="section level2 unnumbered hasAnchor">
 <h2>実証例11.2 為替レートの単位根検定<a href="ch11.html#実証例11.2-為替レートの単位根検定" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>ここでは, <a href="https://fred.stlouisfed.org/">FRED, St. Louis Fed</a>からデータを取得することにする.
-Rでは<code>fredr</code>というパッケージによるAPI実装があり, これを使うと簡単にデータをダウンロードすることができる.
-API利用には事前に登録とAPIキーの取得が必要で, 取得したAPIキーは<code>fred_APIkey.txt</code>に保存しておく.</p>
-<div class="sourceCode" id="cb162"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb162-1"><a href="ch11.html#cb162-1" tabindex="-1"></a><span class="co"># APIキーを読み込む</span></span>
-<span id="cb162-2"><a href="ch11.html#cb162-2" tabindex="-1"></a>fred_APIkey <span class="ot">&lt;-</span> <span class="fu">scan</span>(<span class="st">&quot;fred_APIkey.txt&quot;</span>, <span class="at">what =</span> <span class="st">&quot;character&quot;</span>)</span>
-<span id="cb162-3"><a href="ch11.html#cb162-3" tabindex="-1"></a><span class="co"># 読み込んだAPIキーをセット</span></span>
-<span id="cb162-4"><a href="ch11.html#cb162-4" tabindex="-1"></a><span class="fu">fredr_set_key</span>(fred_APIkey)</span></code></pre></div>
-<div class="sourceCode" id="cb163"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb163-1"><a href="ch11.html#cb163-1" tabindex="-1"></a><span class="co"># データ取得</span></span>
-<span id="cb163-2"><a href="ch11.html#cb163-2" tabindex="-1"></a>DEXJPUS <span class="ot">&lt;-</span> <span class="fu">fredr</span>(</span>
-<span id="cb163-3"><a href="ch11.html#cb163-3" tabindex="-1"></a>  <span class="at">series_id =</span> <span class="st">&quot;DEXJPUS&quot;</span>,</span>
-<span id="cb163-4"><a href="ch11.html#cb163-4" tabindex="-1"></a>  <span class="at">observation_start =</span> <span class="fu">as.Date</span>(<span class="st">&quot;1991-04-01&quot;</span>),</span>
-<span id="cb163-5"><a href="ch11.html#cb163-5" tabindex="-1"></a>  <span class="at">observation_end =</span> <span class="fu">as.Date</span>(<span class="st">&quot;2002-12-31&quot;</span>)</span>
-<span id="cb163-6"><a href="ch11.html#cb163-6" tabindex="-1"></a>)</span></code></pre></div>
-<div class="sourceCode" id="cb164"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb164-1"><a href="ch11.html#cb164-1" tabindex="-1"></a>data_ex11<span class="fl">.2</span> <span class="ot">&lt;-</span> DEXJPUS <span class="sc">%&gt;%</span></span>
-<span id="cb164-2"><a href="ch11.html#cb164-2" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">S =</span> <span class="fu">log</span>(value) <span class="sc">*</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb164-3"><a href="ch11.html#cb164-3" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">trend =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">dim</span>(DEXJPUS)[<span class="dv">1</span>])</span>
-<span id="cb164-4"><a href="ch11.html#cb164-4" tabindex="-1"></a><span class="fu">lm</span>(S <span class="sc">-</span> <span class="fu">lag</span>(S) <span class="sc">~</span> <span class="dv">0</span> <span class="sc">+</span> <span class="fu">lag</span>(S), <span class="at">data =</span> data_ex11<span class="fl">.2</span>) <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span></code></pre></div>
+<p>データはエクセルファイルに収録されているようだが, ところどころNAとなっている箇所がある.
+NAになっている日については, ここでは単純に前日の値を用いることにする.</p>
+<div class="sourceCode" id="cb162"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb162-1"><a href="ch11.html#cb162-1" tabindex="-1"></a>JapanIntervention1991_2004 <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">&quot;data/11_第11章/JapanIntervention1991-2004.xls&quot;</span>, <span class="at">sheet =</span> <span class="st">&quot;YenDollar&quot;</span>)</span></code></pre></div>
+<pre><code>## New names:
+## • `` -&gt; `...3`
+## • `` -&gt; `...4`
+## • `` -&gt; `...6`</code></pre>
+<div class="sourceCode" id="cb164"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb164-1"><a href="ch11.html#cb164-1" tabindex="-1"></a>data_ex11<span class="fl">.2</span> <span class="ot">&lt;-</span> JapanIntervention1991_2004[<span class="dv">3</span><span class="sc">:</span><span class="dv">3047</span>, ]</span>
+<span id="cb164-2"><a href="ch11.html#cb164-2" tabindex="-1"></a>data_ex11<span class="fl">.2</span> <span class="ot">&lt;-</span> data_ex11<span class="fl">.2</span> <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">mdy</span>(Date)) <span class="sc">%&gt;%</span></span>
+<span id="cb164-3"><a href="ch11.html#cb164-3" tabindex="-1"></a>    <span class="fu">data.frame</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb164-4"><a href="ch11.html#cb164-4" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">rate_NY =</span> <span class="fu">as.numeric</span>(Yen.Dollar.Rate)) <span class="sc">%&gt;%</span></span>
+<span id="cb164-5"><a href="ch11.html#cb164-5" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">select</span>(date, rate_NY, Interventions) <span class="sc">%&gt;%</span></span>
+<span id="cb164-6"><a href="ch11.html#cb164-6" tabindex="-1"></a>    <span class="fu">fill</span>(rate_NY, <span class="at">.direction =</span> <span class="st">&quot;down&quot;</span>)</span>
+<span id="cb164-7"><a href="ch11.html#cb164-7" tabindex="-1"></a>data_ex11<span class="fl">.2</span> <span class="ot">&lt;-</span> data_ex11<span class="fl">.2</span> <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">S =</span> <span class="fu">log</span>(rate_NY) <span class="sc">*</span> <span class="dv">100</span>,</span>
+<span id="cb164-8"><a href="ch11.html#cb164-8" tabindex="-1"></a>             <span class="at">trend =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">dim</span>(data_ex11<span class="fl">.2</span>)[<span class="dv">1</span>])</span>
+<span id="cb164-9"><a href="ch11.html#cb164-9" tabindex="-1"></a></span>
+<span id="cb164-10"><a href="ch11.html#cb164-10" tabindex="-1"></a><span class="fu">lm</span>(S <span class="sc">-</span> <span class="fu">lag</span>(S) <span class="sc">~</span> <span class="dv">0</span> <span class="sc">+</span> <span class="fu">lag</span>(S), <span class="at">data =</span> data_ex11<span class="fl">.2</span>) <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = S - lag(S) ~ 0 + lag(S), data = data_ex11.2)
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
-## -5.6179 -0.3605  0.0121  0.3893  3.2522 
+## -7.4107 -0.3690  0.0060  0.3957  4.1037 
 ## 
 ## Coefficients:
 ##          Estimate Std. Error t value Pr(&gt;|t|)
-## lag(S) -2.518e-05  2.810e-05  -0.896     0.37
+## lag(S) -1.241e-05  2.803e-05  -0.443    0.658
 ## 
-## Residual standard error: 0.7121 on 2845 degrees of freedom
-##   (221 observations deleted due to missingness)
-## Multiple R-squared:  0.0002822,  Adjusted R-squared:  -6.916e-05 
-## F-statistic: 0.8032 on 1 and 2845 DF,  p-value: 0.3702</code></pre>
+## Residual standard error: 0.7345 on 3043 degrees of freedom
+##   (1 observation deleted due to missingness)
+## Multiple R-squared:  6.442e-05,  Adjusted R-squared:  -0.0002642 
+## F-statistic: 0.196 on 1 and 3043 DF,  p-value: 0.658</code></pre>
 <div class="sourceCode" id="cb166"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb166-1"><a href="ch11.html#cb166-1" tabindex="-1"></a><span class="fu">lm</span>(S <span class="sc">-</span> <span class="fu">lag</span>(S) <span class="sc">~</span> <span class="fu">lag</span>(S), <span class="at">data =</span> data_ex11<span class="fl">.2</span>) <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span></code></pre></div>
 <pre><code>## 
 ## Call:
@@ -658,19 +661,19 @@ API利用には事前に登録とAPIキーの取得が必要で, 取得したAPI
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
-## -5.5872 -0.3644  0.0138  0.3855  3.2847 
+## -7.3803 -0.3750  0.0153  0.4020  4.0701 
 ## 
 ## Coefficients:
 ##              Estimate Std. Error t value Pr(&gt;|t|)  
-## (Intercept)  1.165682   0.562528   2.072   0.0383 *
-## lag(S)      -0.002479   0.001184  -2.093   0.0364 *
+## (Intercept)  1.228288   0.564321   2.177   0.0296 *
+## lag(S)      -0.002598   0.001188  -2.186   0.0289 *
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 0.7116 on 2844 degrees of freedom
-##   (221 observations deleted due to missingness)
-## Multiple R-squared:  0.001538,   Adjusted R-squared:  0.001187 
-## F-statistic:  4.38 on 1 and 2844 DF,  p-value: 0.03645</code></pre>
+## Residual standard error: 0.7341 on 3042 degrees of freedom
+##   (1 observation deleted due to missingness)
+## Multiple R-squared:  0.001569,   Adjusted R-squared:  0.001241 
+## F-statistic:  4.78 on 1 and 3042 DF,  p-value: 0.02886</code></pre>
 <div class="sourceCode" id="cb168"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb168-1"><a href="ch11.html#cb168-1" tabindex="-1"></a><span class="fu">lm</span>(S <span class="sc">-</span> <span class="fu">lag</span>(S) <span class="sc">~</span> trend <span class="sc">+</span> <span class="fu">lag</span>(S), <span class="at">data =</span> data_ex11<span class="fl">.2</span>) <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span></code></pre></div>
 <pre><code>## 
 ## Call:
@@ -678,28 +681,28 @@ API利用には事前に登録とAPIキーの取得が必要で, 取得したAPI
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
-## -5.5909 -0.3616  0.0152  0.3860  3.2812 
+## -7.3862 -0.3670  0.0086  0.4016  4.0836 
 ## 
 ## Coefficients:
 ##               Estimate Std. Error t value Pr(&gt;|t|)  
-## (Intercept)  1.176e+00  5.628e-01   2.089   0.0368 *
-## trend        1.015e-05  1.511e-05   0.671   0.5020  
-## lag(S)      -2.533e-03  1.187e-03  -2.133   0.0330 *
+## (Intercept)  1.244e+00  5.645e-01   2.204   0.0276 *
+## trend        1.623e-05  1.517e-05   1.069   0.2850  
+## lag(S)      -2.683e-03  1.191e-03  -2.253   0.0243 *
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 0.7117 on 2843 degrees of freedom
-##   (221 observations deleted due to missingness)
-## Multiple R-squared:  0.001696,   Adjusted R-squared:  0.0009938 
-## F-statistic: 2.415 on 2 and 2843 DF,  p-value: 0.08954</code></pre>
+## Residual standard error: 0.7341 on 3041 degrees of freedom
+##   (1 observation deleted due to missingness)
+## Multiple R-squared:  0.001944,   Adjusted R-squared:  0.001288 
+## F-statistic: 2.962 on 2 and 3041 DF,  p-value: 0.05186</code></pre>
 </div>
 <div id="図11-6-円ドルレート" class="section level2 unnumbered hasAnchor">
 <h2>図11-6 円ドルレート<a href="ch11.html#図11-6-円ドルレート" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb170"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb170-1"><a href="ch11.html#cb170-1" tabindex="-1"></a>DEXJPUS <span class="sc">%&gt;%</span></span>
-<span id="cb170-2"><a href="ch11.html#cb170-2" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> date, <span class="at">y =</span> value)) <span class="sc">+</span></span>
+<div class="sourceCode" id="cb170"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb170-1"><a href="ch11.html#cb170-1" tabindex="-1"></a>data_ex11<span class="fl">.2</span> <span class="sc">%&gt;%</span></span>
+<span id="cb170-2"><a href="ch11.html#cb170-2" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> date, <span class="at">y =</span> rate_NY)) <span class="sc">+</span></span>
 <span id="cb170-3"><a href="ch11.html#cb170-3" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span></span>
 <span id="cb170-4"><a href="ch11.html#cb170-4" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;年&quot;</span>, <span class="at">y =</span> <span class="st">&quot;&quot;</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-132-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/unnamed-chunk-130-1.png" width="672" /></p>
 </div>
 <div id="実証例11.3-インフレ率の単位根検定" class="section level2 unnumbered hasAnchor">
 <h2>実証例11.3 インフレ率の単位根検定<a href="ch11.html#実証例11.3-インフレ率の単位根検定" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -867,7 +870,7 @@ ADF検定は, Rでは<code>urca</code>パッケージの<code>ur.df()</code>と�
 <span id="cb180-3"><a href="ch11.html#cb180-3" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> 対数季節階差)) <span class="sc">+</span></span>
 <span id="cb180-4"><a href="ch11.html#cb180-4" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span></span>
 <span id="cb180-5"><a href="ch11.html#cb180-5" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;年&quot;</span>, <span class="at">y =</span> <span class="st">&quot;インフレ率 (%)&quot;</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-134-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/unnamed-chunk-132-1.png" width="672" /></p>
 </div>
 <div id="実証例11.4-ランダムウォーク型のトレンドインフレ率の推定" class="section level2 unnumbered hasAnchor">
 <h2>実証例11.4 ランダムウォーク型のトレンド・インフレ率の推定<a href="ch11.html#実証例11.4-ランダムウォーク型のトレンドインフレ率の推定" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -892,7 +895,81 @@ ADF検定は, Rでは<code>urca</code>パッケージの<code>ur.df()</code>と�
 <span id="cb183-10"><a href="ch11.html#cb183-10" tabindex="-1"></a>    <span class="fu">scale_color_hue</span>(<span class="at">name =</span> <span class="fu">element_blank</span>(), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;トレンド成分 (トレンド・インフレ率)&quot;</span>, <span class="st">&quot;インフレ率&quot;</span>)) <span class="sc">+</span></span>
 <span id="cb183-11"><a href="ch11.html#cb183-11" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="fu">element_blank</span>(), <span class="at">y =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
 <span id="cb183-12"><a href="ch11.html#cb183-12" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">legend.justification =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>))</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-135-1.png" width="672" /></p>
+</div>
+<div id="実証例11.5-水準シフト型のトレンドインフレ率推定と構造変化検定" class="section level2 unnumbered hasAnchor">
+<h2>実証例11.5 水準シフト型のトレンド・インフレ率推定と構造変化検定<a href="ch11.html#実証例11.5-水準シフト型のトレンドインフレ率推定と構造変化検定" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>構造変化点<span class="math inline">\(T^*\)</span>が未知の場合に行う単位根検定であるZivot=Andrews検定はRでは<code>urca::ur.za()</code>に実装されているが, この関数は<span class="math inline">\(F\)</span>検定ではなく<span class="math inline">\(t\)</span>検定を行うようだ.
+ここでは代わりに, <span class="math inline">\(\text{int}[\pi_0\times T] \geq T^* \geq \text{int}[(1 - \pi_0)\times T]\)</span>の範囲の各<span class="math inline">\(T^*\)</span>についてforループで<span class="math inline">\(F\)</span>統計量を計算することにする.
+なお, <span class="math inline">\(q = 1\)</span>の場合, 上限<span class="math inline">\(F\)</span>統計量と上限ワルド統計量は一致するので, 後者は省略する.</p>
+<div class="sourceCode" id="cb184"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb184-1"><a href="ch11.html#cb184-1" tabindex="-1"></a>data_ex11<span class="fl">.5</span> <span class="ot">&lt;-</span> data_ex11<span class="fl">.4</span> <span class="sc">%&gt;%</span></span>
+<span id="cb184-2"><a href="ch11.html#cb184-2" tabindex="-1"></a>    <span class="fu">data.frame</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb184-3"><a href="ch11.html#cb184-3" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">select</span>(trend) <span class="sc">%&gt;%</span></span>
+<span id="cb184-4"><a href="ch11.html#cb184-4" tabindex="-1"></a>    <span class="fu">cbind</span>(data_ex11<span class="fl">.3</span><span class="sc">$</span>year) <span class="sc">%&gt;%</span></span>
+<span id="cb184-5"><a href="ch11.html#cb184-5" tabindex="-1"></a>    <span class="fu">rename</span>(<span class="st">&quot;year&quot;</span> <span class="ot">=</span> <span class="st">`</span><span class="at">data_ex11.3$year</span><span class="st">`</span>)</span>
+<span id="cb184-6"><a href="ch11.html#cb184-6" tabindex="-1"></a><span class="co"># それぞれのT^*についてRSS(T^*)とF(T^*)の値を保存するための列を作っておく.</span></span>
+<span id="cb184-7"><a href="ch11.html#cb184-7" tabindex="-1"></a>data_ex11<span class="fl">.5</span> <span class="ot">&lt;-</span> data_ex11<span class="fl">.5</span> <span class="sc">%&gt;%</span></span>
+<span id="cb184-8"><a href="ch11.html#cb184-8" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">t =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">dim</span>(data_ex11<span class="fl">.5</span>)[<span class="dv">1</span>], <span class="co"># 行番号</span></span>
+<span id="cb184-9"><a href="ch11.html#cb184-9" tabindex="-1"></a>           <span class="at">RSS_T_star =</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">dim</span>(data_ex11<span class="fl">.5</span>)[<span class="dv">1</span>]),</span>
+<span id="cb184-10"><a href="ch11.html#cb184-10" tabindex="-1"></a>           <span class="at">FT_star =</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">dim</span>(data_ex11<span class="fl">.5</span>)[<span class="dv">1</span>]))</span>
+<span id="cb184-11"><a href="ch11.html#cb184-11" tabindex="-1"></a></span>
+<span id="cb184-12"><a href="ch11.html#cb184-12" tabindex="-1"></a><span class="co"># パラメータ</span></span>
+<span id="cb184-13"><a href="ch11.html#cb184-13" tabindex="-1"></a>T <span class="ot">&lt;-</span> <span class="fu">dim</span>(data_ex11<span class="fl">.5</span>)[<span class="dv">1</span>]</span>
+<span id="cb184-14"><a href="ch11.html#cb184-14" tabindex="-1"></a>pi_0 <span class="ot">&lt;-</span> <span class="fl">0.05</span></span>
+<span id="cb184-15"><a href="ch11.html#cb184-15" tabindex="-1"></a>q <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb184-16"><a href="ch11.html#cb184-16" tabindex="-1"></a></span>
+<span id="cb184-17"><a href="ch11.html#cb184-17" tabindex="-1"></a>RSS_R <span class="ot">&lt;-</span> <span class="fu">lm</span>(trend <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data =</span> data_ex11<span class="fl">.5</span>)<span class="sc">$</span>residuals<span class="sc">^</span><span class="dv">2</span> <span class="sc">%&gt;%</span> <span class="fu">sum</span>()</span>
+<span id="cb184-18"><a href="ch11.html#cb184-18" tabindex="-1"></a><span class="cf">for</span> (T_star <span class="cf">in</span> <span class="fu">floor</span>(pi_0 <span class="sc">*</span> T)<span class="sc">:</span><span class="fu">floor</span>((<span class="dv">1</span> <span class="sc">-</span> pi_0) <span class="sc">*</span> T)) {</span>
+<span id="cb184-19"><a href="ch11.html#cb184-19" tabindex="-1"></a>    <span class="co"># 構造変化前後を示すダミー変数を作成</span></span>
+<span id="cb184-20"><a href="ch11.html#cb184-20" tabindex="-1"></a>    data_ex11<span class="fl">.5</span>_temp <span class="ot">&lt;-</span> data_ex11<span class="fl">.5</span> <span class="sc">%&gt;%</span></span>
+<span id="cb184-21"><a href="ch11.html#cb184-21" tabindex="-1"></a>        <span class="fu">mutate</span>(<span class="at">dummy =</span> t <span class="sc">&lt;</span> T_star)</span>
+<span id="cb184-22"><a href="ch11.html#cb184-22" tabindex="-1"></a>    data_ex11<span class="fl">.5</span><span class="sc">$</span>RSS_T_star[T_star] <span class="ot">&lt;-</span> <span class="fu">lm</span>(trend <span class="sc">~</span> dummy, <span class="at">data =</span> data_ex11<span class="fl">.5</span>_temp)<span class="sc">$</span>residuals<span class="sc">^</span><span class="dv">2</span> <span class="sc">%&gt;%</span> <span class="fu">sum</span>()</span>
+<span id="cb184-23"><a href="ch11.html#cb184-23" tabindex="-1"></a>    data_ex11<span class="fl">.5</span><span class="sc">$</span>FT_star[T_star] <span class="ot">&lt;-</span> ((RSS_R <span class="sc">-</span> data_ex11<span class="fl">.5</span><span class="sc">$</span>RSS_T_star[T_star]) <span class="sc">/</span> q) <span class="sc">/</span> (data_ex11<span class="fl">.5</span><span class="sc">$</span>RSS_T_star[T_star] <span class="sc">/</span> (T <span class="sc">-</span> <span class="dv">2</span> <span class="sc">*</span> q))</span>
+<span id="cb184-24"><a href="ch11.html#cb184-24" tabindex="-1"></a>}</span>
+<span id="cb184-25"><a href="ch11.html#cb184-25" tabindex="-1"></a></span>
+<span id="cb184-26"><a href="ch11.html#cb184-26" tabindex="-1"></a><span class="co"># 構造変化点を表示</span></span>
+<span id="cb184-27"><a href="ch11.html#cb184-27" tabindex="-1"></a>data_ex11<span class="fl">.5</span> <span class="sc">%&gt;%</span></span>
+<span id="cb184-28"><a href="ch11.html#cb184-28" tabindex="-1"></a>    <span class="fu">filter</span>(FT_star <span class="sc">==</span> <span class="fu">max</span>(FT_star, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code></pre></div>
+<pre><code>##      trend       year   t RSS_T_star  FT_star
+## 1 4.025797 1981-11-01 131   3612.687 860.5861</code></pre>
+<div class="sourceCode" id="cb186"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb186-1"><a href="ch11.html#cb186-1" tabindex="-1"></a><span class="co"># 構造変化前後のトレンド・インフレ率の推定値を表示</span></span>
+<span id="cb186-2"><a href="ch11.html#cb186-2" tabindex="-1"></a>data_ex11<span class="fl">.5</span> <span class="ot">&lt;-</span> data_ex11<span class="fl">.5</span> <span class="sc">%&gt;%</span></span>
+<span id="cb186-3"><a href="ch11.html#cb186-3" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">after_structural_break =</span> t <span class="sc">&gt;=</span> <span class="dv">131</span>)</span>
+<span id="cb186-4"><a href="ch11.html#cb186-4" tabindex="-1"></a>data_ex11<span class="fl">.5</span> <span class="sc">%&gt;%</span></span>
+<span id="cb186-5"><a href="ch11.html#cb186-5" tabindex="-1"></a>    <span class="fu">group_by</span>(after_structural_break) <span class="sc">%&gt;%</span></span>
+<span id="cb186-6"><a href="ch11.html#cb186-6" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="fu">across</span>(trend, <span class="sc">~</span> <span class="fu">mean</span>(. , <span class="at">na.rm =</span> <span class="cn">TRUE</span>)))</span></code></pre></div>
+<pre><code>## # A tibble: 2 × 2
+##   after_structural_break trend
+##   &lt;lgl&gt;                  &lt;dbl&gt;
+## 1 FALSE                  8.32 
+## 2 TRUE                   0.730</code></pre>
+<p>分析の結果, 1981年11月に上限ワルド統計量<span class="math inline">\(F(T^*) = 860.5861\)</span>が得られたことがわかった.
+また, 構造変化前のトレンド・インフレ率は8.32%, 構造変化後は0.730%だった.</p>
+</div>
+<div id="図11-9-トレンドインフレ率水準の構造変化-ワルド統計量" class="section level2 unnumbered hasAnchor">
+<h2>図11-9 トレンド・インフレ率水準の構造変化 (ワルド統計量)<a href="ch11.html#図11-9-トレンドインフレ率水準の構造変化-ワルド統計量" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb188"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb188-1"><a href="ch11.html#cb188-1" tabindex="-1"></a>data_ex11<span class="fl">.5</span> <span class="sc">%&gt;%</span></span>
+<span id="cb188-2"><a href="ch11.html#cb188-2" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> FT_star)) <span class="sc">+</span></span>
+<span id="cb188-3"><a href="ch11.html#cb188-3" tabindex="-1"></a>    <span class="fu">geom_line</span>()</span></code></pre></div>
+<pre><code>## Warning: Removed 54 rows containing missing values or values outside the scale
+## range (`geom_line()`).</code></pre>
 <p><img src="_main_files/figure-html/unnamed-chunk-137-1.png" width="672" /></p>
+</div>
+<div id="図11-10-水準シフト型トレンドインフレ率" class="section level2 unnumbered hasAnchor">
+<h2>図11-10 水準シフト型トレンド・インフレ率<a href="ch11.html#図11-10-水準シフト型トレンドインフレ率" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb190"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb190-1"><a href="ch11.html#cb190-1" tabindex="-1"></a><span class="co"># 手動描画用に推定値を保存しておく.</span></span>
+<span id="cb190-2"><a href="ch11.html#cb190-2" tabindex="-1"></a>y_max_min <span class="ot">&lt;-</span> data_ex11<span class="fl">.5</span> <span class="sc">%&gt;%</span></span>
+<span id="cb190-3"><a href="ch11.html#cb190-3" tabindex="-1"></a>    <span class="fu">group_by</span>(after_structural_break) <span class="sc">%&gt;%</span></span>
+<span id="cb190-4"><a href="ch11.html#cb190-4" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="fu">across</span>(trend, <span class="sc">~</span> <span class="fu">mean</span>(. , <span class="at">na.rm =</span> <span class="cn">TRUE</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb190-5"><a href="ch11.html#cb190-5" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">select</span>(trend) <span class="sc">%&gt;%</span></span>
+<span id="cb190-6"><a href="ch11.html#cb190-6" tabindex="-1"></a>    <span class="fu">pull</span>()</span>
+<span id="cb190-7"><a href="ch11.html#cb190-7" tabindex="-1"></a></span>
+<span id="cb190-8"><a href="ch11.html#cb190-8" tabindex="-1"></a>data_ex11<span class="fl">.5</span> <span class="sc">%&gt;%</span></span>
+<span id="cb190-9"><a href="ch11.html#cb190-9" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> trend, <span class="at">group =</span> after_structural_break)) <span class="sc">+</span></span>
+<span id="cb190-10"><a href="ch11.html#cb190-10" tabindex="-1"></a>    <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">&quot;skyblue&quot;</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb190-11"><a href="ch11.html#cb190-11" tabindex="-1"></a>    <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">formula =</span> y <span class="sc">~</span> <span class="dv">1</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">linewidth =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb190-12"><a href="ch11.html#cb190-12" tabindex="-1"></a>    <span class="fu">geom_linerange</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">ym</span>(<span class="dv">198111</span>), <span class="at">ymax =</span> y_max_min[<span class="dv">1</span>], <span class="at">ymin =</span> y_max_min[<span class="dv">2</span>]), <span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">linewidth =</span> <span class="fl">0.5</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-138-1.png" width="672" /></p>
 <!-- ## 練習問題 11-1 [確認] {-}
 
 ## 練習問題 11-2 [確認] {-}

@@ -23,7 +23,7 @@
 <meta name="author" content="石井 俊輔" />
 
 
-<meta name="date" content="2025-02-13" />
+<meta name="date" content="2025-02-15" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -292,6 +292,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="ch11.html"><a href="ch11.html#実証例11.3-インフレ率の単位根検定-1"><i class="fa fa-check"></i>実証例11.3 インフレ率の単位根検定</a></li>
 <li class="chapter" data-level="" data-path="ch11.html"><a href="ch11.html#実証例11.4-ランダムウォーク型のトレンドインフレ率の推定"><i class="fa fa-check"></i>実証例11.4 ランダムウォーク型のトレンド・インフレ率の推定</a></li>
 <li class="chapter" data-level="" data-path="ch11.html"><a href="ch11.html#図11-8-bn分解とランダムウォーク型トレンドインフレ率"><i class="fa fa-check"></i>図11-8 BN分解とランダムウォーク型トレンド・インフレ率</a></li>
+<li class="chapter" data-level="" data-path="ch11.html"><a href="ch11.html#実証例11.5-水準シフト型のトレンドインフレ率推定と構造変化検定"><i class="fa fa-check"></i>実証例11.5 水準シフト型のトレンド・インフレ率推定と構造変化検定</a></li>
+<li class="chapter" data-level="" data-path="ch11.html"><a href="ch11.html#図11-9-トレンドインフレ率水準の構造変化-ワルド統計量"><i class="fa fa-check"></i>図11-9 トレンド・インフレ率水準の構造変化 (ワルド統計量)</a></li>
+<li class="chapter" data-level="" data-path="ch11.html"><a href="ch11.html#図11-10-水準シフト型トレンドインフレ率"><i class="fa fa-check"></i>図11-10 水準シフト型トレンド・インフレ率</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="ch12.html"><a href="ch12.html"><i class="fa fa-check"></i>第12章 VARモデル</a></li>
 <li class="divider"></li>
@@ -351,10 +354,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb87-12"><a href="ch10.html#cb87-12" tabindex="-1"></a><span class="do">## Registered S3 method overwritten by &#39;quantmod&#39;:</span></span>
 <span id="cb87-13"><a href="ch10.html#cb87-13" tabindex="-1"></a><span class="do">##   method            from</span></span>
 <span id="cb87-14"><a href="ch10.html#cb87-14" tabindex="-1"></a><span class="do">##   as.zoo.data.frame zoo</span></span>
-<span id="cb87-15"><a href="ch10.html#cb87-15" tabindex="-1"></a><span class="do">## ── Attaching core tidyquant packages ───────── tidyquant 1.0.10 ──</span></span>
+<span id="cb87-15"><a href="ch10.html#cb87-15" tabindex="-1"></a><span class="do">## ── Attaching core tidyquant packages ───────────── tidyquant 1.0.10 ──</span></span>
 <span id="cb87-16"><a href="ch10.html#cb87-16" tabindex="-1"></a><span class="do">## ✔ PerformanceAnalytics 2.0.4      ✔ TTR                  0.24.4</span></span>
 <span id="cb87-17"><a href="ch10.html#cb87-17" tabindex="-1"></a><span class="do">## ✔ quantmod             0.4.26     ✔ xts                  0.14.1</span></span>
-<span id="cb87-18"><a href="ch10.html#cb87-18" tabindex="-1"></a><span class="do">## ── Conflicts ──────────────────────────── tidyquant_conflicts() ──</span></span>
+<span id="cb87-18"><a href="ch10.html#cb87-18" tabindex="-1"></a><span class="do">## ── Conflicts ──────────────────────────────── tidyquant_conflicts() ──</span></span>
 <span id="cb87-19"><a href="ch10.html#cb87-19" tabindex="-1"></a><span class="do">## ✖ zoo::as.Date()                 masks base::as.Date()</span></span>
 <span id="cb87-20"><a href="ch10.html#cb87-20" tabindex="-1"></a><span class="do">## ✖ zoo::as.Date.numeric()         masks base::as.Date.numeric()</span></span>
 <span id="cb87-21"><a href="ch10.html#cb87-21" tabindex="-1"></a><span class="do">## ✖ dplyr::filter()                masks stats::filter()</span></span>
@@ -491,15 +494,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb95-10"><a href="ch10.html#cb95-10" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;年&quot;</span>, <span class="at">y =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
 <span id="cb95-11"><a href="ch10.html#cb95-11" tabindex="-1"></a>    <span class="co"># scale_color_hue(name = element_blank()) +</span></span>
 <span id="cb95-12"><a href="ch10.html#cb95-12" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">legend.justification =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>))</span>
-<span id="cb95-13"><a href="ch10.html#cb95-13" tabindex="-1"></a><span class="do">## Warning: A numeric `legend.position` argument in `theme()` was deprecated</span></span>
-<span id="cb95-14"><a href="ch10.html#cb95-14" tabindex="-1"></a><span class="do">## in ggplot2 3.5.0.</span></span>
+<span id="cb95-13"><a href="ch10.html#cb95-13" tabindex="-1"></a><span class="do">## Warning: A numeric `legend.position` argument in `theme()` was deprecated in</span></span>
+<span id="cb95-14"><a href="ch10.html#cb95-14" tabindex="-1"></a><span class="do">## ggplot2 3.5.0.</span></span>
 <span id="cb95-15"><a href="ch10.html#cb95-15" tabindex="-1"></a><span class="do">## ℹ Please use the `legend.position.inside` argument of `theme()`</span></span>
 <span id="cb95-16"><a href="ch10.html#cb95-16" tabindex="-1"></a><span class="do">##   instead.</span></span>
 <span id="cb95-17"><a href="ch10.html#cb95-17" tabindex="-1"></a><span class="do">## This warning is displayed once every 8 hours.</span></span>
-<span id="cb95-18"><a href="ch10.html#cb95-18" tabindex="-1"></a><span class="do">## Call `lifecycle::last_lifecycle_warnings()` to see where this</span></span>
-<span id="cb95-19"><a href="ch10.html#cb95-19" tabindex="-1"></a><span class="do">## warning was generated.</span></span>
-<span id="cb95-20"><a href="ch10.html#cb95-20" tabindex="-1"></a><span class="do">## Warning: Removed 2 rows containing missing values or values outside the</span></span>
-<span id="cb95-21"><a href="ch10.html#cb95-21" tabindex="-1"></a><span class="do">## scale range (`geom_line()`).</span></span></code></pre></div>
+<span id="cb95-18"><a href="ch10.html#cb95-18" tabindex="-1"></a><span class="do">## Call `lifecycle::last_lifecycle_warnings()` to see where this warning</span></span>
+<span id="cb95-19"><a href="ch10.html#cb95-19" tabindex="-1"></a><span class="do">## was generated.</span></span>
+<span id="cb95-20"><a href="ch10.html#cb95-20" tabindex="-1"></a><span class="do">## Warning: Removed 2 rows containing missing values or values outside the scale</span></span>
+<span id="cb95-21"><a href="ch10.html#cb95-21" tabindex="-1"></a><span class="do">## range (`geom_line()`).</span></span></code></pre></div>
 <p><img src="_main_files/figure-html/unnamed-chunk-95-1.png" width="672" /></p>
 </div>
 <div id="図10-7-実質gdp-公表季調値" class="section level2 unnumbered hasAnchor">
@@ -581,8 +584,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb99-26"><a href="ch10.html#cb99-26" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> inflation)) <span class="sc">+</span></span>
 <span id="cb99-27"><a href="ch10.html#cb99-27" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span></span>
 <span id="cb99-28"><a href="ch10.html#cb99-28" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;年&quot;</span>, <span class="at">y =</span> <span class="st">&quot;インフレ率 (%)&quot;</span>)</span>
-<span id="cb99-29"><a href="ch10.html#cb99-29" tabindex="-1"></a><span class="do">## Warning: Removed 1 row containing missing values or values outside the</span></span>
-<span id="cb99-30"><a href="ch10.html#cb99-30" tabindex="-1"></a><span class="do">## scale range (`geom_line()`).</span></span></code></pre></div>
+<span id="cb99-29"><a href="ch10.html#cb99-29" tabindex="-1"></a><span class="do">## Warning: Removed 1 row containing missing values or values outside the scale</span></span>
+<span id="cb99-30"><a href="ch10.html#cb99-30" tabindex="-1"></a><span class="do">## range (`geom_line()`).</span></span></code></pre></div>
 <p><img src="_main_files/figure-html/unnamed-chunk-99-1.png" width="672" /></p>
 </div>
 <div id="figure10-9" class="section level2 unnumbered hasAnchor">
@@ -1347,8 +1350,8 @@ ADLモデルはRでは<code>dynlm::dynlm()</code>を用いることで推定で�
 <span id="cb121-3"><a href="ch10.html#cb121-3" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Date, <span class="at">y =</span> return_topix)) <span class="sc">+</span></span>
 <span id="cb121-4"><a href="ch10.html#cb121-4" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span></span>
 <span id="cb121-5"><a href="ch10.html#cb121-5" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;年&quot;</span>, <span class="at">y =</span> <span class="st">&quot;&quot;</span>)</span></code></pre></div>
-<pre><code>## Warning: Removed 1 row containing missing values or values outside the
-## scale range (`geom_line()`).</code></pre>
+<pre><code>## Warning: Removed 1 row containing missing values or values outside the scale
+## range (`geom_line()`).</code></pre>
 <p><img src="_main_files/figure-html/unnamed-chunk-114-1.png" width="672" /></p>
 </div>
 <div id="ex10.7" class="section level2 unnumbered hasAnchor">

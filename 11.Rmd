@@ -29,9 +29,9 @@ library(tidyverse)
 library(readxl)
 library(estatapi)
 library(hpfilter)
-library(fredr)
 library(urca)
 library(tsm)
+library(fredr)
 ```
 
 ## (11.3) 式 {#exp11.3 .unnumbered}
@@ -189,30 +189,19 @@ lm(GDP ~ trend + GDP_lag, data = ex11.1_data_3) %>% summary()
 
 ## 実証例11.2 為替レートの単位根検定 {-}
 
-ここでは, [FRED, St. Louis Fed](https://fred.stlouisfed.org/)からデータを取得することにする.
-Rでは`fredr`というパッケージによるAPI実装があり, これを使うと簡単にデータをダウンロードすることができる.
-API利用には事前に登録とAPIキーの取得が必要で, 取得したAPIキーは`fred_APIkey.txt`に保存しておく.
+データはエクセルファイルに収録されているようだが, ところどころNAとなっている箇所がある.
+NAになっている日については, ここでは単純に前日の値を用いることにする.
+```{r}
+JapanIntervention1991_2004 <- read_excel("data/11_第11章/JapanIntervention1991-2004.xls", sheet = "YenDollar")
+data_ex11.2 <- JapanIntervention1991_2004[3:3047, ]
+data_ex11.2 <- data_ex11.2 %>% mutate(date = mdy(Date)) %>%
+    data.frame() %>%
+    mutate(rate_NY = as.numeric(Yen.Dollar.Rate)) %>%
+    dplyr::select(date, rate_NY, Interventions) %>%
+    fill(rate_NY, .direction = "down")
+data_ex11.2 <- data_ex11.2 %>% mutate(S = log(rate_NY) * 100,
+             trend = 1:dim(data_ex11.2)[1])
 
-```{r collapse=T, message=FALSE}
-# APIキーを読み込む
-fred_APIkey <- scan("fred_APIkey.txt", what = "character")
-# 読み込んだAPIキーをセット
-fredr_set_key(fred_APIkey)
-```
-
-```{r collapse=T, message=FALSE}
-# データ取得
-DEXJPUS <- fredr(
-  series_id = "DEXJPUS",
-  observation_start = as.Date("1991-04-01"),
-  observation_end = as.Date("2002-12-31")
-)
-```
-
-```{r collapse=T, message=FALSE}
-data_ex11.2 <- DEXJPUS %>%
-    mutate(S = log(value) * 100) %>%
-    mutate(trend = 1:dim(DEXJPUS)[1])
 lm(S - lag(S) ~ 0 + lag(S), data = data_ex11.2) %>% summary()
 lm(S - lag(S) ~ lag(S), data = data_ex11.2) %>% summary()
 lm(S - lag(S) ~ trend + lag(S), data = data_ex11.2) %>% summary()
@@ -220,8 +209,8 @@ lm(S - lag(S) ~ trend + lag(S), data = data_ex11.2) %>% summary()
 
 ## 図11-6 円ドルレート {-}
 ```{r collapse=T, message=FALSE}
-DEXJPUS %>%
-    ggplot(aes(x = date, y = value)) +
+data_ex11.2 %>%
+    ggplot(aes(x = date, y = rate_NY)) +
     geom_line() +
     labs(x = "年", y = "")
 ```
@@ -280,6 +269,74 @@ data_fig11_8 %>%
     scale_color_hue(name = element_blank(), labels = c("トレンド成分 (トレンド・インフレ率)", "インフレ率")) +
     labs(x = element_blank(), y = element_blank()) +
     theme(legend.position = c(0, 1), legend.justification = c(0, 1))
+```
+
+## 実証例11.5 水準シフト型のトレンド・インフレ率推定と構造変化検定 {-}
+
+構造変化点$T^*$が未知の場合に行う単位根検定であるZivot=Andrews検定はRでは`urca::ur.za()`に実装されているが, この関数は$F$検定ではなく$t$検定を行うようだ.
+ここでは代わりに, $\text{int}[\pi_0\times T] \geq T^* \geq \text{int}[(1 - \pi_0)\times T]$の範囲の各$T^*$についてforループで$F$統計量を計算することにする.
+なお, $q = 1$の場合, 上限$F$統計量と上限ワルド統計量は一致するので, 後者は省略する.
+```{r collapse=T, message=FALSE}
+data_ex11.5 <- data_ex11.4 %>%
+    data.frame() %>%
+    dplyr::select(trend) %>%
+    cbind(data_ex11.3$year) %>%
+    rename("year" = `data_ex11.3$year`)
+# それぞれのT^*についてRSS(T^*)とF(T^*)の値を保存するための列を作っておく.
+data_ex11.5 <- data_ex11.5 %>%
+    mutate(t = 1:dim(data_ex11.5)[1], # 行番号
+           RSS_T_star = rep(NA, dim(data_ex11.5)[1]),
+           FT_star = rep(NA, dim(data_ex11.5)[1]))
+
+# パラメータ
+T <- dim(data_ex11.5)[1]
+pi_0 <- 0.05
+q <- 1
+
+RSS_R <- lm(trend ~ 1, data = data_ex11.5)$residuals^2 %>% sum()
+for (T_star in floor(pi_0 * T):floor((1 - pi_0) * T)) {
+    # 構造変化前後を示すダミー変数を作成
+    data_ex11.5_temp <- data_ex11.5 %>%
+        mutate(dummy = t < T_star)
+    data_ex11.5$RSS_T_star[T_star] <- lm(trend ~ dummy, data = data_ex11.5_temp)$residuals^2 %>% sum()
+    data_ex11.5$FT_star[T_star] <- ((RSS_R - data_ex11.5$RSS_T_star[T_star]) / q) / (data_ex11.5$RSS_T_star[T_star] / (T - 2 * q))
+}
+
+# 構造変化点を表示
+data_ex11.5 %>%
+    filter(FT_star == max(FT_star, na.rm = TRUE))
+# 構造変化前後のトレンド・インフレ率の推定値を表示
+data_ex11.5 <- data_ex11.5 %>%
+    mutate(after_structural_break = t >= 131)
+data_ex11.5 %>%
+    group_by(after_structural_break) %>%
+    summarise(across(trend, ~ mean(. , na.rm = TRUE)))
+```
+
+分析の結果, 1981年11月に上限ワルド統計量$F(T^*) = 860.5861$が得られたことがわかった.
+また, 構造変化前のトレンド・インフレ率は8.32%, 構造変化後は0.730%だった.
+
+## 図11-9 トレンド・インフレ率水準の構造変化 (ワルド統計量) {-}
+```{r}
+data_ex11.5 %>%
+    ggplot(aes(x = year, y = FT_star)) +
+    geom_line()
+```
+
+## 図11-10 水準シフト型トレンド・インフレ率 {-}
+```{r}
+# 手動描画用に推定値を保存しておく.
+y_max_min <- data_ex11.5 %>%
+    group_by(after_structural_break) %>%
+    summarise(across(trend, ~ mean(. , na.rm = TRUE))) %>%
+    dplyr::select(trend) %>%
+    pull()
+
+data_ex11.5 %>%
+    ggplot(aes(x = year, y = trend, group = after_structural_break)) +
+    geom_line(color = "skyblue", linewidth = 1) +
+    geom_smooth(method = "lm", formula = y ~ 1, se = FALSE, color = "black", linewidth = 0.5) +
+    geom_linerange(aes(x = ym(198111), ymax = y_max_min[1], ymin = y_max_min[2]), color = "black", linewidth = 0.5)
 ```
 
 <!-- ## 練習問題 11-1 [確認] {-}
