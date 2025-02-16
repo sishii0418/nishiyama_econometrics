@@ -23,7 +23,7 @@
 <meta name="author" content="石井 俊輔" />
 
 
-<meta name="date" content="2025-02-15" />
+<meta name="date" content="2025-02-16" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -295,6 +295,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="ch11.html"><a href="ch11.html#実証例11.5-水準シフト型のトレンドインフレ率推定と構造変化検定"><i class="fa fa-check"></i>実証例11.5 水準シフト型のトレンド・インフレ率推定と構造変化検定</a></li>
 <li class="chapter" data-level="" data-path="ch11.html"><a href="ch11.html#図11-9-トレンドインフレ率水準の構造変化-ワルド統計量"><i class="fa fa-check"></i>図11-9 トレンド・インフレ率水準の構造変化 (ワルド統計量)</a></li>
 <li class="chapter" data-level="" data-path="ch11.html"><a href="ch11.html#図11-10-水準シフト型トレンドインフレ率"><i class="fa fa-check"></i>図11-10 水準シフト型トレンド・インフレ率</a></li>
+<li class="chapter" data-level="" data-path="ch11.html"><a href="ch11.html#練習問題-11-8-実証"><i class="fa fa-check"></i>練習問題 11-8 [実証]</a></li>
+<li class="chapter" data-level="" data-path="ch11.html"><a href="ch11.html#練習問題-11-9-実証"><i class="fa fa-check"></i>練習問題 11-9 [実証]</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="ch12.html"><a href="ch12.html"><i class="fa fa-check"></i>第12章 VARモデル</a></li>
 <li class="divider"></li>
@@ -346,7 +348,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb138-4"><a href="ch11.html#cb138-4" tabindex="-1"></a><span class="fu">library</span>(hpfilter)</span>
 <span id="cb138-5"><a href="ch11.html#cb138-5" tabindex="-1"></a><span class="fu">library</span>(urca)</span>
 <span id="cb138-6"><a href="ch11.html#cb138-6" tabindex="-1"></a><span class="fu">library</span>(tsm)</span>
-<span id="cb138-7"><a href="ch11.html#cb138-7" tabindex="-1"></a><span class="fu">library</span>(fredr)</span></code></pre></div>
+<span id="cb138-7"><a href="ch11.html#cb138-7" tabindex="-1"></a><span class="fu">library</span>(fredr)</span>
+<span id="cb138-8"><a href="ch11.html#cb138-8" tabindex="-1"></a><span class="fu">library</span>(modelsummary)</span></code></pre></div>
 <div id="exp11.3" class="section level2 unnumbered hasAnchor">
 <h2>(11.3) 式<a href="ch11.html#exp11.3" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>データは前章<a href="ch10.html#figure10-3">図10-3</a>図10-3で用いたものを使う.
@@ -982,11 +985,501 @@ ADF検定は, Rでは<code>urca</code>パッケージの<code>ur.df()</code>と�
 
 ## 練習問題 11-6 [発展] {-}
 
-## 練習問題 11-7 [発展] {-}
+## 練習問題 11-7 [発展] {-} -->
+</div>
+<div id="練習問題-11-8-実証" class="section level2 unnumbered hasAnchor">
+<h2>練習問題 11-8 [実証]<a href="ch11.html#練習問題-11-8-実証" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>データを読み込む.</p>
+<div class="sourceCode" id="cb191"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb191-1"><a href="ch11.html#cb191-1" tabindex="-1"></a>USlogRealGDP <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">&quot;data/11_第11章/USlogRealGDP.xls&quot;</span>, <span class="at">sheet =</span> <span class="st">&quot;logRealGDP&quot;</span>, <span class="at">col_names =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<pre><code>## New names:
+## • `` -&gt; `...1`
+## • `` -&gt; `...2`</code></pre>
+<div class="sourceCode" id="cb193"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb193-1"><a href="ch11.html#cb193-1" tabindex="-1"></a>data_practice11<span class="fl">.8</span> <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(USlogRealGDP) <span class="sc">%&gt;%</span></span>
+<span id="cb193-2"><a href="ch11.html#cb193-2" tabindex="-1"></a>    <span class="fu">rename</span>(<span class="st">&quot;year_quarter&quot;</span> <span class="ot">=</span> ...<span class="dv">1</span>, <span class="st">&quot;logRealGDP&quot;</span> <span class="ot">=</span> ...<span class="dv">2</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb193-3"><a href="ch11.html#cb193-3" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">year_quarter =</span> <span class="fu">yq</span>(year_quarter),</span>
+<span id="cb193-4"><a href="ch11.html#cb193-4" tabindex="-1"></a>           <span class="at">logRealGDP =</span> <span class="fu">as.numeric</span>(logRealGDP)) <span class="sc">%&gt;%</span></span>
+<span id="cb193-5"><a href="ch11.html#cb193-5" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">trend =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">dim</span>(USlogRealGDP)[<span class="dv">1</span>])</span></code></pre></div>
+<pre><code>## Warning: There was 1 warning in `mutate()`.
+## ℹ In argument: `year_quarter = yq(year_quarter)`.
+## Caused by warning:
+## !  1 failed to parse.</code></pre>
+<div class="sourceCode" id="cb195"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb195-1"><a href="ch11.html#cb195-1" tabindex="-1"></a>data_practice11<span class="fl">.8</span>[<span class="dv">120</span>, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">yq</span>(<span class="st">&quot;1976Q4&quot;</span>) <span class="co"># 誤植によりyq()でパースできなかった箇所を直す</span></span></code></pre></div>
+<p>線形トレンドの推定.</p>
+<div class="sourceCode" id="cb196"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb196-1"><a href="ch11.html#cb196-1" tabindex="-1"></a>data_practice11<span class="fl">.8</span>_linear <span class="ot">&lt;-</span> <span class="fu">lm</span>(logRealGDP <span class="sc">~</span> trend, <span class="at">data =</span> data_practice11<span class="fl">.8</span>)</span>
+<span id="cb196-2"><a href="ch11.html#cb196-2" tabindex="-1"></a><span class="fu">summary</span>(data_practice11<span class="fl">.8</span>_linear)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = logRealGDP ~ trend, data = data_practice11.8)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -15.731  -5.130   2.577   5.267   9.990 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 7.713e+02  7.968e-01   968.0   &lt;2e-16 ***
+## trend       7.883e-01  4.763e-03   165.5   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 6.755 on 287 degrees of freedom
+## Multiple R-squared:  0.9896, Adjusted R-squared:  0.9896 
+## F-statistic: 2.739e+04 on 1 and 287 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>HPフィルターによる推定. ここで用いるデータは四半期データなので, <span class="math inline">\(\lambda = 1600\)</span>を用いる.</p>
+<div class="sourceCode" id="cb198"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb198-1"><a href="ch11.html#cb198-1" tabindex="-1"></a>data_practice11<span class="fl">.8</span>_hp <span class="ot">&lt;-</span> data_practice11<span class="fl">.8</span> <span class="sc">%&gt;%</span></span>
+<span id="cb198-2"><a href="ch11.html#cb198-2" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">select</span>(logRealGDP) <span class="sc">%&gt;%</span></span>
+<span id="cb198-3"><a href="ch11.html#cb198-3" tabindex="-1"></a>    <span class="fu">hp1</span>(<span class="at">lambda =</span> <span class="dv">1600</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb198-4"><a href="ch11.html#cb198-4" tabindex="-1"></a>    <span class="fu">rename</span>(<span class="st">&quot;hp&quot;</span> <span class="ot">=</span> logRealGDP)</span></code></pre></div>
+<p>推定結果をデータフレームに格納して, ggplotでグラフを描画する.</p>
+<div class="sourceCode" id="cb199"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb199-1"><a href="ch11.html#cb199-1" tabindex="-1"></a>data_practice11<span class="fl">.8</span> <span class="ot">&lt;-</span> data_practice11<span class="fl">.8</span> <span class="sc">%&gt;%</span></span>
+<span id="cb199-2"><a href="ch11.html#cb199-2" tabindex="-1"></a>                        <span class="fu">cbind</span>(data_practice11<span class="fl">.8</span>_hp) <span class="sc">%&gt;%</span></span>
+<span id="cb199-3"><a href="ch11.html#cb199-3" tabindex="-1"></a>                        <span class="fu">cbind</span>(<span class="fu">data.frame</span>(<span class="at">linear_trend =</span> data_practice11<span class="fl">.8</span>_linear<span class="sc">$</span>fitted.values))</span>
+<span id="cb199-4"><a href="ch11.html#cb199-4" tabindex="-1"></a></span>
+<span id="cb199-5"><a href="ch11.html#cb199-5" tabindex="-1"></a>data_practice11<span class="fl">.8</span> <span class="sc">%&gt;%</span></span>
+<span id="cb199-6"><a href="ch11.html#cb199-6" tabindex="-1"></a>    <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(<span class="st">&quot;logRealGDP&quot;</span>, <span class="st">&quot;linear_trend&quot;</span>, <span class="st">&quot;hp&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb199-7"><a href="ch11.html#cb199-7" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> year_quarter, <span class="at">y =</span> value, <span class="at">color =</span> name, <span class="at">linetype =</span> name)) <span class="sc">+</span></span>
+<span id="cb199-8"><a href="ch11.html#cb199-8" tabindex="-1"></a>    <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> year_quarter, <span class="at">y =</span> value, <span class="at">color =</span> name)) <span class="sc">+</span></span>
+<span id="cb199-9"><a href="ch11.html#cb199-9" tabindex="-1"></a>    <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;blue&quot;</span>, <span class="st">&quot;black&quot;</span>),</span>
+<span id="cb199-10"><a href="ch11.html#cb199-10" tabindex="-1"></a>                       <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;HPフィルター (λ = 1600)&quot;</span>, <span class="st">&quot;線形トレンド&quot;</span>, <span class="st">&quot;対数実質GDP&quot;</span>),</span>
+<span id="cb199-11"><a href="ch11.html#cb199-11" tabindex="-1"></a>                       <span class="at">name =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
+<span id="cb199-12"><a href="ch11.html#cb199-12" tabindex="-1"></a>    <span class="fu">scale_linetype_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;longdash&quot;</span>, <span class="st">&quot;longdash&quot;</span>, <span class="st">&quot;solid&quot;</span>),</span>
+<span id="cb199-13"><a href="ch11.html#cb199-13" tabindex="-1"></a>                          <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;HPフィルター (λ = 1600)&quot;</span>, <span class="st">&quot;線形トレンド&quot;</span>, <span class="st">&quot;対数実質GDP&quot;</span>),</span>
+<span id="cb199-14"><a href="ch11.html#cb199-14" tabindex="-1"></a>                          <span class="at">name =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
+<span id="cb199-15"><a href="ch11.html#cb199-15" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;年&quot;</span>, <span class="at">y =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
+<span id="cb199-16"><a href="ch11.html#cb199-16" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">legend.justification =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>))</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-142-1.png" width="672" /></p>
+<p>GDPギャップ推定値の比較もグラフに描画する.</p>
+<div class="sourceCode" id="cb200"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb200-1"><a href="ch11.html#cb200-1" tabindex="-1"></a>data_practice11<span class="fl">.8</span> <span class="sc">%&gt;%</span></span>
+<span id="cb200-2"><a href="ch11.html#cb200-2" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">gap_hp =</span> hp <span class="sc">-</span> logRealGDP,</span>
+<span id="cb200-3"><a href="ch11.html#cb200-3" tabindex="-1"></a>           <span class="at">gap_linear_trend =</span> linear_trend <span class="sc">-</span> logRealGDP) <span class="sc">%&gt;%</span></span>
+<span id="cb200-4"><a href="ch11.html#cb200-4" tabindex="-1"></a>    <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(<span class="st">&quot;gap_linear_trend&quot;</span>, <span class="st">&quot;gap_hp&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb200-5"><a href="ch11.html#cb200-5" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> year_quarter, <span class="at">y =</span> value, <span class="at">color =</span> name)) <span class="sc">+</span></span>
+<span id="cb200-6"><a href="ch11.html#cb200-6" tabindex="-1"></a>    <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> year_quarter, <span class="at">y =</span> value, <span class="at">color =</span> name)) <span class="sc">+</span></span>
+<span id="cb200-7"><a href="ch11.html#cb200-7" tabindex="-1"></a>    <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;blue&quot;</span>),</span>
+<span id="cb200-8"><a href="ch11.html#cb200-8" tabindex="-1"></a>                       <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;HPフィルター (λ = 1600)&quot;</span>, <span class="st">&quot;線形トレンド&quot;</span>),</span>
+<span id="cb200-9"><a href="ch11.html#cb200-9" tabindex="-1"></a>                       <span class="at">name =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
+<span id="cb200-10"><a href="ch11.html#cb200-10" tabindex="-1"></a>    <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
+<span id="cb200-11"><a href="ch11.html#cb200-11" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;年&quot;</span>, <span class="at">y =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
+<span id="cb200-12"><a href="ch11.html#cb200-12" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">legend.justification =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>))</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-143-1.png" width="672" /></p>
+</div>
+<div id="練習問題-11-9-実証" class="section level2 unnumbered hasAnchor">
+<h2>練習問題 11-9 [実証]<a href="ch11.html#練習問題-11-9-実証" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>データを読み込む.
+ここでは, HadCRUT3データの全球平均値を分析することにする.</p>
+<div class="sourceCode" id="cb201"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb201-1"><a href="ch11.html#cb201-1" tabindex="-1"></a>globaltemperature <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">&quot;data/11_第11章/globaltemparature.xlsx&quot;</span>, <span class="at">sheet =</span> <span class="st">&quot;data&quot;</span>)</span></code></pre></div>
+<pre><code>## New names:
+## • `` -&gt; `...1`
+## • `` -&gt; `...3`
+## • `` -&gt; `...4`
+## • `` -&gt; `...5`
+## • `` -&gt; `...6`
+## • `` -&gt; `...7`
+## • `` -&gt; `...8`
+## • `` -&gt; `...9`
+## • `` -&gt; `...10`
+## • `` -&gt; `...12`
+## • `` -&gt; `...13`
+## • `` -&gt; `...14`
+## • `` -&gt; `...15`
+## • `` -&gt; `...16`</code></pre>
+<div class="sourceCode" id="cb203"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb203-1"><a href="ch11.html#cb203-1" tabindex="-1"></a>data_practice11<span class="fl">.9</span> <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(globaltemperature[<span class="dv">3</span><span class="sc">:</span><span class="dv">166</span>, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>)]) <span class="sc">%&gt;%</span></span>
+<span id="cb203-2"><a href="ch11.html#cb203-2" tabindex="-1"></a>    <span class="fu">rename</span>(<span class="st">&quot;year&quot;</span> <span class="ot">=</span> ...<span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb203-3"><a href="ch11.html#cb203-3" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">Unfiltered =</span> <span class="fu">as.numeric</span>(Unfiltered),</span>
+<span id="cb203-4"><a href="ch11.html#cb203-4" tabindex="-1"></a>           <span class="at">year =</span> <span class="fu">as.numeric</span>(year))</span>
+<span id="cb203-5"><a href="ch11.html#cb203-5" tabindex="-1"></a>data_practice11<span class="fl">.9</span> <span class="ot">&lt;-</span> data_practice11<span class="fl">.9</span> <span class="sc">%&gt;%</span></span>
+<span id="cb203-6"><a href="ch11.html#cb203-6" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">trend =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">dim</span>(data_practice11<span class="fl">.9</span>)[<span class="dv">1</span>])</span></code></pre></div>
+<p>データをプロットする.</p>
+<div class="sourceCode" id="cb204"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb204-1"><a href="ch11.html#cb204-1" tabindex="-1"></a>data_practice11<span class="fl">.9</span> <span class="sc">%&gt;%</span></span>
+<span id="cb204-2"><a href="ch11.html#cb204-2" tabindex="-1"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb204-3"><a href="ch11.html#cb204-3" tabindex="-1"></a>    <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> Unfiltered))</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-145-1.png" width="672" /></p>
+<p>まずは<a href="#ex11.2">実証例11.2</a>で見たように, ディッキー=フラー検定を行う.</p>
+<div class="sourceCode" id="cb205"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb205-1"><a href="ch11.html#cb205-1" tabindex="-1"></a>practice11<span class="fl">.9</span>_lm_none <span class="ot">&lt;-</span> <span class="fu">lm</span>(Unfiltered <span class="sc">-</span> <span class="fu">lag</span>(Unfiltered) <span class="sc">~</span> <span class="dv">0</span> <span class="sc">+</span> <span class="fu">lag</span>(Unfiltered), <span class="at">data =</span> data_practice11<span class="fl">.9</span>)</span>
+<span id="cb205-2"><a href="ch11.html#cb205-2" tabindex="-1"></a>practice11<span class="fl">.9</span>_lm_drift <span class="ot">&lt;-</span> <span class="fu">lm</span>(Unfiltered <span class="sc">-</span> <span class="fu">lag</span>(Unfiltered) <span class="sc">~</span> <span class="fu">lag</span>(Unfiltered), <span class="at">data =</span> data_practice11<span class="fl">.9</span>)</span>
+<span id="cb205-3"><a href="ch11.html#cb205-3" tabindex="-1"></a>practice11<span class="fl">.9</span>_lm_trend <span class="ot">&lt;-</span> <span class="fu">lm</span>(Unfiltered <span class="sc">-</span> <span class="fu">lag</span>(Unfiltered) <span class="sc">~</span> trend <span class="sc">+</span> <span class="fu">lag</span>(Unfiltered), <span class="at">data =</span> data_practice11<span class="fl">.9</span>)</span>
+<span id="cb205-4"><a href="ch11.html#cb205-4" tabindex="-1"></a>models <span class="ot">=</span> <span class="fu">list</span>(<span class="st">&quot;None&quot;</span> <span class="ot">=</span> practice11<span class="fl">.9</span>_lm_none,</span>
+<span id="cb205-5"><a href="ch11.html#cb205-5" tabindex="-1"></a>              <span class="st">&quot;Drift&quot;</span> <span class="ot">=</span> practice11<span class="fl">.9</span>_lm_drift,</span>
+<span id="cb205-6"><a href="ch11.html#cb205-6" tabindex="-1"></a>              <span class="st">&quot;Trend&quot;</span> <span class="ot">=</span> practice11<span class="fl">.9</span>_lm_trend)</span>
+<span id="cb205-7"><a href="ch11.html#cb205-7" tabindex="-1"></a><span class="fu">modelsummary</span>(models, <span class="at">statistic =</span> <span class="st">&quot;statistic&quot;</span>, <span class="at">notes =</span> <span class="st">&quot;括弧内はt統計量&quot;</span>)</span></code></pre></div>
+<!-- preamble start -->
 
-## 練習問題 11-8 [実証] {-}
+    <script>
+      function styleCell_bthojreipx6hxyeam7ro(i, j, css_id) {
+        var table = document.getElementById("tinytable_bthojreipx6hxyeam7ro");
+        table.rows[i].cells[j].classList.add(css_id);
+      }
+      function insertSpanRow(i, colspan, content) {
+        var table = document.getElementById('tinytable_bthojreipx6hxyeam7ro');
+        var newRow = table.insertRow(i);
+        var newCell = newRow.insertCell(0);
+        newCell.setAttribute("colspan", colspan);
+        // newCell.innerText = content;
+        // this may be unsafe, but innerText does not interpret <br>
+        newCell.innerHTML = content;
+      }
+      function spanCell_bthojreipx6hxyeam7ro(i, j, rowspan, colspan) {
+        var table = document.getElementById("tinytable_bthojreipx6hxyeam7ro");
+        const targetRow = table.rows[i];
+        const targetCell = targetRow.cells[j];
+        for (let r = 0; r < rowspan; r++) {
+          // Only start deleting cells to the right for the first row (r == 0)
+          if (r === 0) {
+            // Delete cells to the right of the target cell in the first row
+            for (let c = colspan - 1; c > 0; c--) {
+              if (table.rows[i + r].cells[j + c]) {
+                table.rows[i + r].deleteCell(j + c);
+              }
+            }
+          }
+          // For rows below the first, delete starting from the target column
+          if (r > 0) {
+            for (let c = colspan - 1; c >= 0; c--) {
+              if (table.rows[i + r] && table.rows[i + r].cells[j]) {
+                table.rows[i + r].deleteCell(j);
+              }
+            }
+          }
+        }
+        // Set rowspan and colspan of the target cell
+        targetCell.rowSpan = rowspan;
+        targetCell.colSpan = colspan;
+      }
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(0, 0, 'tinytable_css_id7ka512d5x6f03rwzvoi9') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(0, 1, 'tinytable_css_id3i6aiilraoipa9z7h1z3') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(0, 2, 'tinytable_css_id3i6aiilraoipa9z7h1z3') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(0, 3, 'tinytable_css_id3i6aiilraoipa9z7h1z3') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(1, 0, 'tinytable_css_idlosgql9buga13ua2zwzh') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(1, 1, 'tinytable_css_id0lz3tkpmqz3yo4j5imtz') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(1, 2, 'tinytable_css_id0lz3tkpmqz3yo4j5imtz') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(1, 3, 'tinytable_css_id0lz3tkpmqz3yo4j5imtz') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(2, 0, 'tinytable_css_idlosgql9buga13ua2zwzh') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(2, 1, 'tinytable_css_id0lz3tkpmqz3yo4j5imtz') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(2, 2, 'tinytable_css_id0lz3tkpmqz3yo4j5imtz') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(2, 3, 'tinytable_css_id0lz3tkpmqz3yo4j5imtz') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(3, 0, 'tinytable_css_idlosgql9buga13ua2zwzh') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(3, 1, 'tinytable_css_id0lz3tkpmqz3yo4j5imtz') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(3, 2, 'tinytable_css_id0lz3tkpmqz3yo4j5imtz') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(3, 3, 'tinytable_css_id0lz3tkpmqz3yo4j5imtz') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(4, 0, 'tinytable_css_idlosgql9buga13ua2zwzh') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(4, 1, 'tinytable_css_id0lz3tkpmqz3yo4j5imtz') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(4, 2, 'tinytable_css_id0lz3tkpmqz3yo4j5imtz') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(4, 3, 'tinytable_css_id0lz3tkpmqz3yo4j5imtz') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(5, 0, 'tinytable_css_idlosgql9buga13ua2zwzh') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(5, 1, 'tinytable_css_id0lz3tkpmqz3yo4j5imtz') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(5, 2, 'tinytable_css_id0lz3tkpmqz3yo4j5imtz') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(5, 3, 'tinytable_css_id0lz3tkpmqz3yo4j5imtz') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(6, 0, 'tinytable_css_idpcyee62w6bcg2i9jwupn') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(6, 1, 'tinytable_css_iddhn3kpneaqqa8rj1gn12') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(6, 2, 'tinytable_css_iddhn3kpneaqqa8rj1gn12') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(6, 3, 'tinytable_css_iddhn3kpneaqqa8rj1gn12') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(7, 0, 'tinytable_css_idlosgql9buga13ua2zwzh') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(7, 1, 'tinytable_css_id0lz3tkpmqz3yo4j5imtz') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(7, 2, 'tinytable_css_id0lz3tkpmqz3yo4j5imtz') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(7, 3, 'tinytable_css_id0lz3tkpmqz3yo4j5imtz') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(8, 0, 'tinytable_css_idlosgql9buga13ua2zwzh') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(8, 1, 'tinytable_css_id0lz3tkpmqz3yo4j5imtz') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(8, 2, 'tinytable_css_id0lz3tkpmqz3yo4j5imtz') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(8, 3, 'tinytable_css_id0lz3tkpmqz3yo4j5imtz') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(9, 0, 'tinytable_css_idlosgql9buga13ua2zwzh') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(9, 1, 'tinytable_css_id0lz3tkpmqz3yo4j5imtz') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(9, 2, 'tinytable_css_id0lz3tkpmqz3yo4j5imtz') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(9, 3, 'tinytable_css_id0lz3tkpmqz3yo4j5imtz') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(10, 0, 'tinytable_css_idlosgql9buga13ua2zwzh') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(10, 1, 'tinytable_css_id0lz3tkpmqz3yo4j5imtz') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(10, 2, 'tinytable_css_id0lz3tkpmqz3yo4j5imtz') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(10, 3, 'tinytable_css_id0lz3tkpmqz3yo4j5imtz') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(11, 0, 'tinytable_css_idlosgql9buga13ua2zwzh') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(11, 1, 'tinytable_css_id0lz3tkpmqz3yo4j5imtz') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(11, 2, 'tinytable_css_id0lz3tkpmqz3yo4j5imtz') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(11, 3, 'tinytable_css_id0lz3tkpmqz3yo4j5imtz') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(12, 0, 'tinytable_css_idlosgql9buga13ua2zwzh') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(12, 1, 'tinytable_css_id0lz3tkpmqz3yo4j5imtz') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(12, 2, 'tinytable_css_id0lz3tkpmqz3yo4j5imtz') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(12, 3, 'tinytable_css_id0lz3tkpmqz3yo4j5imtz') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(13, 0, 'tinytable_css_idlosgql9buga13ua2zwzh') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(13, 1, 'tinytable_css_id0lz3tkpmqz3yo4j5imtz') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(13, 2, 'tinytable_css_id0lz3tkpmqz3yo4j5imtz') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(13, 3, 'tinytable_css_id0lz3tkpmqz3yo4j5imtz') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(14, 0, 'tinytable_css_idlosgql9buga13ua2zwzh') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(14, 1, 'tinytable_css_id0lz3tkpmqz3yo4j5imtz') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(14, 2, 'tinytable_css_id0lz3tkpmqz3yo4j5imtz') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(14, 3, 'tinytable_css_id0lz3tkpmqz3yo4j5imtz') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(15, 0, 'tinytable_css_idlosgql9buga13ua2zwzh') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(15, 1, 'tinytable_css_id0lz3tkpmqz3yo4j5imtz') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(15, 2, 'tinytable_css_id0lz3tkpmqz3yo4j5imtz') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(15, 3, 'tinytable_css_id0lz3tkpmqz3yo4j5imtz') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(16, 0, 'tinytable_css_idlosgql9buga13ua2zwzh') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(16, 1, 'tinytable_css_idlosgql9buga13ua2zwzh') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(16, 2, 'tinytable_css_idlosgql9buga13ua2zwzh') })
+window.addEventListener('load', function () { styleCell_bthojreipx6hxyeam7ro(16, 3, 'tinytable_css_idlosgql9buga13ua2zwzh') })
+    </script>
 
-## 練習問題 11-9 [実証] {-} -->
+    <style>
+    .table td.tinytable_css_id7ka512d5x6f03rwzvoi9, .table th.tinytable_css_id7ka512d5x6f03rwzvoi9 {  text-align: left;  border-bottom: solid 0.1em #d3d8dc; }
+    .table td.tinytable_css_id3i6aiilraoipa9z7h1z3, .table th.tinytable_css_id3i6aiilraoipa9z7h1z3 {  text-align: center;  border-bottom: solid 0.1em #d3d8dc; }
+    .table td.tinytable_css_idlosgql9buga13ua2zwzh, .table th.tinytable_css_idlosgql9buga13ua2zwzh {  text-align: left; }
+    .table td.tinytable_css_id0lz3tkpmqz3yo4j5imtz, .table th.tinytable_css_id0lz3tkpmqz3yo4j5imtz {  text-align: center; }
+    .table td.tinytable_css_idpcyee62w6bcg2i9jwupn, .table th.tinytable_css_idpcyee62w6bcg2i9jwupn {  border-bottom: solid 0.05em black;  text-align: left; }
+    .table td.tinytable_css_iddhn3kpneaqqa8rj1gn12, .table th.tinytable_css_iddhn3kpneaqqa8rj1gn12 {  border-bottom: solid 0.05em black;  text-align: center; }
+    </style>
+    <div class="container">
+      <table class="table table-borderless" id="tinytable_bthojreipx6hxyeam7ro" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing='true'>
+        <thead>
+        
+              <tr>
+                <th scope="col"> </th>
+                <th scope="col">None</th>
+                <th scope="col">Drift</th>
+                <th scope="col">Trend</th>
+              </tr>
+        </thead>
+        <tfoot><tr><td colspan='4'>括弧内はt統計量</td></tr></tfoot>
+        <tbody>
+                <tr>
+                  <td>lag(Unfiltered)</td>
+                  <td>-0.069  </td>
+                  <td>-0.081  </td>
+                  <td>-0.240  </td>
+                </tr>
+                <tr>
+                  <td>               </td>
+                  <td>(-2.380)</td>
+                  <td>(-2.398)</td>
+                  <td>(-4.605)</td>
+                </tr>
+                <tr>
+                  <td>(Intercept)    </td>
+                  <td>        </td>
+                  <td>-0.007  </td>
+                  <td>-0.124  </td>
+                </tr>
+                <tr>
+                  <td>               </td>
+                  <td>        </td>
+                  <td>(-0.681)</td>
+                  <td>(-3.923)</td>
+                </tr>
+                <tr>
+                  <td>trend          </td>
+                  <td>        </td>
+                  <td>        </td>
+                  <td>0.001   </td>
+                </tr>
+                <tr>
+                  <td>               </td>
+                  <td>        </td>
+                  <td>        </td>
+                  <td>(3.893) </td>
+                </tr>
+                <tr>
+                  <td>Num.Obs.       </td>
+                  <td>163     </td>
+                  <td>163     </td>
+                  <td>163     </td>
+                </tr>
+                <tr>
+                  <td>R2             </td>
+                  <td>0.034   </td>
+                  <td>0.034   </td>
+                  <td>0.118   </td>
+                </tr>
+                <tr>
+                  <td>R2 Adj.        </td>
+                  <td>0.028   </td>
+                  <td>0.028   </td>
+                  <td>0.107   </td>
+                </tr>
+                <tr>
+                  <td>AIC            </td>
+                  <td>-250.1  </td>
+                  <td>-248.6  </td>
+                  <td>-261.3  </td>
+                </tr>
+                <tr>
+                  <td>BIC            </td>
+                  <td>-243.9  </td>
+                  <td>-239.3  </td>
+                  <td>-249.0  </td>
+                </tr>
+                <tr>
+                  <td>Log.Lik.       </td>
+                  <td>127.065 </td>
+                  <td>127.300 </td>
+                  <td>134.675 </td>
+                </tr>
+                <tr>
+                  <td>F              </td>
+                  <td>        </td>
+                  <td>5.749   </td>
+                  <td>10.704  </td>
+                </tr>
+                <tr>
+                  <td>RMSE           </td>
+                  <td>0.11    </td>
+                  <td>0.11    </td>
+                  <td>0.11    </td>
+                </tr>
+                <tr>
+                  <td>nobs_zero      </td>
+                  <td>0       </td>
+                  <td>0       </td>
+                  <td>0       </td>
+                </tr>
+        </tbody>
+      </table>
+    </div>
+<!-- hack to avoid NA insertion in last line -->
+<p>定数項なしのモデルでは, 5%水準では単位根仮説を棄却できるが, 1%水準では棄却できない結果となった.
+定数項ありのモデルでは, 10%水準でも単位根仮説を棄却できない結果となった.
+一方で定数項・トレンドありのモデルでは, 1%水準で単位根仮説を棄却できる結果となった.</p>
+<p>定数項・トレンドありのモデルの推定結果をみると, 定数項・トレンドともに係数が有意であることから, 両者を含めたこのモデルが推定に適当と考えられる.
+この場合, 単位根仮説は棄却され, 確率トレンドが存在しないことが結論付けられる.</p>
+<p>続いて<a href="#ex11.3">実証例11.3</a>に倣って, ADF検定を行う.</p>
+<div class="sourceCode" id="cb206"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb206-1"><a href="ch11.html#cb206-1" tabindex="-1"></a><span class="fu">ur.df</span>(data_practice11<span class="fl">.9</span><span class="sc">$</span>Unfiltered, <span class="at">type =</span> <span class="st">&quot;none&quot;</span>) <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span></code></pre></div>
+<pre><code>## 
+## ############################################### 
+## # Augmented Dickey-Fuller Test Unit Root Test # 
+## ############################################### 
+## 
+## Test regression none 
+## 
+## 
+## Call:
+## lm(formula = z.diff ~ z.lag.1 - 1 + z.diff.lag)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.27401 -0.07124 -0.00160  0.07050  0.32442 
+## 
+## Coefficients:
+##            Estimate Std. Error t value Pr(&gt;|t|)  
+## z.lag.1    -0.05634    0.02956  -1.906   0.0585 .
+## z.diff.lag -0.15751    0.07815  -2.015   0.0455 *
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.1105 on 160 degrees of freedom
+## Multiple R-squared:  0.05595,    Adjusted R-squared:  0.04415 
+## F-statistic: 4.741 on 2 and 160 DF,  p-value: 0.009991
+## 
+## 
+## Value of test-statistic is: -1.9059 
+## 
+## Critical values for test statistics: 
+##       1pct  5pct 10pct
+## tau1 -2.58 -1.95 -1.62</code></pre>
+<div class="sourceCode" id="cb208"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb208-1"><a href="ch11.html#cb208-1" tabindex="-1"></a><span class="fu">ur.df</span>(data_practice11<span class="fl">.9</span><span class="sc">$</span>Unfiltered, <span class="at">type =</span> <span class="st">&quot;drift&quot;</span>) <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span></code></pre></div>
+<pre><code>## 
+## ############################################### 
+## # Augmented Dickey-Fuller Test Unit Root Test # 
+## ############################################### 
+## 
+## Test regression drift 
+## 
+## 
+## Call:
+## lm(formula = z.diff ~ z.lag.1 + 1 + z.diff.lag)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.27036 -0.06817  0.00173  0.07190  0.32611 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)  
+## (Intercept) -0.003894   0.010168  -0.383   0.7023  
+## z.lag.1     -0.063163   0.034584  -1.826   0.0697 .
+## z.diff.lag  -0.152609   0.079396  -1.922   0.0564 .
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.1108 on 159 degrees of freedom
+## Multiple R-squared:  0.05515,    Adjusted R-squared:  0.04326 
+## F-statistic:  4.64 on 2 and 159 DF,  p-value: 0.011
+## 
+## 
+## Value of test-statistic is: -1.8264 1.8798 
+## 
+## Critical values for test statistics: 
+##       1pct  5pct 10pct
+## tau2 -3.46 -2.88 -2.57
+## phi1  6.52  4.63  3.81</code></pre>
+<div class="sourceCode" id="cb210"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb210-1"><a href="ch11.html#cb210-1" tabindex="-1"></a><span class="fu">ur.df</span>(data_practice11<span class="fl">.9</span><span class="sc">$</span>Unfiltered, <span class="at">type =</span> <span class="st">&quot;trend&quot;</span>) <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span></code></pre></div>
+<pre><code>## 
+## ############################################### 
+## # Augmented Dickey-Fuller Test Unit Root Test # 
+## ############################################### 
+## 
+## Test regression trend 
+## 
+## 
+## Call:
+## lm(formula = z.diff ~ z.lag.1 + 1 + tt + z.diff.lag)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.28648 -0.07399  0.01117  0.07480  0.35812 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) -0.1172257  0.0330531  -3.547 0.000514 ***
+## z.lag.1     -0.2238721  0.0558234  -4.010 9.33e-05 ***
+## tt           0.0010794  0.0003006   3.590 0.000440 ***
+## z.diff.lag  -0.0756382  0.0795274  -0.951 0.343008    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.1069 on 158 degrees of freedom
+## Multiple R-squared:  0.1264, Adjusted R-squared:  0.1098 
+## F-statistic: 7.622 on 3 and 158 DF,  p-value: 8.601e-05
+## 
+## 
+## Value of test-statistic is: -4.0104 5.6442 8.2384 
+## 
+## Critical values for test statistics: 
+##       1pct  5pct 10pct
+## tau3 -3.99 -3.43 -3.13
+## phi2  6.22  4.75  4.07
+## phi3  8.43  6.49  5.47</code></pre>
+<p>こちらも最後の線形トレンドモデルを除いて, 5%水準で単位根仮説を棄却できない結果となった.</p>
+<p>構造変化の検定は, ここでは定数項・トレンドともに変化があったと想定して行う.</p>
+<div class="sourceCode" id="cb212"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb212-1"><a href="ch11.html#cb212-1" tabindex="-1"></a><span class="co"># それぞれのT^*についてRSS(T^*)とF(T^*)の値を保存するための列を作っておく.</span></span>
+<span id="cb212-2"><a href="ch11.html#cb212-2" tabindex="-1"></a>data_practice11<span class="fl">.9</span> <span class="ot">&lt;-</span> data_practice11<span class="fl">.9</span> <span class="sc">%&gt;%</span></span>
+<span id="cb212-3"><a href="ch11.html#cb212-3" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">t =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">dim</span>(data_practice11<span class="fl">.9</span>)[<span class="dv">1</span>], <span class="co"># 行番号</span></span>
+<span id="cb212-4"><a href="ch11.html#cb212-4" tabindex="-1"></a>           <span class="at">RSS_T_star =</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">dim</span>(data_practice11<span class="fl">.9</span>)[<span class="dv">1</span>]),</span>
+<span id="cb212-5"><a href="ch11.html#cb212-5" tabindex="-1"></a>           <span class="at">FT_star =</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">dim</span>(data_practice11<span class="fl">.9</span>)[<span class="dv">1</span>]),</span>
+<span id="cb212-6"><a href="ch11.html#cb212-6" tabindex="-1"></a>           <span class="at">WT_star =</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">dim</span>(data_practice11<span class="fl">.9</span>)[<span class="dv">1</span>]))</span>
+<span id="cb212-7"><a href="ch11.html#cb212-7" tabindex="-1"></a></span>
+<span id="cb212-8"><a href="ch11.html#cb212-8" tabindex="-1"></a><span class="co"># パラメータ</span></span>
+<span id="cb212-9"><a href="ch11.html#cb212-9" tabindex="-1"></a>T <span class="ot">&lt;-</span> <span class="fu">dim</span>(data_practice11<span class="fl">.9</span>)[<span class="dv">1</span>]</span>
+<span id="cb212-10"><a href="ch11.html#cb212-10" tabindex="-1"></a>pi_0 <span class="ot">&lt;-</span> <span class="fl">0.05</span></span>
+<span id="cb212-11"><a href="ch11.html#cb212-11" tabindex="-1"></a>q <span class="ot">&lt;-</span> <span class="dv">4</span></span>
+<span id="cb212-12"><a href="ch11.html#cb212-12" tabindex="-1"></a></span>
+<span id="cb212-13"><a href="ch11.html#cb212-13" tabindex="-1"></a>RSS_R <span class="ot">&lt;-</span> <span class="fu">lm</span>(Unfiltered <span class="sc">~</span> trend, <span class="at">data =</span> data_practice11<span class="fl">.9</span>)<span class="sc">$</span>residuals<span class="sc">^</span><span class="dv">2</span> <span class="sc">%&gt;%</span> <span class="fu">sum</span>()</span>
+<span id="cb212-14"><a href="ch11.html#cb212-14" tabindex="-1"></a><span class="cf">for</span> (T_star <span class="cf">in</span> <span class="fu">floor</span>(pi_0 <span class="sc">*</span> T)<span class="sc">:</span><span class="fu">floor</span>((<span class="dv">1</span> <span class="sc">-</span> pi_0) <span class="sc">*</span> T)) {</span>
+<span id="cb212-15"><a href="ch11.html#cb212-15" tabindex="-1"></a>    <span class="co"># 構造変化前後を示すダミー変数を作成</span></span>
+<span id="cb212-16"><a href="ch11.html#cb212-16" tabindex="-1"></a>    data_practice11<span class="fl">.9</span>_temp <span class="ot">&lt;-</span> data_practice11<span class="fl">.9</span> <span class="sc">%&gt;%</span></span>
+<span id="cb212-17"><a href="ch11.html#cb212-17" tabindex="-1"></a>        <span class="fu">mutate</span>(<span class="at">dummy =</span> t <span class="sc">&lt;</span> T_star)</span>
+<span id="cb212-18"><a href="ch11.html#cb212-18" tabindex="-1"></a>    data_practice11<span class="fl">.9</span><span class="sc">$</span>RSS_T_star[T_star] <span class="ot">&lt;-</span> <span class="fu">lm</span>(Unfiltered <span class="sc">~</span> trend <span class="sc">*</span> dummy, <span class="at">data =</span> data_practice11<span class="fl">.9</span>_temp)<span class="sc">$</span>residuals<span class="sc">^</span><span class="dv">2</span> <span class="sc">%&gt;%</span> <span class="fu">sum</span>()</span>
+<span id="cb212-19"><a href="ch11.html#cb212-19" tabindex="-1"></a>    data_practice11<span class="fl">.9</span><span class="sc">$</span>FT_star[T_star] <span class="ot">&lt;-</span> ((RSS_R <span class="sc">-</span> data_practice11<span class="fl">.9</span><span class="sc">$</span>RSS_T_star[T_star]) <span class="sc">/</span> q) <span class="sc">/</span> (data_practice11<span class="fl">.9</span><span class="sc">$</span>RSS_T_star[T_star] <span class="sc">/</span> (T <span class="sc">-</span> <span class="dv">2</span> <span class="sc">*</span> q))</span>
+<span id="cb212-20"><a href="ch11.html#cb212-20" tabindex="-1"></a>    data_practice11<span class="fl">.9</span><span class="sc">$</span>FT_star[T_star] <span class="ot">&lt;-</span> q <span class="sc">*</span> data_practice11<span class="fl">.9</span><span class="sc">$</span>FT_star[T_star]</span>
+<span id="cb212-21"><a href="ch11.html#cb212-21" tabindex="-1"></a>}</span>
+<span id="cb212-22"><a href="ch11.html#cb212-22" tabindex="-1"></a></span>
+<span id="cb212-23"><a href="ch11.html#cb212-23" tabindex="-1"></a><span class="co"># 構造変化点を表示</span></span>
+<span id="cb212-24"><a href="ch11.html#cb212-24" tabindex="-1"></a>data_practice11<span class="fl">.9</span> <span class="sc">%&gt;%</span></span>
+<span id="cb212-25"><a href="ch11.html#cb212-25" tabindex="-1"></a>    <span class="fu">filter</span>(FT_star <span class="sc">==</span> <span class="fu">max</span>(FT_star, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code></pre></div>
+<pre><code>##   year Unfiltered trend  t RSS_T_star  FT_star WT_star
+## 1 1902     -0.386    53 53   2.474737 113.1647      NA</code></pre>
+<div class="sourceCode" id="cb214"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb214-1"><a href="ch11.html#cb214-1" tabindex="-1"></a><span class="co"># 構造変化前後のトレンド・インフレ率の推定値を表示</span></span>
+<span id="cb214-2"><a href="ch11.html#cb214-2" tabindex="-1"></a>data_practice11<span class="fl">.9</span> <span class="ot">&lt;-</span> data_practice11<span class="fl">.9</span> <span class="sc">%&gt;%</span></span>
+<span id="cb214-3"><a href="ch11.html#cb214-3" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">after_structural_break =</span> t <span class="sc">&gt;=</span> <span class="dv">53</span>)</span>
+<span id="cb214-4"><a href="ch11.html#cb214-4" tabindex="-1"></a>data_practice11<span class="fl">.9</span> <span class="sc">%&gt;%</span></span>
+<span id="cb214-5"><a href="ch11.html#cb214-5" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> Unfiltered, <span class="at">group =</span> after_structural_break)) <span class="sc">+</span></span>
+<span id="cb214-6"><a href="ch11.html#cb214-6" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb214-7"><a href="ch11.html#cb214-7" tabindex="-1"></a>    <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">formula =</span> y <span class="sc">~</span> x)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-148-1.png" width="672" /></p>
+<p>構造変化点は1902年となった.
+この結果は産業革命が平均的に世界に波及した時期を示唆しているのかもしれない.</p>
 
 </div>
 </div>

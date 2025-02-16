@@ -32,6 +32,7 @@ library(hpfilter)
 library(urca)
 library(tsm)
 library(fredr)
+library(modelsummary)
 ```
 
 ## (11.3) 式 {#exp11.3 .unnumbered}
@@ -351,8 +352,152 @@ data_ex11.5 %>%
 
 ## 練習問題 11-6 [発展] {-}
 
-## 練習問題 11-7 [発展] {-}
+## 練習問題 11-7 [発展] {-} -->
 
 ## 練習問題 11-8 [実証] {-}
 
-## 練習問題 11-9 [実証] {-} -->
+データを読み込む.
+```{r}
+USlogRealGDP <- read_excel("data/11_第11章/USlogRealGDP.xls", sheet = "logRealGDP", col_names = FALSE)
+data_practice11.8 <- data.frame(USlogRealGDP) %>%
+    rename("year_quarter" = ...1, "logRealGDP" = ...2) %>%
+    mutate(year_quarter = yq(year_quarter),
+           logRealGDP = as.numeric(logRealGDP)) %>%
+    mutate(trend = 1:dim(USlogRealGDP)[1])
+data_practice11.8[120, 1] <- yq("1976Q4") # 誤植によりyq()でパースできなかった箇所を直す
+```
+
+線形トレンドの推定.
+```{r}
+data_practice11.8_linear <- lm(logRealGDP ~ trend, data = data_practice11.8)
+summary(data_practice11.8_linear)
+```
+
+HPフィルターによる推定. ここで用いるデータは四半期データなので, $\lambda = 1600$を用いる.
+```{r}
+data_practice11.8_hp <- data_practice11.8 %>%
+    dplyr::select(logRealGDP) %>%
+    hp1(lambda = 1600) %>%
+    rename("hp" = logRealGDP)
+```
+
+推定結果をデータフレームに格納して, ggplotでグラフを描画する.
+```{r}
+data_practice11.8 <- data_practice11.8 %>%
+                        cbind(data_practice11.8_hp) %>%
+                        cbind(data.frame(linear_trend = data_practice11.8_linear$fitted.values))
+
+data_practice11.8 %>%
+    pivot_longer(cols = c("logRealGDP", "linear_trend", "hp")) %>%
+    ggplot(aes(x = year_quarter, y = value, color = name, linetype = name)) +
+    geom_line(aes(x = year_quarter, y = value, color = name)) +
+    scale_color_manual(values = c("red", "blue", "black"),
+                       labels = c("HPフィルター (λ = 1600)", "線形トレンド", "対数実質GDP"),
+                       name = element_blank()) +
+    scale_linetype_manual(values = c("longdash", "longdash", "solid"),
+                          labels = c("HPフィルター (λ = 1600)", "線形トレンド", "対数実質GDP"),
+                          name = element_blank()) +
+    labs(x = "年", y = element_blank()) +
+    theme(legend.position = c(0, 1), legend.justification = c(0, 1))
+```
+
+GDPギャップ推定値の比較もグラフに描画する.
+```{r}
+data_practice11.8 %>%
+    mutate(gap_hp = hp - logRealGDP,
+           gap_linear_trend = linear_trend - logRealGDP) %>%
+    pivot_longer(cols = c("gap_linear_trend", "gap_hp")) %>%
+    ggplot(aes(x = year_quarter, y = value, color = name)) +
+    geom_line(aes(x = year_quarter, y = value, color = name)) +
+    scale_color_manual(values = c("red", "blue"),
+                       labels = c("HPフィルター (λ = 1600)", "線形トレンド"),
+                       name = element_blank()) +
+    geom_hline(yintercept = 0, color = "black") +
+    labs(x = "年", y = element_blank()) +
+    theme(legend.position = c(0, 1), legend.justification = c(0, 1))
+```
+
+## 練習問題 11-9 [実証] {-}
+
+データを読み込む.
+ここでは, HadCRUT3データの全球平均値を分析することにする.
+```{r}
+globaltemperature <- read_excel("data/11_第11章/globaltemparature.xlsx", sheet = "data")
+data_practice11.9 <- data.frame(globaltemperature[3:166, c(1, 2)]) %>%
+    rename("year" = ...1) %>%
+    mutate(Unfiltered = as.numeric(Unfiltered),
+           year = as.numeric(year))
+data_practice11.9 <- data_practice11.9 %>%
+    mutate(trend = 1:dim(data_practice11.9)[1])
+```
+
+データをプロットする.
+```{r}
+data_practice11.9 %>%
+    ggplot() +
+    geom_line(aes(x = year, y = Unfiltered))
+```
+
+まずは[実証例11.2](#ex11.2)で見たように, ディッキー=フラー検定を行う.
+```{r}
+practice11.9_lm_none <- lm(Unfiltered - lag(Unfiltered) ~ 0 + lag(Unfiltered), data = data_practice11.9)
+practice11.9_lm_drift <- lm(Unfiltered - lag(Unfiltered) ~ lag(Unfiltered), data = data_practice11.9)
+practice11.9_lm_trend <- lm(Unfiltered - lag(Unfiltered) ~ trend + lag(Unfiltered), data = data_practice11.9)
+models = list("None" = practice11.9_lm_none,
+              "Drift" = practice11.9_lm_drift,
+              "Trend" = practice11.9_lm_trend)
+modelsummary(models, statistic = "statistic", notes = "括弧内はt統計量")
+```
+定数項なしのモデルでは, 5%水準では単位根仮説を棄却できるが, 1%水準では棄却できない結果となった.
+定数項ありのモデルでは, 10%水準でも単位根仮説を棄却できない結果となった.
+一方で定数項・トレンドありのモデルでは, 1%水準で単位根仮説を棄却できる結果となった.
+
+定数項・トレンドありのモデルの推定結果をみると, 定数項・トレンドともに係数が有意であることから, 両者を含めたこのモデルが推定に適当と考えられる.
+この場合, 単位根仮説は棄却され, 確率トレンドが存在しないことが結論付けられる.
+
+続いて[実証例11.3](#ex11.3)に倣って, ADF検定を行う.
+```{r}
+ur.df(data_practice11.9$Unfiltered, type = "none") %>% summary()
+ur.df(data_practice11.9$Unfiltered, type = "drift") %>% summary()
+ur.df(data_practice11.9$Unfiltered, type = "trend") %>% summary()
+```
+こちらも最後の線形トレンドモデルを除いて, 5%水準で単位根仮説を棄却できない結果となった.
+
+構造変化の検定は, ここでは定数項・トレンドともに変化があったと想定して行う.
+```{r collapse=T, message=FALSE}
+# それぞれのT^*についてRSS(T^*)とF(T^*)の値を保存するための列を作っておく.
+data_practice11.9 <- data_practice11.9 %>%
+    mutate(t = 1:dim(data_practice11.9)[1], # 行番号
+           RSS_T_star = rep(NA, dim(data_practice11.9)[1]),
+           FT_star = rep(NA, dim(data_practice11.9)[1]),
+           WT_star = rep(NA, dim(data_practice11.9)[1]))
+
+# パラメータ
+T <- dim(data_practice11.9)[1]
+pi_0 <- 0.05
+q <- 4
+
+RSS_R <- lm(Unfiltered ~ trend, data = data_practice11.9)$residuals^2 %>% sum()
+for (T_star in floor(pi_0 * T):floor((1 - pi_0) * T)) {
+    # 構造変化前後を示すダミー変数を作成
+    data_practice11.9_temp <- data_practice11.9 %>%
+        mutate(dummy = t < T_star)
+    data_practice11.9$RSS_T_star[T_star] <- lm(Unfiltered ~ trend * dummy, data = data_practice11.9_temp)$residuals^2 %>% sum()
+    data_practice11.9$FT_star[T_star] <- ((RSS_R - data_practice11.9$RSS_T_star[T_star]) / q) / (data_practice11.9$RSS_T_star[T_star] / (T - 2 * q))
+    data_practice11.9$FT_star[T_star] <- q * data_practice11.9$FT_star[T_star]
+}
+
+# 構造変化点を表示
+data_practice11.9 %>%
+    filter(FT_star == max(FT_star, na.rm = TRUE))
+# 構造変化前後のトレンド・インフレ率の推定値を表示
+data_practice11.9 <- data_practice11.9 %>%
+    mutate(after_structural_break = t >= 53)
+data_practice11.9 %>%
+    ggplot(aes(x = year, y = Unfiltered, group = after_structural_break)) +
+    geom_line() +
+    geom_smooth(method = "lm", formula = y ~ x)
+```
+
+構造変化点は1902年となった.
+この結果は産業革命が平均的に世界に波及した時期を示唆しているのかもしれない.
