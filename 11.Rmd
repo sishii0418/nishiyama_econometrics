@@ -339,6 +339,30 @@ data_ex11.5 %>%
     geom_linerange(aes(x = ym(198111), ymax = y_max_min[1], ymin = y_max_min[2]), color = "black", linewidth = 0.5)
 ```
 
+## 実証例11.6 外国為替市場介入関数の構造変化検定 {-}
+```{r}
+DEXJPUS <- fredr(
+  series_id = "DEXJPUS",
+  observation_start = as.Date("1981-04-01"),
+  observation_end = as.Date("2002-12-31")
+)
+DEXJPUS <- DEXJPUS %>%
+    fill(value, .direction = "down") %>%
+    mutate(MA1 = stats::filter(value, rep(1, 260) / 260, sides = 1),
+           MA3 = stats::filter(value, rep(1, 260 * 3) / (260 * 3), sides = 1),
+           MA5 = stats::filter(value, rep(1, 260 * 5) / (260 * 5), sides = 1)) %>%
+    filter(ymd(19910401) <= date) %>%
+    select(-realtime_start, -realtime_end)
+
+data_ex11.6 <- right_join(data_ex11.2, DEXJPUS) %>%
+    mutate(S = log(value)) %>%
+    mutate(INT = sign(as.numeric(Interventions))) %>%
+    mutate(DMA1 = S - log(MA1),
+           DMA3 = S - log(MA3),
+           DMA5 = S - log(MA5))
+lm(INT ~ stats::lag(S - stats::lag(S)) + stats::lag(S - stats::lag(S, 20)) + stats::lag(DMA1) + stats::lag(DMA3) + stats::lag(DMA5) + stats::lag(INT), data = data_ex11.6) %>% summary()
+```
+
 <!-- ## 練習問題 11-1 [確認] {-}
 
 ## 練習問題 11-2 [確認] {-}
