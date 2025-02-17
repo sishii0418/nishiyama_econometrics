@@ -24,7 +24,191 @@ if(.Platform$OS.type == "unix") {
 }
 ```
 
-```{=html}
+必要なライブラリを読み込む.
+
+```{r collapse=T}
+library(tidyverse)
+library(readxl)
+# library(estatapi)
+# library(hpfilter)
+library(urca)
+# library(tsm)
+# library(fredr)
+# library(modelsummary)
+library(vars)
+library(estimatr)
+```
+
+## 図12-1 短期金利と長期金利 (月次データ) {-}
+
+Excelファイルを読み込んで, ggplotでグラフを描画する.
+ついでにこれらのデータの単位根の有無をADF検定を行って検証しよう.
+```{r}
+Fig_1_longshortspread <- read_excel("data/12_第12章/Fig_1_longshortspread.xlsx")
+Fig_1_longshortspread %>%
+    mutate(year = ym(year)) %>%
+    pivot_longer(cols = c("短期金利（コールレート）", "長期金利（10年物国債利回り）", "長短金利スプレッド")) %>%
+    ggplot(aes(x = year, y = value, color = name)) +
+    geom_line() +
+    labs(x = "年", y = element_blank()) +
+    theme(legend.position = c(0, 1), legend.justification = c(0, 1))
+# 金利データの単位根仮説をADF検定で検証する.
+ur.df(Fig_1_longshortspread$`短期金利（コールレート）`, type = "none", selectlags = "BIC", lags = 12) %>% summary()
+ur.df(Fig_1_longshortspread$`長期金利（10年物国債利回り）`, type = "none", selectlags = "BIC", lags = 12) %>% summary()
+```
+`urca::ur.df()`で情報基準により自動的にラグ次数を選択するには, `lags`引数にラグの最大値を指定して, `selectlags`引数に用いたい情報基準(AICかBIC)を選択する.
+短期金利と長期金利両者ともに著者らの分析通り, 単位根仮説は棄却されない結果となった.
+
+## 実証例12.1 金利の期間構造とグレンジャー因果性 {-}
+
+RにおいてVARモデルは`vars`パッケージによって実装されている.
+まずラグ次数の選択を`vars::VARselect()`により行う.
+```{r}
+data_ex12.1 <- Fig_1_longshortspread %>%
+    mutate(`短期金利（コールレート）_delta` = `短期金利（コールレート）` - lag(`短期金利（コールレート）`)) %>%
+    dplyr::select(`短期金利（コールレート）_delta`, 長短金利スプレッド) %>%
+    filter(!is.na(`短期金利（コールレート）_delta`))
+VARselect(data_ex12.1, type = "const")
+```
+
+`VARselect()`ではAIC, Hannan-Quinn Criterion (HQ), Schwarz Criterion (SC, BICのこと), Final Prediction Error Criterion (FPE)の4種類の情報基準が示される.
+著者らの分析通り, BICではラグ次数4が選択された.
+
+```{r}
+model_ex12.1 <- VAR(data_ex12.1, p = 4, type = "const")
+causality(model_ex12.1, cause = "長短金利スプレッド")
+```
+
+こちらも著者らの分析通り, 5%有意水準で帰無仮説が棄却され ($p = 0.01829$), スプレッドがコールレートに対してグレンジャー因果性をもつことが示唆された.
+
+## 実証例12.2 金利の期間構造とシムズの因果性検定 {-}
+
+単純に`lm()`関数でOLS推定を行ったあと, ラグ次数4を用いたHAC標準誤差を`NeweyWest()`で計算し, 結果を`coeftest()`で表示する.
+```{r}
+model_ex12.2 <- lm(長短金利スプレッド ~ lead(`短期金利（コールレート）_delta`) + `短期金利（コールレート）_delta` + lag(`短期金利（コールレート）_delta`) + lag(`短期金利（コールレート）_delta`, 2) + lag(`短期金利（コールレート）_delta`, 3) + lag(`短期金利（コールレート）_delta`, 4) + lag(`短期金利（コールレート）_delta`, 5) + lag(`短期金利（コールレート）_delta`, 6), data = data_ex12.1)
+coeftest(model_ex12.2, NeweyWest(model_ex12.2, lag = 4))
+```
+
+リード変数の$p$-値をみると, 10%水準では帰無仮説が棄却できるが, 5%水準では棄却できない結果となった.
+
+## 実証例12.3 南極のペンギンの数と日本のGDP {-}
+
+Excelファイルを読み込んで単回帰でOLS推定を行い, またそれぞれの変数についてADF検定も実行する.
+```{r}
+Fig_2_penguin <- read_excel("data/12_第12章/Fig_2_penguin.xlsx", sheet = "Figure")
+model_ex12.3 <- lm_robust(実質GDP ~ アデリーペンギンの営巣数, data = Fig_2_penguin, se_type = "HC1")
+summary(model_ex12.3)
+# 定数項のないADF検定
+ur.df(Fig_2_penguin$実質GDP, type = "trend", lags = 0) %>% summary()
+ur.df(Fig_2_penguin$アデリーペンギンの営巣数, type = "drift", lags = 0) %>% summary()
+```
+
+## 図12-2 GDPとペンギンの数 {-}
+
+異なるデータを同じ図にプロットするために, 先にアデリーペンギンの営巣数の数値をスケールした([参考](https://knknkn.hatenablog.com/entry/2019/02/27/204913)).
+```{r}
+Fig_2_penguin %>%
+    mutate(アデリーペンギンの営巣数 = アデリーペンギンの営巣数 * 600000 / 6000) %>% # 両軸表示用にスケール
+    pivot_longer(cols = c("実質GDP", "アデリーペンギンの営巣数")) %>%
+    ggplot(aes(x = ...1, y = value, colour = name)) +
+    geom_line() +
+    scale_y_continuous(sec.axis = sec_axis(~./600000 * 6000, name = "アデリーペンギンの営巣数")) +
+    scale_color_hue(name = element_blank(), labels = c("実質GDP", "アデリーペンギンの営巣数")) +
+    labs(x = element_blank(), y = "実質GDP") +
+    theme(legend.position = c(0, 1), legend.justification = c(0, 1))
+```
+
+## 図12-3 実験系列 (共和分) {#fig12-3 .unnumbered}
+
+Rでそれぞれ100個ずつ正規分布乱数を生成し, これをもとに$X_t, Y_t$の挙動をシミュレーションする.
+
+```{r}
+# 再現性のために任意のシード値を設定
+set.seed(634)
+# 200個の正規分布乱数を生成 (系列相関なし)
+data_fig12_3 <- data.frame(eps_1 = c(0, rnorm(100)), eps_2 = c(0, rnorm(100)))
+X = c(0)
+Y = c(0)
+for (i in 2:101) {
+    X = c(X, X[i-1] + data_fig12_3$eps_2[i])
+    Y = c(Y, 0.5 * Y[i-1] + 0.5 * X[i-1] + data_fig12_3$eps_1[i])
+}
+data_fig12_3 %>%
+    mutate(X = X, Y = Y, index = 1:101) %>%
+    mutate(`Y - X` = Y - X) %>%
+    pivot_longer(cols = c("X", "Y", "Y - X")) %>%
+    ggplot(aes(x = index, y = value, colour = name)) +
+    geom_line() +
+    scale_color_hue(name = element_blank(), labels = c("X", "Y", "Y - X")) +
+    labs(x = element_blank(), y = element_blank()) +
+    theme(legend.position = c(0, 1), legend.justification = c(0, 1))
+
+```
+
+## 図12-4 実験系列 (見せかけの相関) {-}
+
+[図12-3](#fig12-3)と同様にシミュレーションしてみよう.
+```{r}
+# 再現性のために任意のシード値を設定
+set.seed(63400)
+# 200個の正規分布乱数を生成 (系列相関なし)
+data_fig12_4 <- data.frame(eps_1 = c(0, rnorm(100)), eps_2 = c(0, rnorm(100)))
+X = c(0)
+Y = c(0)
+for (i in 2:101) {
+    X = c(X, X[i-1] + data_fig12_4$eps_2[i])
+    Y = c(Y, Y[i-1] + data_fig12_4$eps_1[i])
+}
+data_fig12_4 %>%
+    mutate(X = X, Y = Y, index = 1:101) %>%
+    mutate(`Y - X` = Y - X) %>%
+    pivot_longer(cols = c("X", "Y", "Y - X")) %>%
+    ggplot(aes(x = index, y = value, colour = name)) +
+    geom_line() +
+    scale_color_hue(name = element_blank(), labels = c("X", "Y", "Y - X")) +
+    labs(x = element_blank(), y = element_blank()) +
+    theme(legend.position = c(0, 1), legend.justification = c(0, 1))
+
+```
+
+## 実証例12.4 金利の期間構造と共和分 {-}
+
+```{r}
+model_ex12.4 <- lm_robust(`長期金利（10年物国債利回り）` ~ `短期金利（コールレート）`, se_type = "HC1", data = Fig_1_longshortspread)
+summary(model_ex12.4)
+# 残差をADF検定
+model_ex12.4$residuals <- Fig_1_longshortspread$`長期金利（10年物国債利回り）` - model_ex12.4$fitted.values
+ur.df(model_ex12.4$residuals, type = "none", lags = 8, selectlags = "BIC") %>% summary()
+```
+
+## 実証例12.5 南極のペンギンの数と日本の GDP （再考） {-}
+
+```{r}
+model_ex12.3$residuals <- Fig_2_penguin$実質GDP - model_ex12.3$fitted.values
+ur.df(model_ex12.3$residuals, type = "none", lags = 8, selectlags = "BIC") %>% summary()
+```
+
+## 実証例12.6 金利の期間構造と誤差修正モデル {-}
+
+Rでは誤差修正モデルは`urca::ca.jo()`関数を用いてモデルを作成したのち, `urca::cajorls()`によって推定できる.
+推定結果の表示には自由度修正ホワイト標準誤差を用いるため, `vcov(type = "HC1")`とし, `coeftest()`を利用した.
+
+```{r}
+data_ex12.6 <- Fig_1_longshortspread %>%
+    dplyr::select(`長期金利（10年物国債利回り）`, `短期金利（コールレート）`)
+z <- ca.jo(data_ex12.6, ecdet = "none", K = 3, spec = "transitory")
+model_ex12.6 <- cajorls(z)$rlm
+coeftest(model_ex12.6, vcov = vcovHC(model_ex12.6, type = "HC1"))
+```
+
+## 実証例12.7 金利の期間構造と動学OLS推定 {-}
+```{r}
+data_ex12.7 <- Fig_1_longshortspread %>%
+    mutate(`短期金利（コールレート）_delta` = `短期金利（コールレート）`- lag(`短期金利（コールレート）`))
+model_ex12.7 <- lm(`長期金利（10年物国債利回り）` ~ `短期金利（コールレート）` + lead(`短期金利（コールレート）_delta`, 2) + lead(`短期金利（コールレート）_delta`) + `短期金利（コールレート）_delta` + lag(`短期金利（コールレート）_delta`) + lag(`短期金利（コールレート）_delta`, 2), data = data_ex12.7)
+coeftest(model_ex12.7, NeweyWest(model_ex12.7, lag = 4))
+```
+
 <!-- ## 練習問題 12-1 [確認] {.unnumbered}
 
 ## 練習問題 12-2 [確認] {.unnumbered}
@@ -36,4 +220,3 @@ if(.Platform$OS.type == "unix") {
 ## 練習問題 12-5 [実証] {.unnumbered}
 
 ## 練習問題 12-6 [実証] {.unnumbered} -->
-```
