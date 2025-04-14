@@ -88,8 +88,9 @@ fig11_2_data_2015 <- estat_getStatsData(appId = appId, statsDataId = "0003109751
 fig11_2_data_2015 <- fig11_2_data_2015 %>% filter(国内総生産_実質暦年 == "国内総生産(支出側)" &
                             表章項目 == "金額") %>%
                         dplyr::select(value) %>%
-                        rename("実質国内総支出" = value) %>%
-                        mutate(年 = 1994:2023)
+                        rename("実質国内総支出" = value)
+fig11_2_data_2015 <- fig11_2_data_2015 %>%
+                        mutate(年 = 1994:(1994 + nrow(fig11_2_data_2015) - 1))
 ```
 
 ```{r collapse=T, message=FALSE}

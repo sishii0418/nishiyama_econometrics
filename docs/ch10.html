@@ -23,7 +23,7 @@
 <meta name="author" content="石井 俊輔" />
 
 
-<meta name="date" content="2025-02-17" />
+<meta name="date" content="2025-04-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -307,10 +307,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="ch12.html"><a href="ch12.html#図12-2-gdpとペンギンの数"><i class="fa fa-check"></i>図12-2 GDPとペンギンの数</a></li>
 <li class="chapter" data-level="" data-path="ch12.html"><a href="ch12.html#fig12-3"><i class="fa fa-check"></i>図12-3 実験系列 (共和分)</a></li>
 <li class="chapter" data-level="" data-path="ch12.html"><a href="ch12.html#図12-4-実験系列-見せかけの相関"><i class="fa fa-check"></i>図12-4 実験系列 (見せかけの相関)</a></li>
-<li class="chapter" data-level="" data-path="ch12.html"><a href="ch12.html#実証例12.4-金利の期間構造と共和分"><i class="fa fa-check"></i>実証例12.4 金利の期間構造と共和分</a></li>
+<li class="chapter" data-level="" data-path="ch12.html"><a href="ch12.html#ex12-4"><i class="fa fa-check"></i>実証例12.4 金利の期間構造と共和分</a></li>
 <li class="chapter" data-level="" data-path="ch12.html"><a href="ch12.html#実証例12.5-南極のペンギンの数と日本の-gdp-再考"><i class="fa fa-check"></i>実証例12.5 南極のペンギンの数と日本の GDP （再考）</a></li>
 <li class="chapter" data-level="" data-path="ch12.html"><a href="ch12.html#実証例12.6-金利の期間構造と誤差修正モデル"><i class="fa fa-check"></i>実証例12.6 金利の期間構造と誤差修正モデル</a></li>
 <li class="chapter" data-level="" data-path="ch12.html"><a href="ch12.html#実証例12.7-金利の期間構造と動学ols推定"><i class="fa fa-check"></i>実証例12.7 金利の期間構造と動学OLS推定</a></li>
+<li class="chapter" data-level="" data-path="ch12.html"><a href="ch12.html#実証例12.8-金利の期間構造と動学ols推定"><i class="fa fa-check"></i>実証例12.8 金利の期間構造と動学OLS推定</a></li>
+<li class="chapter" data-level="" data-path="ch12.html"><a href="ch12.html#実証例12.10-沖縄返還と通貨切替え"><i class="fa fa-check"></i>実証例12.10 沖縄返還と通貨切替え</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -580,27 +582,28 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb99-7"><a href="ch10.html#cb99-7" tabindex="-1"></a></span>
 <span id="cb99-8"><a href="ch10.html#cb99-8" tabindex="-1"></a><span class="co"># e-Statから1994年以降のデータをダウンロードして読み込み</span></span>
 <span id="cb99-9"><a href="ch10.html#cb99-9" tabindex="-1"></a>fig10_8_after <span class="ot">&lt;-</span> <span class="fu">estat_getStatsData</span>(<span class="at">appId =</span> appId, <span class="at">statsDataId =</span> <span class="st">&quot;0003109787&quot;</span>)</span>
-<span id="cb99-10"><a href="ch10.html#cb99-10" tabindex="-1"></a><span class="do">## Fetching record 1-2214... (total: 2214 records)</span></span>
+<span id="cb99-10"><a href="ch10.html#cb99-10" tabindex="-1"></a><span class="do">## Fetching record 1-2232... (total: 2232 records)</span></span>
 <span id="cb99-11"><a href="ch10.html#cb99-11" tabindex="-1"></a>fig10_8_after <span class="ot">&lt;-</span> fig10_8_after <span class="sc">%&gt;%</span></span>
 <span id="cb99-12"><a href="ch10.html#cb99-12" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="st">`</span><span class="at">国内総生産_四半期デフレーター 季節調整系列</span><span class="st">`</span> <span class="sc">==</span> <span class="st">&quot;国内総生産(支出側)&quot;</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb99-13"><a href="ch10.html#cb99-13" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="st">`</span><span class="at">時間軸（四半期）</span><span class="st">`</span>, value)</span>
-<span id="cb99-14"><a href="ch10.html#cb99-14" tabindex="-1"></a></span>
-<span id="cb99-15"><a href="ch10.html#cb99-15" tabindex="-1"></a><span class="co"># 対応する時間軸を作成</span></span>
-<span id="cb99-16"><a href="ch10.html#cb99-16" tabindex="-1"></a>year <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">ymd</span>(<span class="dv">19800101</span>), <span class="fu">ymd</span>(<span class="dv">20240701</span>), <span class="at">by =</span> <span class="st">&quot;quarter&quot;</span>)</span>
-<span id="cb99-17"><a href="ch10.html#cb99-17" tabindex="-1"></a></span>
-<span id="cb99-18"><a href="ch10.html#cb99-18" tabindex="-1"></a>fig10_8_data <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(fig10_8_pre, fig10_8_after) <span class="sc">%&gt;%</span></span>
-<span id="cb99-19"><a href="ch10.html#cb99-19" tabindex="-1"></a>                <span class="fu">cbind</span>(year) <span class="sc">%&gt;%</span></span>
-<span id="cb99-20"><a href="ch10.html#cb99-20" tabindex="-1"></a>                <span class="fu">data.frame</span>()</span>
-<span id="cb99-21"><a href="ch10.html#cb99-21" tabindex="-1"></a></span>
-<span id="cb99-22"><a href="ch10.html#cb99-22" tabindex="-1"></a>fig10_8_data <span class="ot">&lt;-</span> fig10_8_data <span class="sc">%&gt;%</span></span>
-<span id="cb99-23"><a href="ch10.html#cb99-23" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">inflation =</span> <span class="dv">400</span> <span class="sc">*</span> (value <span class="sc">-</span> <span class="fu">lag</span>(value))<span class="sc">/</span><span class="fu">lag</span>(value))</span>
-<span id="cb99-24"><a href="ch10.html#cb99-24" tabindex="-1"></a></span>
-<span id="cb99-25"><a href="ch10.html#cb99-25" tabindex="-1"></a>fig10_8_data <span class="sc">%&gt;%</span></span>
-<span id="cb99-26"><a href="ch10.html#cb99-26" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> inflation)) <span class="sc">+</span></span>
-<span id="cb99-27"><a href="ch10.html#cb99-27" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb99-28"><a href="ch10.html#cb99-28" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;年&quot;</span>, <span class="at">y =</span> <span class="st">&quot;インフレ率 (%)&quot;</span>)</span>
-<span id="cb99-29"><a href="ch10.html#cb99-29" tabindex="-1"></a><span class="do">## Warning: Removed 1 row containing missing values or values outside the scale</span></span>
-<span id="cb99-30"><a href="ch10.html#cb99-30" tabindex="-1"></a><span class="do">## range (`geom_line()`).</span></span></code></pre></div>
+<span id="cb99-14"><a href="ch10.html#cb99-14" tabindex="-1"></a>fig10_8_after <span class="ot">&lt;-</span> fig10_8_after[<span class="dv">1</span><span class="sc">:</span><span class="dv">123</span>, ]</span>
+<span id="cb99-15"><a href="ch10.html#cb99-15" tabindex="-1"></a></span>
+<span id="cb99-16"><a href="ch10.html#cb99-16" tabindex="-1"></a><span class="co"># 対応する時間軸を作成</span></span>
+<span id="cb99-17"><a href="ch10.html#cb99-17" tabindex="-1"></a>year <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">ymd</span>(<span class="dv">19800101</span>), <span class="fu">ymd</span>(<span class="dv">20240701</span>), <span class="at">by =</span> <span class="st">&quot;quarter&quot;</span>)</span>
+<span id="cb99-18"><a href="ch10.html#cb99-18" tabindex="-1"></a></span>
+<span id="cb99-19"><a href="ch10.html#cb99-19" tabindex="-1"></a>fig10_8_data <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(fig10_8_pre, fig10_8_after) <span class="sc">%&gt;%</span></span>
+<span id="cb99-20"><a href="ch10.html#cb99-20" tabindex="-1"></a>                <span class="fu">cbind</span>(year) <span class="sc">%&gt;%</span></span>
+<span id="cb99-21"><a href="ch10.html#cb99-21" tabindex="-1"></a>                <span class="fu">data.frame</span>()</span>
+<span id="cb99-22"><a href="ch10.html#cb99-22" tabindex="-1"></a></span>
+<span id="cb99-23"><a href="ch10.html#cb99-23" tabindex="-1"></a>fig10_8_data <span class="ot">&lt;-</span> fig10_8_data <span class="sc">%&gt;%</span></span>
+<span id="cb99-24"><a href="ch10.html#cb99-24" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">inflation =</span> <span class="dv">400</span> <span class="sc">*</span> (value <span class="sc">-</span> <span class="fu">lag</span>(value))<span class="sc">/</span><span class="fu">lag</span>(value))</span>
+<span id="cb99-25"><a href="ch10.html#cb99-25" tabindex="-1"></a></span>
+<span id="cb99-26"><a href="ch10.html#cb99-26" tabindex="-1"></a>fig10_8_data <span class="sc">%&gt;%</span></span>
+<span id="cb99-27"><a href="ch10.html#cb99-27" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> inflation)) <span class="sc">+</span></span>
+<span id="cb99-28"><a href="ch10.html#cb99-28" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb99-29"><a href="ch10.html#cb99-29" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;年&quot;</span>, <span class="at">y =</span> <span class="st">&quot;インフレ率 (%)&quot;</span>)</span>
+<span id="cb99-30"><a href="ch10.html#cb99-30" tabindex="-1"></a><span class="do">## Warning: Removed 1 row containing missing values or values outside the scale</span></span>
+<span id="cb99-31"><a href="ch10.html#cb99-31" tabindex="-1"></a><span class="do">## range (`geom_line()`).</span></span></code></pre></div>
 <p><img src="_main_files/figure-html/unnamed-chunk-99-1.png" width="672" /></p>
 </div>
 <div id="figure10-9" class="section level2 unnumbered hasAnchor">
@@ -698,11 +701,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb104-12"><a href="ch10.html#cb104-12" tabindex="-1"></a><span class="do">## </span></span>
 <span id="cb104-13"><a href="ch10.html#cb104-13" tabindex="-1"></a><span class="do">## Coefficients:</span></span>
 <span id="cb104-14"><a href="ch10.html#cb104-14" tabindex="-1"></a><span class="do">##             Estimate Std. Error t value  Pr(&gt;|t|) CI Lower CI Upper  DF</span></span>
-<span id="cb104-15"><a href="ch10.html#cb104-15" tabindex="-1"></a><span class="do">## (Intercept)   0.5742    0.16705   3.438 7.660e-04   0.2441   0.9044 145</span></span>
-<span id="cb104-16"><a href="ch10.html#cb104-16" tabindex="-1"></a><span class="do">## 内閣府        0.4153    0.09608   4.323 2.845e-05   0.2255   0.6052 145</span></span>
+<span id="cb104-15"><a href="ch10.html#cb104-15" tabindex="-1"></a><span class="do">## (Intercept)   0.5686    0.16731   3.399 8.750e-04   0.2379   0.8993 145</span></span>
+<span id="cb104-16"><a href="ch10.html#cb104-16" tabindex="-1"></a><span class="do">## 内閣府        0.4078    0.09841   4.144 5.773e-05   0.2133   0.6024 145</span></span>
 <span id="cb104-17"><a href="ch10.html#cb104-17" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb104-18"><a href="ch10.html#cb104-18" tabindex="-1"></a><span class="do">## Multiple R-squared:  0.09996 ,   Adjusted R-squared:  0.09375 </span></span>
-<span id="cb104-19"><a href="ch10.html#cb104-19" tabindex="-1"></a><span class="do">## F-statistic: 18.69 on 1 and 145 DF,  p-value: 2.845e-05</span></span></code></pre></div>
+<span id="cb104-18"><a href="ch10.html#cb104-18" tabindex="-1"></a><span class="do">## Multiple R-squared:  0.09713 ,   Adjusted R-squared:  0.09091 </span></span>
+<span id="cb104-19"><a href="ch10.html#cb104-19" tabindex="-1"></a><span class="do">## F-statistic: 17.17 on 1 and 145 DF,  p-value: 5.773e-05</span></span></code></pre></div>
 </div>
 <div id="式" class="section level2 unnumbered hasAnchor">
 <h2>(10.13) 式<a href="ch10.html#式" class="anchor-section" aria-label="Anchor link to header"></a></h2>

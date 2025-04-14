@@ -23,7 +23,7 @@
 <meta name="author" content="石井 俊輔" />
 
 
-<meta name="date" content="2025-02-17" />
+<meta name="date" content="2025-04-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -307,10 +307,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="ch12.html"><a href="ch12.html#図12-2-gdpとペンギンの数"><i class="fa fa-check"></i>図12-2 GDPとペンギンの数</a></li>
 <li class="chapter" data-level="" data-path="ch12.html"><a href="ch12.html#fig12-3"><i class="fa fa-check"></i>図12-3 実験系列 (共和分)</a></li>
 <li class="chapter" data-level="" data-path="ch12.html"><a href="ch12.html#図12-4-実験系列-見せかけの相関"><i class="fa fa-check"></i>図12-4 実験系列 (見せかけの相関)</a></li>
-<li class="chapter" data-level="" data-path="ch12.html"><a href="ch12.html#実証例12.4-金利の期間構造と共和分"><i class="fa fa-check"></i>実証例12.4 金利の期間構造と共和分</a></li>
+<li class="chapter" data-level="" data-path="ch12.html"><a href="ch12.html#ex12-4"><i class="fa fa-check"></i>実証例12.4 金利の期間構造と共和分</a></li>
 <li class="chapter" data-level="" data-path="ch12.html"><a href="ch12.html#実証例12.5-南極のペンギンの数と日本の-gdp-再考"><i class="fa fa-check"></i>実証例12.5 南極のペンギンの数と日本の GDP （再考）</a></li>
 <li class="chapter" data-level="" data-path="ch12.html"><a href="ch12.html#実証例12.6-金利の期間構造と誤差修正モデル"><i class="fa fa-check"></i>実証例12.6 金利の期間構造と誤差修正モデル</a></li>
 <li class="chapter" data-level="" data-path="ch12.html"><a href="ch12.html#実証例12.7-金利の期間構造と動学ols推定"><i class="fa fa-check"></i>実証例12.7 金利の期間構造と動学OLS推定</a></li>
+<li class="chapter" data-level="" data-path="ch12.html"><a href="ch12.html#実証例12.8-金利の期間構造と動学ols推定"><i class="fa fa-check"></i>実証例12.8 金利の期間構造と動学OLS推定</a></li>
+<li class="chapter" data-level="" data-path="ch12.html"><a href="ch12.html#実証例12.10-沖縄返還と通貨切替え"><i class="fa fa-check"></i>実証例12.10 沖縄返還と通貨切替え</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -383,11 +385,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb223"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb223-1"><a href="ch12.html#cb223-1" tabindex="-1"></a>Fig_1_longshortspread <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">&quot;data/12_第12章/Fig_1_longshortspread.xlsx&quot;</span>)</span>
 <span id="cb223-2"><a href="ch12.html#cb223-2" tabindex="-1"></a>Fig_1_longshortspread <span class="sc">%&gt;%</span></span>
 <span id="cb223-3"><a href="ch12.html#cb223-3" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">ym</span>(year)) <span class="sc">%&gt;%</span></span>
-<span id="cb223-4"><a href="ch12.html#cb223-4" tabindex="-1"></a>    <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(<span class="st">&quot;短期金利（コールレート）&quot;</span>, <span class="st">&quot;長期金利（10年物国債利回り）&quot;</span>, <span class="st">&quot;長短金利スプレッド&quot;</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb223-5"><a href="ch12.html#cb223-5" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> value, <span class="at">color =</span> name)) <span class="sc">+</span></span>
-<span id="cb223-6"><a href="ch12.html#cb223-6" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb223-7"><a href="ch12.html#cb223-7" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;年&quot;</span>, <span class="at">y =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
-<span id="cb223-8"><a href="ch12.html#cb223-8" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">legend.justification =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>))</span></code></pre></div>
+<span id="cb223-4"><a href="ch12.html#cb223-4" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> year)) <span class="sc">+</span></span>
+<span id="cb223-5"><a href="ch12.html#cb223-5" tabindex="-1"></a>    <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="st">`</span><span class="at">短期金利（コールレート）</span><span class="st">`</span>, <span class="at">color =</span> <span class="st">&quot;短期金利（コールレート）&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb223-6"><a href="ch12.html#cb223-6" tabindex="-1"></a>    <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="st">`</span><span class="at">長期金利（10年物国債利回り）</span><span class="st">`</span>, <span class="at">color =</span> <span class="st">&quot;長期金利（10年物国債利回り）&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb223-7"><a href="ch12.html#cb223-7" tabindex="-1"></a>    <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="st">`</span><span class="at">長短金利スプレッド</span><span class="st">`</span>, <span class="at">color =</span> <span class="st">&quot;長短金利スプレッド&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb223-8"><a href="ch12.html#cb223-8" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;年&quot;</span>, <span class="at">y =</span> <span class="fu">element_blank</span>(), <span class="at">color =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
+<span id="cb223-9"><a href="ch12.html#cb223-9" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">legend.justification =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>))</span></code></pre></div>
 <p><img src="_main_files/figure-html/unnamed-chunk-151-1.png" width="672" /></p>
 <div class="sourceCode" id="cb224"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb224-1"><a href="ch12.html#cb224-1" tabindex="-1"></a><span class="co"># 金利データの単位根仮説をADF検定で検証する.</span></span>
 <span id="cb224-2"><a href="ch12.html#cb224-2" tabindex="-1"></a><span class="fu">ur.df</span>(Fig_1_longshortspread<span class="sc">$</span><span class="st">`</span><span class="at">短期金利（コールレート）</span><span class="st">`</span>, <span class="at">type =</span> <span class="st">&quot;none&quot;</span>, <span class="at">selectlags =</span> <span class="st">&quot;BIC&quot;</span>, <span class="at">lags =</span> <span class="dv">12</span>) <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span></code></pre></div>
@@ -701,8 +704,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb244-19"><a href="ch12.html#cb244-19" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">legend.justification =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>))</span></code></pre></div>
 <p><img src="_main_files/figure-html/unnamed-chunk-158-1.png" width="672" /></p>
 </div>
-<div id="実証例12.4-金利の期間構造と共和分" class="section level2 unnumbered hasAnchor">
-<h2>実証例12.4 金利の期間構造と共和分<a href="ch12.html#実証例12.4-金利の期間構造と共和分" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="ex12-4" class="section level2 unnumbered hasAnchor">
+<h2>実証例12.4 金利の期間構造と共和分<a href="ch12.html#ex12-4" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><code>urca::ur.df()</code>関数でADF検定を行うことができるが, 表12-1に示されたエングル=グレンジャー検定統計量ではなく通常のADF検定の臨界値が出力されるので直接有意性を確認する必要がある.</p>
 <div class="sourceCode" id="cb245"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb245-1"><a href="ch12.html#cb245-1" tabindex="-1"></a>model_ex12<span class="fl">.4</span> <span class="ot">&lt;-</span> <span class="fu">lm_robust</span>(<span class="st">`</span><span class="at">長期金利（10年物国債利回り）</span><span class="st">`</span> <span class="sc">~</span> <span class="st">`</span><span class="at">短期金利（コールレート）</span><span class="st">`</span>, <span class="at">se_type =</span> <span class="st">&quot;HC1&quot;</span>, <span class="at">data =</span> Fig_1_longshortspread)</span>
 <span id="cb245-2"><a href="ch12.html#cb245-2" tabindex="-1"></a><span class="fu">summary</span>(model_ex12<span class="fl">.4</span>)</span></code></pre></div>
 <pre><code>## 
@@ -725,7 +729,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## F-statistic: 463.4 on 1 and 109 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="sourceCode" id="cb247"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb247-1"><a href="ch12.html#cb247-1" tabindex="-1"></a><span class="co"># 残差をADF検定</span></span>
 <span id="cb247-2"><a href="ch12.html#cb247-2" tabindex="-1"></a>model_ex12<span class="fl">.4</span><span class="sc">$</span>residuals <span class="ot">&lt;-</span> Fig_1_longshortspread<span class="sc">$</span><span class="st">`</span><span class="at">長期金利（10年物国債利回り）</span><span class="st">`</span> <span class="sc">-</span> model_ex12<span class="fl">.4</span><span class="sc">$</span>fitted.values</span>
-<span id="cb247-3"><a href="ch12.html#cb247-3" tabindex="-1"></a><span class="fu">ur.df</span>(model_ex12<span class="fl">.4</span><span class="sc">$</span>residuals, <span class="at">type =</span> <span class="st">&quot;none&quot;</span>, <span class="at">lags =</span> <span class="dv">8</span>, <span class="at">selectlags =</span> <span class="st">&quot;BIC&quot;</span>) <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span></code></pre></div>
+<span id="cb247-3"><a href="ch12.html#cb247-3" tabindex="-1"></a><span class="fu">ur.df</span>(model_ex12<span class="fl">.4</span><span class="sc">$</span>residuals, <span class="at">type =</span> <span class="st">&quot;none&quot;</span>, <span class="at">lags =</span> <span class="dv">10</span>, <span class="at">selectlags =</span> <span class="st">&quot;BIC&quot;</span>) <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span></code></pre></div>
 <pre><code>## 
 ## ############################################### 
 ## # Augmented Dickey-Fuller Test Unit Root Test # 
@@ -739,22 +743,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
-## -0.54868 -0.15556 -0.03448  0.12935  0.73874 
+## -0.53249 -0.14699 -0.02859  0.13579  0.73487 
 ## 
 ## Coefficients:
 ##             Estimate Std. Error t value Pr(&gt;|t|)    
-## z.lag.1     -0.39066    0.06508  -6.003 3.20e-08 ***
-## z.diff.lag1  0.41732    0.08750   4.769 6.37e-06 ***
-## z.diff.lag2  0.25134    0.09844   2.553   0.0122 *  
+## z.lag.1     -0.40010    0.06488  -6.167 1.60e-08 ***
+## z.diff.lag1  0.40078    0.08763   4.573 1.42e-05 ***
+## z.diff.lag2  0.24880    0.09815   2.535   0.0128 *  
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 0.2316 on 99 degrees of freedom
-## Multiple R-squared:  0.3327, Adjusted R-squared:  0.3125 
-## F-statistic: 16.46 on 3 and 99 DF,  p-value: 9.44e-09
+## Residual standard error: 0.2301 on 97 degrees of freedom
+## Multiple R-squared:  0.3399, Adjusted R-squared:  0.3195 
+## F-statistic: 16.65 on 3 and 97 DF,  p-value: 8.365e-09
 ## 
 ## 
-## Value of test-statistic is: -6.003 
+## Value of test-statistic is: -6.1672 
 ## 
 ## Critical values for test statistics: 
 ##       1pct  5pct 10pct
@@ -762,6 +766,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="実証例12.5-南極のペンギンの数と日本の-gdp-再考" class="section level2 unnumbered hasAnchor">
 <h2>実証例12.5 南極のペンギンの数と日本の GDP （再考）<a href="ch12.html#実証例12.5-南極のペンギンの数と日本の-gdp-再考" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><span id="ex12-4">実証例12.4</span>同様, 単位根検定の<span class="math inline">\(t\)</span>統計量を直接エングル=グレンジャー検定統計量の臨界値と比較する.</p>
 <div class="sourceCode" id="cb249"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb249-1"><a href="ch12.html#cb249-1" tabindex="-1"></a>model_ex12<span class="fl">.3</span><span class="sc">$</span>residuals <span class="ot">&lt;-</span> Fig_2_penguin<span class="sc">$</span>実質GDP <span class="sc">-</span> model_ex12<span class="fl">.3</span><span class="sc">$</span>fitted.values</span>
 <span id="cb249-2"><a href="ch12.html#cb249-2" tabindex="-1"></a><span class="fu">ur.df</span>(model_ex12<span class="fl">.3</span><span class="sc">$</span>residuals, <span class="at">type =</span> <span class="st">&quot;none&quot;</span>, <span class="at">lags =</span> <span class="dv">8</span>, <span class="at">selectlags =</span> <span class="st">&quot;BIC&quot;</span>) <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span></code></pre></div>
 <pre><code>## 
@@ -876,6 +881,108 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## lag(`短期金利（コールレート）_delta`, 2)     0.9879    
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<div class="sourceCode" id="cb255"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb255-1"><a href="ch12.html#cb255-1" tabindex="-1"></a><span class="fu">summary</span>(model_ex12<span class="fl">.7</span>)<span class="sc">$</span>adj.r.squared</span></code></pre></div>
+<pre><code>## [1] 0.8104161</code></pre>
+</div>
+<div id="実証例12.8-金利の期間構造と動学ols推定" class="section level2 unnumbered hasAnchor">
+<h2>実証例12.8 金利の期間構造と動学OLS推定<a href="ch12.html#実証例12.8-金利の期間構造と動学ols推定" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>ヨハンセン検定は<code>urca::ca.jo()</code>関数により実装されている.</p>
+<div class="sourceCode" id="cb257"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb257-1"><a href="ch12.html#cb257-1" tabindex="-1"></a><span class="fu">ca.jo</span>(data_ex12<span class="fl">.1</span>, <span class="at">type =</span> <span class="st">&quot;trace&quot;</span>, <span class="at">ecdet =</span> <span class="st">&quot;none&quot;</span>, <span class="at">K =</span> <span class="dv">2</span>) <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span></code></pre></div>
+<pre><code>## 
+## ###################### 
+## # Johansen-Procedure # 
+## ###################### 
+## 
+## Test type: trace statistic , with linear trend 
+## 
+## Eigenvalues (lambda):
+## [1] 0.22193097 0.02487239
+## 
+## Values of teststatistic and critical values of test:
+## 
+##           test 10pct  5pct  1pct
+## r &lt;= 1 |  2.72  6.50  8.18 11.65
+## r = 0  | 29.82 15.66 17.95 23.52
+## 
+## Eigenvectors, normalised to first column:
+## (These are the cointegration relations)
+## 
+##                                 短期金利.コールレート._delta.l2
+## 短期金利.コールレート._delta.l2                      1.00000000
+## 長短金利スプレッド.l2                                0.02670481
+##                                 長短金利スプレッド.l2
+## 短期金利.コールレート._delta.l2              1.000000
+## 長短金利スプレッド.l2                       -2.448301
+## 
+## Weights W:
+## (This is the loading matrix)
+## 
+##                                短期金利.コールレート._delta.l2
+## 短期金利.コールレート._delta.d                      -0.5630998
+## 長短金利スプレッド.d                                -0.1086134
+##                                長短金利スプレッド.l2
+## 短期金利.コールレート._delta.d          -0.008896835
+## 長短金利スプレッド.d                     0.017756552</code></pre>
+<p><code>ecdet = "none"</code>と設定することで共和分に定数項・トレンド項がないモデルを指定できるはずだが, 実際はトレンド項があるモデルが推定された.</p>
+</div>
+<div id="実証例12.10-沖縄返還と通貨切替え" class="section level2 unnumbered hasAnchor">
+<h2>実証例12.10 沖縄返還と通貨切替え<a href="ch12.html#実証例12.10-沖縄返還と通貨切替え" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<!-- FIXME: 正しく分析できているか確認? -->
+<div class="sourceCode" id="cb259"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb259-1"><a href="ch12.html#cb259-1" tabindex="-1"></a>OkiDat2 <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">&quot;data/12_第12章/OkiDat2.xls&quot;</span>, <span class="at">sheet =</span> <span class="st">&quot;okidat2&quot;</span>)</span></code></pre></div>
+<pre><code>## New names:
+## • `` -&gt; `...1`</code></pre>
+<div class="sourceCode" id="cb261"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb261-1"><a href="ch12.html#cb261-1" tabindex="-1"></a>data_ex12<span class="fl">.10</span> <span class="ot">&lt;-</span> OkiDat2 <span class="sc">%&gt;%</span></span>
+<span id="cb261-2"><a href="ch12.html#cb261-2" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>...<span class="dv">1</span>)</span>
+<span id="cb261-3"><a href="ch12.html#cb261-3" tabindex="-1"></a>model_ex12<span class="fl">.10</span> <span class="ot">&lt;-</span> <span class="fu">VAR</span>(data_ex12<span class="fl">.10</span>) <span class="sc">%&gt;%</span> <span class="fu">BQ</span>()</span>
+<span id="cb261-4"><a href="ch12.html#cb261-4" tabindex="-1"></a><span class="fu">fevd</span>(model_ex12<span class="fl">.10</span>, <span class="at">n.ahead =</span> <span class="dv">20</span>)<span class="sc">$</span>dlyratio</span></code></pre></div>
+<pre><code>##        dlyratio        lnq
+##  [1,] 0.9260965 0.07390346
+##  [2,] 0.9211909 0.07880907
+##  [3,] 0.9213974 0.07860265
+##  [4,] 0.9208979 0.07910213
+##  [5,] 0.9206545 0.07934554
+##  [6,] 0.9204385 0.07956146
+##  [7,] 0.9202782 0.07972184
+##  [8,] 0.9201535 0.07984654
+##  [9,] 0.9200577 0.07994232
+## [10,] 0.9199839 0.08001613
+## [11,] 0.9199270 0.08007297
+## [12,] 0.9198833 0.08011674
+## [13,] 0.9198495 0.08015046
+## [14,] 0.9198236 0.08017642
+## [15,] 0.9198036 0.08019642
+## [16,] 0.9197882 0.08021183
+## [17,] 0.9197763 0.08022369
+## [18,] 0.9197672 0.08023283
+## [19,] 0.9197601 0.08023987
+## [20,] 0.9197547 0.08024529</code></pre>
+<div class="sourceCode" id="cb263"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb263-1"><a href="ch12.html#cb263-1" tabindex="-1"></a><span class="co"># 通貨切替え以前 (1956-1970)</span></span>
+<span id="cb263-2"><a href="ch12.html#cb263-2" tabindex="-1"></a>data_ex12<span class="fl">.10</span>_pre <span class="ot">&lt;-</span> OkiDat2 <span class="sc">%&gt;%</span></span>
+<span id="cb263-3"><a href="ch12.html#cb263-3" tabindex="-1"></a>    <span class="fu">filter</span>(...<span class="dv">1</span> <span class="sc">&lt;=</span> <span class="dv">1970</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb263-4"><a href="ch12.html#cb263-4" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>...<span class="dv">1</span>)</span>
+<span id="cb263-5"><a href="ch12.html#cb263-5" tabindex="-1"></a>model_ex12<span class="fl">.10</span>_pre <span class="ot">&lt;-</span> <span class="fu">VAR</span>(data_ex12<span class="fl">.10</span>_pre) <span class="sc">%&gt;%</span> <span class="fu">BQ</span>()</span>
+<span id="cb263-6"><a href="ch12.html#cb263-6" tabindex="-1"></a><span class="fu">fevd</span>(model_ex12<span class="fl">.10</span>_pre, <span class="at">n.ahead =</span> <span class="dv">20</span>)<span class="sc">$</span>dlyratio</span></code></pre></div>
+<pre><code>##        dlyratio       lnq
+##  [1,] 0.6448800 0.3551200
+##  [2,] 0.6319651 0.3680349
+##  [3,] 0.6348724 0.3651276
+##  [4,] 0.6335653 0.3664347
+##  [5,] 0.6339229 0.3660771
+##  [6,] 0.6337063 0.3662937
+##  [7,] 0.6337088 0.3662912
+##  [8,] 0.6336392 0.3663608
+##  [9,] 0.6336022 0.3663978
+## [10,] 0.6335592 0.3664408
+## [11,] 0.6335236 0.3664764
+## [12,] 0.6334901 0.3665099
+## [13,] 0.6334602 0.3665398
+## [14,] 0.6334329 0.3665671
+## [15,] 0.6334081 0.3665919
+## [16,] 0.6333857 0.3666143
+## [17,] 0.6333653 0.3666347
+## [18,] 0.6333469 0.3666531
+## [19,] 0.6333301 0.3666699
+## [20,] 0.6333149 0.3666851</code></pre>
 <!-- ## 練習問題 12-1 [確認] {.unnumbered}
 
 ## 練習問題 12-2 [確認] {.unnumbered}

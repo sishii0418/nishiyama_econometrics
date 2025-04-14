@@ -224,6 +224,7 @@ fig10_8_after <- estat_getStatsData(appId = appId, statsDataId = "0003109787")
 fig10_8_after <- fig10_8_after %>%
     filter(`国内総生産_四半期デフレーター 季節調整系列` == "国内総生産(支出側)") %>%
     dplyr::select(`時間軸（四半期）`, value)
+fig10_8_after <- fig10_8_after[1:123, ]
 
 # 対応する時間軸を作成
 year <- seq(ymd(19800101), ymd(20240701), by = "quarter")
